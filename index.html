@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goderich Chess Club</title>
   
-  <!-- SELF-CONTAINED CSS: Zero internet dependencies, fully cross-browser compatible -->
   <style>
-    /* Reset & Base Formatting styles */
+    /* Reset & Base System Styles */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
     *:focus-visible {
       outline: 3px solid #D97706 !important;
@@ -25,17 +24,14 @@
       -webkit-font-smoothing: antialiased;
     }
     
-    /* Layout Framework Container Utility */
     .container {
       width: 100%;
-      max-w: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 20px;
-      padding-right: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
     }
 
-    /* Screen Reader Skip Navigation Link */
+    /* Accessibility Navigation Shortcut */
     .sr-only {
       position: absolute;
       width: 1px;
@@ -46,23 +42,8 @@
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
-    .sr-only:focus {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      z-index: 100;
-      background: #D97706;
-      color: #020617;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      clip: auto;
-      width: auto;
-      height: auto;
-    }
 
-    /* NAVBAR MODULE ARCHITECTURE */
+    /* HEADER & MAIN NAVIGATION */
     .site-header {
       background-color: #020617;
       border-bottom: 1px solid rgba(217, 119, 6, 0.2);
@@ -91,7 +72,7 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
     }
     .nav-item {
       color: #CBD5E1;
@@ -120,24 +101,29 @@
       background-color: #F59E0B;
     }
 
-    /* HERO GRID LAYOUT STRUCTURE */
+    /* RESPONSIVE LAYOUT MECHANICS */
     .hero-main {
-      padding-top: 80px;
-      padding-bottom: 80px;
+      padding: 60px 0;
     }
     .split-grid {
-      display: grid;
-      grid-template-cols: 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 48px;
-      align-items: center;
     }
+    
+    /* Desktop layout breakpoint upgrade */
     @media (min-width: 992px) {
+      .hero-main { padding: 100px 0; }
       .split-grid {
-        grid-template-cols: 7fr 5fr;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
       }
+      .hero-text-block { flex: 0 0 58%; }
+      .hero-card-block { flex: 0 0 38%; }
     }
 
-    /* COPY & TYPOGRAPHY SYSTEM */
+    /* CONTENT DISPLAY & BADGES */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -154,20 +140,19 @@
       margin-bottom: 24px;
     }
     .hero-title {
-      font-size: 42px;
+      font-size: 40px;
       font-weight: 800;
       line-height: 1.15;
       color: #FFFFFF;
       margin-bottom: 20px;
-      letter-spacing: -0.5px;
     }
     @media (min-width: 768px) {
-      .hero-title { font-size: 56px; }
+      .hero-title { font-size: 54px; }
     }
     .hero-desc {
       font-size: 18px;
       color: #94A3B8;
-      margin-bottom: 32px;
+      margin-bottom: 36px;
       line-height: 1.6;
     }
     .btn-group {
@@ -175,7 +160,7 @@
       flex-direction: column;
       gap: 16px;
     }
-    @media (min-width: 576px) {
+    @media (min-width: 480px) {
       .btn-group { flex-direction: row; }
     }
     .btn-primary {
@@ -189,9 +174,8 @@
       text-align: center;
       transition: background-color 0.2s ease;
     }
-    .btn-primary:hover {
-      background-color: #F59E0B;
-    }
+    .btn-primary:hover { background-color: #F59E0B; }
+    
     .btn-secondary {
       border: 2px solid #334155;
       color: #E2E8F0;
@@ -206,12 +190,11 @@
     .btn-secondary:hover {
       border-color: rgba(217, 119, 6, 0.5);
       background-color: #1E293B;
-      color: #FFFFFF;
     }
 
-    /* INFO CARD DISPLAY SYSTEM */
+    /* INFO CARD DISPLAY MECHANICS */
     .meeting-card {
-      background: linear-gradient(180deg, #020617 0%, #0B1329 100%);
+      background: linear-gradient(180deg, #020617 0%, #060B18 100%);
       border: 2px solid rgba(217, 119, 6, 0.6);
       border-radius: 20px;
       padding: 32px;
@@ -226,7 +209,7 @@
       margin-bottom: 24px;
     }
     .card-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -236,18 +219,12 @@
       display: flex;
       align-items: flex-start;
       gap: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     .info-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background-color: #020617;
-      border: 1px solid #1E293B;
-      font-size: 20px;
+      font-size: 22px;
+      line-height: 1;
+      margin-top: 4px;
     }
     .info-label {
       font-size: 12px;
@@ -255,19 +232,18 @@
       letter-spacing: 0.5px;
       color: #64748B;
       font-weight: 600;
+      margin-bottom: 2px;
     }
     .info-value {
       font-size: 16px;
       font-weight: 600;
       color: #FFFFFF;
-      margin-top: 2px;
     }
     .address-block {
       font-style: normal;
       font-size: 16px;
       font-weight: 600;
       color: #FFFFFF;
-      line-height: 1.4;
     }
     .address-sub {
       font-size: 14px;
@@ -279,12 +255,12 @@
     .card-footer {
       border-top: 1px solid #1E293B;
       padding-top: 24px;
-      margin-top: 24px;
+      margin-top: 8px;
     }
     .btn-rsvp {
       display: block;
       width: 100%;
-      background: linear-gradient(90deg, #D97706 0%, #B45309 100%);
+      background: #D97706;
       color: #020617;
       font-weight: 700;
       padding: 14px;
@@ -292,11 +268,10 @@
       text-decoration: none;
       text-align: center;
       font-size: 16px;
-      transition: opacity 0.2s ease;
+      transition: background-color 0.2s ease;
     }
-    .btn-rsvp:hover {
-      opacity: 0.95;
-    }
+    .btn-rsvp:hover { background-color: #F59E0B; }
+    
     .card-note {
       font-size: 12px;
       color: #64748B;
@@ -304,7 +279,7 @@
       margin-top: 12px;
     }
     
-    /* MOBILE NAVIGATION DISPLAY CONFIG */
+    /* MOBILE LINK BREAK ADJUSTMENT */
     @media (max-width: 767px) {
       .nav-links { display: none; }
     }
@@ -312,10 +287,9 @@
 </head>
 <body>
 
-  <!-- ACCESSIBILITY: Keyboard Skip Navigation target Link -->
   <a href="#main-content" class="sr-only">Skip to main content</a>
 
-  <!-- RESPONSIVE NAVBAR CONTAINER -->
+  <!-- INTERACTIVE NAVBAR -->
   <header class="site-header">
     <div class="container">
       <div class="navbar-flex">
@@ -334,12 +308,12 @@
     </div>
   </header>
 
-  <!-- HERO SECTION WITH MEETING INFO DISPLAY -->
+  <!-- HERO LAYOUT ARTIFACTS -->
   <main id="main-content" class="hero-main">
     <div class="container">
       <div class="split-grid">
         
-        <!-- Copywriting Left Column Column -->
+        <!-- Text Column -->
         <div class="hero-text-block">
           <div class="badge">
             <span aria-hidden="true">🛡️</span> Huron County Chess Community
@@ -356,11 +330,11 @@
           </div>
         </div>
 
-        <!-- Next Meeting Information Card Column -->
+        <!-- Info Card Column with Location details restored -->
         <div class="hero-card-block">
           <section class="meeting-card" aria-labelledby="card-heading">
             <div class="card-header-flex">
-              <span class="gold-text" style="font-size: 24px;" aria-hidden="true">📋</span>
+              <span class="gold-text" style="font-size: 20px;" aria-hidden="true">📋</span>
               <h2 id="card-heading" class="card-title">Next Official Meeting</h2>
             </div>
 
@@ -381,3 +355,26 @@
             </div>
 
             <div class="info-row">
+              <div class="info-icon" aria-hidden="true">📍</div>
+              <div>
+                <p class="info-label">Location Venue</p>
+                <address class="address-block">
+                  Goderich Public Library<br>
+                  <span class="address-sub">52 Montreal St, Goderich, ON N7A 2G4</span>
+                </address>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <a href="#" class="btn-rsvp">RSVP / Save Your Board</a>
+              <p class="card-note">* Drop-ins are always free. Chessboards and timers provided!</p>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
