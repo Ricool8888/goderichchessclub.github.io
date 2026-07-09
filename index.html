@@ -6,7 +6,7 @@
   <title>Goderich Chess Club</title>
   
   <style>
-    /* Reset & Base Formatting */
+    /* Reset & Base System Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -45,7 +45,7 @@
       border: 0;
     }
 
-    /* HEADER & MAIN NAVIGATION */
+    /* HEADER & Navigation Bar */
     .site-header {
       background-color: #020617;
       border-bottom: 1px solid rgba(217, 119, 6, 0.2);
@@ -103,29 +103,29 @@
       background-color: #F59E0B;
     }
 
-    /* HERO SECTION LAYOUT */
+    /* HERO STABLE FLEX SYSTEM Layout */
     .hero-main {
       padding: 60px 0;
-      flex: 1;
+      flex: 1 0 auto;
     }
-    .split-grid {
+    .split-layout {
       display: flex;
       flex-direction: column;
       gap: 48px;
     }
     
     @media (min-width: 992px) {
-      .hero-main { padding: 100px 0; }
-      .split-grid {
+      .hero-main { padding: 80px 0; }
+      .split-layout {
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
       }
-      .hero-text-block { flex: 0 0 55%; }
-      .hero-card-block { flex: 0 0 40%; }
+      .hero-text-block { width: 55%; }
+      .hero-card-block { width: 40%; }
     }
 
-    /* TYPOGRAPHY & BADGES */
+    /* Content Layout Typographies */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -194,7 +194,7 @@
       background-color: #1E293B;
     }
 
-    /* WEEKLY SCHEDULE CARD */
+    /* CARD Container Details Block */
     .meeting-card {
       background: linear-gradient(180deg, #020617 0%, #060B18 100%);
       border: 2px solid rgba(217, 119, 6, 0.6);
@@ -281,12 +281,13 @@
       margin-top: 12px;
     }
 
-    /* FOOTER ARCHITECTURE */
+    /* FOOTER Elements CSS */
     .site-footer {
       background-color: #020617;
       border-top: 1px solid rgba(217, 119, 6, 0.2);
       padding: 40px 0;
       margin-top: auto;
+      flex-shrink: 0;
     }
     .footer-flex {
       display: flex;
@@ -306,44 +307,29 @@
       color: #64748B;
       font-size: 14px;
     }
-    .footer-text a {
-      color: #94A3B8;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    .footer-text a:hover {
-      color: #D97706;
-    }
     .footer-right {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
     @media (min-width: 768px) {
-      .footer-right {
-        align-items: flex-end;
-      }
+      .footer-right { align-items: flex-end; }
     }
     .footer-nav {
       display: flex;
       gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
     }
     .footer-nav-link {
       color: #94A3B8;
       text-decoration: none;
       font-size: 14px;
-      transition: color 0.2s ease;
     }
-    .footer-nav-link:hover {
-      color: #D97706;
-    }
+    .footer-nav-link:hover { color: #D97706; }
+    
     .social-links {
       display: flex;
       gap: 12px;
-      align-items: center;
     }
     .social-icon-btn {
       display: inline-flex;
@@ -378,7 +364,7 @@
 
   <a href="#main-content" class="sr-only">Skip to main content</a>
 
-  <!-- SITE HEADER WITH CONNECTED ROUTING -->
+  <!-- TOP STICKY NAVIGATION BAR -->
   <header class="site-header">
     <div class="container">
       <div class="navbar-flex">
@@ -397,12 +383,12 @@
     </div>
   </header>
 
-  <!-- MAIN HERO SECTION -->
+  <!-- CONTENT VIEW HERO AREA -->
   <main id="main-content" class="hero-main">
     <div class="container">
-      <div class="split-grid">
+      <div class="split-layout">
         
-        <!-- Left Text Block -->
+        <!-- Left Side Copy Block Container -->
         <div class="hero-text-block">
           <div class="badge">
             <span aria-hidden="true">🛡️</span> Friendly & Supportive Environment
@@ -411,3 +397,8 @@
             Welcome to <span class="gold-text">Goderich Chess Club</span>
           </h1>
           <p class="hero-desc">
+            Whether you are a seasoned player looking to sharpen your skills or a newcomer eager to learn the game, this is the perfect opportunity to immerse yourself in the fascinating world of chess. Engage in fun and challenging matches while making new friends along the way.
+          </p>
+          <div class="btn-group">
+            <a href="about.html" class="btn-primary">Learn About Our Club</a>
+            <a href="mailto:goderichchessclub@gmail.com" class="btn-secondary">Email Inquiries</a>
