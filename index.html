@@ -396,6 +396,140 @@
     color: #81B64C;
     border-color: #81B64C;
   }
+
+  /* Section Framing */
+  .newsletter-section {
+    padding: 60px 0;
+    background-color: #020617; /* Matches headers/footers royal slate */
+    border-top: 1px solid rgba(217, 119, 6, 0.15);
+    border-bottom: 1px solid rgba(217, 119, 6, 0.15);
+    width: 100%;
+  }
+  .newsletter-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    text-align: center;
+  }
+  @media (min-width: 992px) {
+    .newsletter-container {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+      align-items: center;
+    }
+    .newsletter-content {
+      max-width: 50%;
+    }
+    .newsletter-form {
+      width: 45%;
+      max-width: 500px;
+    }
+  }
+
+  /* Badge and Typography */
+  .newsletter-badge {
+    display: inline-flex;
+    background-color: rgba(217, 119, 6, 0.1);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    color: #D97706;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .newsletter-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 12px;
+  }
+  .newsletter-desc {
+    font-size: 16px;
+    color: #94A3B8;
+    line-height: 1.5;
+  }
+
+  /* Interactive Form Inputs */
+  .newsletter-form {
+    width: 100%;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  @media (min-width: 480px) {
+    .input-group {
+      flex-direction: row;
+      gap: 0;
+      border: 1px solid #1E293B;
+      border-radius: 12px;
+      padding: 4px;
+      background-color: #0B1329;
+    }
+    .input-group:focus-within {
+      border-color: #D97706;
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+    }
+  }
+  .newsletter-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #1E293B;
+    background-color: #0B1329;
+    color: #FFFFFF;
+    font-size: 16px;
+    outline: none;
+  }
+  @media (min-width: 480px) {
+    .newsletter-input {
+      border: none;
+      background-color: transparent;
+      border-radius: 0;
+    }
+  }
+  .newsletter-input::placeholder {
+    color: #475569;
+  }
+  .newsletter-submit {
+    background-color: #D97706;
+    color: #020617;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+  }
+  .newsletter-submit:hover {
+    background-color: #F59E0B;
+  }
+  .newsletter-privacy {
+    font-size: 12px;
+    color: #475569;
+    margin-top: 8px;
+    text-align: center;
+  }
+  @media (min-width: 480px) {
+    .newsletter-privacy {
+      text-align: left;
+      padding-left: 8px;
+    }
+  }
+
   </style>
 </head>
 <body>
@@ -463,6 +597,37 @@
     </svg>
   </a>
 </div>
+<section class="newsletter-section" aria-labelledby="newsletter-heading">
+  <div class="newsletter-container">
+    
+    <div class="newsletter-content">
+      <div class="newsletter-badge" aria-hidden="true">✉️ Stay Updated</div>
+      <h2 id="newsletter-heading" class="newsletter-title">Join Our Mailing List</h2>
+      <p class="newsletter-desc">
+        Sign up to receive club announcements, holiday closures, special event reminders, and tournament alerts. No spam, just chess.
+      </p>
+    </div>
+
+    <!-- FIXED: Connected straight to your live Goderich Chess Club Google Form -->
+    <form action="https://google.com" method="POST" target="_blank" class="newsletter-form">
+      <div class="input-group">
+        <label for="newsletter-email" class="sr-only">Email Address</label>
+        <input 
+          type="email" 
+          id="newsletter-email" 
+          name="entry.1193895227" 
+          placeholder="Enter your email address" 
+          required 
+          class="newsletter-input"
+        >
+        <button type="submit" class="newsletter-submit">Subscribe</button>
+      </div>
+      <p class="newsletter-privacy">* Membership is free. Unsubscribe at any time.</p>
+    </form>
+
+  </div>
+</section>
+
         <footer>
           <p> Goderich Chess Club © 2026 Volunteer Community Initiative. All Rights Reserved. <br> </br> Affiliated Platforms: <a href="https://www.chess.ca/en/" style="color: #81B64C;">CFC</a> • <a href="https://www.fide.com/" style="color: #81B64C;">FIDE</a>
         </p>
