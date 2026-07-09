@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goderich Chess Club</title>
   
+  <!-- SELF-CONTAINED CSS: Zero external network dependencies -->
   <style>
-    /* Reset & Base System Styles */
+    /* Reset & Base Formatting */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -31,7 +32,6 @@
       padding: 0 24px;
     }
 
-    /* Accessibility Navigation Shortcut */
     .sr-only {
       position: absolute;
       width: 1px;
@@ -101,7 +101,7 @@
       background-color: #F59E0B;
     }
 
-    /* RESPONSIVE LAYOUT MECHANICS */
+    /* HERO SECTION LAYOUT */
     .hero-main {
       padding: 60px 0;
     }
@@ -111,7 +111,6 @@
       gap: 48px;
     }
     
-    /* Desktop layout breakpoint upgrade */
     @media (min-width: 992px) {
       .hero-main { padding: 100px 0; }
       .split-grid {
@@ -123,7 +122,7 @@
       .hero-card-block { flex: 0 0 38%; }
     }
 
-    /* CONTENT DISPLAY & BADGES */
+    /* TYPOGRAPHY & BADGES */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -192,7 +191,7 @@
       background-color: #1E293B;
     }
 
-    /* INFO CARD DISPLAY MECHANICS */
+    /* NEXT MEETING INFO CARD */
     .meeting-card {
       background: linear-gradient(180deg, #020617 0%, #060B18 100%);
       border: 2px solid rgba(217, 119, 6, 0.6);
@@ -279,7 +278,6 @@
       margin-top: 12px;
     }
     
-    /* MOBILE LINK BREAK ADJUSTMENT */
     @media (max-width: 767px) {
       .nav-links { display: none; }
     }
@@ -289,68 +287,68 @@
 
   <a href="#main-content" class="sr-only">Skip to main content</a>
 
-  <!-- INTERACTIVE NAVBAR -->
+  <!-- SITE HEADER WITH CONNECTED ROUTING -->
   <header class="site-header">
     <div class="container">
       <div class="navbar-flex">
-        <a href="#" class="brand-logo">
+        <a href="index.html" class="brand-logo">
           <span aria-hidden="true">♞</span>
           Goderich <span class="gold-text">Chess Club</span>
         </a>
-      <nav class="nav-links" aria-label="Main Navigation">
-        <a href="index.html" class="nav-item active" aria-current="page">Home</a>
-        <a href="about.html" class="nav-item">About Us</a> <!-- Changed from '#' to 'about.html' -->
-        <a href="#" class="nav-item">Tournaments</a>
-        <a href="#" class="nav-item">Resources</a>
-        <a href="#" class="btn-join">Join Club</a>
-      </nav>
+        <nav class="nav-links" aria-label="Main Navigation">
+          <a href="index.html" class="nav-item active" aria-current="page">Home</a>
+          <a href="about.html" class="nav-item">About Us</a> <!-- Linked to about.html -->
+          <a href="#" class="nav-item">Tournaments</a>
+          <a href="#" class="nav-item">Resources</a>
+          <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
+        </nav>
       </div>
     </div>
   </header>
 
-  <!-- HERO LAYOUT ARTIFACTS -->
+  <!-- MAIN HERO SECTION -->
   <main id="main-content" class="hero-main">
     <div class="container">
       <div class="split-grid">
         
-        <!-- Text Column -->
+        <!-- Left Text Block (Updated with actual goderichchessclub.com text) -->
         <div class="hero-text-block">
           <div class="badge">
-            <span aria-hidden="true">🛡️</span> Huron County Chess Community
+            <span aria-hidden="true">🛡️</span> Friendly & Supportive Environment
           </div>
           <h1 class="hero-title">
-            Master Your Next Move in <span class="gold-text">Goderich</span>
+            Welcome to <span class="gold-text">Goderich Chess Club</span>
           </h1>
           <p class="hero-desc">
-            Welcome to the premier community hub for chess enthusiasts of all generations in Goderich, Ontario. Whether you are discovering your first opening or mastering masterclass endgame play, pull up a chair at our table.
+            Whether you are a seasoned player looking to sharpen your skills or a newcomer eager to learn the game, this is the perfect opportunity to immerse yourself in the fascinating world of chess. Engage in fun and challenging matches while making new friends along the way.
           </p>
           <div class="btn-group">
-            <a href="#" class="btn-primary">Explore Our Programs</a>
-            <a href="#" class="btn-secondary">View Calendar</a>
+            <a href="about.html" class="btn-primary">Learn About Our Club</a>
+            <a href="mailto:goderichchessclub@gmail.com" class="btn-secondary">Email Inquiries</a>
           </div>
         </div>
 
-        <!-- Info Card Column with Location details restored -->
+        <!-- Right Next Meeting Info Card (Updated Schedule & Contact Info) -->
         <div class="hero-card-block">
           <section class="meeting-card" aria-labelledby="card-heading">
             <div class="card-header-flex">
               <span class="gold-text" style="font-size: 20px;" aria-hidden="true">📋</span>
-              <h2 id="card-heading" class="card-title">Next Official Meeting</h2>
+              <h2 id="card-heading" class="card-title">Weekly Club Schedule</h2>
             </div>
 
             <div class="info-row">
               <div class="info-icon" aria-hidden="true">📅</div>
               <div>
-                <p class="info-label">Date</p>
-                <p class="info-value">Thursday, July 16, 2026</p>
+                <p class="info-label">Meeting Day</p>
+                <p class="info-value">Every Tuesday Night</p>
               </div>
             </div>
 
             <div class="info-row">
               <div class="info-icon" aria-hidden="true">⏰</div>
               <div>
-                <p class="info-label">Time Interval</p>
-                <p class="info-value">6:30 PM &ndash; 9:00 PM EST</p>
+                <p class="info-label">Time</p>
+                <p class="info-value">6:00 PM &ndash; 8:00 PM</p>
               </div>
             </div>
 
@@ -359,22 +357,10 @@
               <div>
                 <p class="info-label">Location Venue</p>
                 <address class="address-block">
-                  Goderich Public Library<br>
+                  Goderich Branch Library<br>
                   <span class="address-sub">52 Montreal St, Goderich, ON N7A 2G4</span>
                 </address>
               </div>
             </div>
 
-            <div class="card-footer">
-              <a href="#" class="btn-rsvp">RSVP / Save Your Board</a>
-              <p class="card-note">* Drop-ins are always free. Chessboards and timers provided!</p>
-            </div>
-          </section>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-</body>
-</html>
+            <div class="info-row">
