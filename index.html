@@ -353,6 +353,45 @@
     @media (max-width: 767px) {
       .nav-links { display: none; }
     }
+  /* Button container layout alignment */
+  .social-container {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  /* Core button design frames */
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: #0B1329;
+    border: 2px solid #1E293B;
+    color: #94A3B8;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Nested graphic element parameters */
+  .social-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+
+  /* Hover color states using the gold chess theme */
+  .social-btn:hover {
+    color: #D97706;
+    border-color: #D97706;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
+  }
+
   </style>
 </head>
 <body>
