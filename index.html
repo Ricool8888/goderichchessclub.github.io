@@ -22,8 +22,8 @@
       color: #F1F5F9;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
+      /* FIX: Removed rigid viewport locks to allow natural scroll tracking down the page */
+      overflow-y: auto;
       min-height: 100vh;
     }
     
@@ -103,26 +103,22 @@
       background-color: #F59E0B;
     }
 
-    /* HERO STABLE FLEX SYSTEM Layout */
+    /* HERO STABLE GRID SYSTEM Layout */
     .hero-main {
       padding: 60px 0;
-      flex: 1 0 auto;
     }
     .split-layout {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 48px;
     }
     
     @media (min-width: 992px) {
       .hero-main { padding: 80px 0; }
       .split-layout {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
+        grid-template-columns: 7fr 5fr;
+        align-items: start;
       }
-      .hero-text-block { width: 55%; }
-      .hero-card-block { width: 40%; }
     }
 
     /* Content Layout Typographies */
@@ -286,8 +282,7 @@
       background-color: #020617;
       border-top: 1px solid rgba(217, 119, 6, 0.2);
       padding: 40px 0;
-      margin-top: auto;
-      flex-shrink: 0;
+      margin-top: 60px;
     }
     .footer-flex {
       display: flex;
@@ -313,9 +308,8 @@
       align-items: center;
       gap: 16px;
     }
-    @media (min-width: 768px) {
-      .footer-right { align-items: flex-end; }
-    }
+    @media (min-width: 768px) { align-items: flex-end; }
+    
     .footer-nav {
       display: flex;
       gap: 16px;
@@ -330,13 +324,14 @@
     .social-links {
       display: flex;
       gap: 12px;
+      margin-top: 4px;
     }
     .social-icon-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background-color: #0B1329;
       border: 1px solid #1E293B;
@@ -383,7 +378,7 @@
     </div>
   </header>
 
-  <!-- CONTENT VIEW HERO AREA -->
+  <!-- CONTENT VIEW AREA -->
   <main id="main-content" class="hero-main">
     <div class="container">
       <div class="split-layout">
@@ -402,3 +397,7 @@
           <div class="btn-group">
             <a href="about.html" class="btn-primary">Learn About Our Club</a>
             <a href="mailto:goderichchessclub@gmail.com" class="btn-secondary">Email Inquiries</a>
+          </div>
+        </div>
+
+        <!-- Right Side Schedule Card Container -->
