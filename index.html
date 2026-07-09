@@ -5,143 +5,379 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goderich Chess Club</title>
   
-  <!-- FAIL-SAFE: Replaced the experimental CDN script with a stable, compiled production stylesheet -->
-  <link rel="stylesheet" href="https://cloudflare.com" integrity="MnoG5H7x..." crossorigin="anonymous" />
-  
-  <!-- ACCESSIBILITY: Custom focus ring adjustments and base dark mode background fallback -->
+  <!-- SELF-CONTAINED CSS: Zero internet dependencies, fully cross-browser compatible -->
   <style>
+    /* Reset & Base Formatting styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
     *:focus-visible {
-      outline: 3px solid #F59E0B !important;
+      outline: 3px solid #D97706 !important;
       outline-offset: 2px;
     }
     body {
-      background-color: #0F172A !important;
-      color: #F1F5F9 !important;
+      background-color: #0B1329;
+      color: #F1F5F9;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
-    .text-gold { color: #F59E0B; }
-    .bg-royal { background-color: #020617; }
-    .border-gold-30 { border-color: rgba(245, 158, 11, 0.3); }
+    
+    /* Layout Framework Container Utility */
+    .container {
+      width: 100%;
+      max-w: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    /* Screen Reader Skip Navigation Link */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    .sr-only:focus {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 100;
+      background: #D97706;
+      color: #020617;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      clip: auto;
+      width: auto;
+      height: auto;
+    }
+
+    /* NAVBAR MODULE ARCHITECTURE */
+    .site-header {
+      background-color: #020617;
+      border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .navbar-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+    .gold-text {
+      color: #D97706;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-item {
+      color: #CBD5E1;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      transition: color 0.2s ease;
+    }
+    .nav-item:hover, .nav-item.active {
+      color: #D97706;
+    }
+    .nav-item.active {
+      border-bottom: 2px solid #D97706;
+      padding-bottom: 4px;
+    }
+    .btn-join {
+      background-color: #D97706;
+      color: #020617;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    .btn-join:hover {
+      background-color: #F59E0B;
+    }
+
+    /* HERO GRID LAYOUT STRUCTURE */
+    .hero-main {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+    .split-grid {
+      display: grid;
+      grid-template-cols: 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (min-width: 992px) {
+      .split-grid {
+        grid-template-cols: 7fr 5fr;
+      }
+    }
+
+    /* COPY & TYPOGRAPHY SYSTEM */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(217, 119, 6, 0.1);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      color: #D97706;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    @media (min-width: 768px) {
+      .hero-title { font-size: 56px; }
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: #94A3B8;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    @media (min-width: 576px) {
+      .btn-group { flex-direction: row; }
+    }
+    .btn-primary {
+      background-color: #D97706;
+      color: #020617;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.2s ease;
+    }
+    .btn-primary:hover {
+      background-color: #F59E0B;
+    }
+    .btn-secondary {
+      border: 2px solid #334155;
+      color: #E2E8F0;
+      font-weight: 600;
+      font-size: 18px;
+      padding: 12px 26px;
+      border-radius: 12px;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(217, 119, 6, 0.5);
+      background-color: #1E293B;
+      color: #FFFFFF;
+    }
+
+    /* INFO CARD DISPLAY SYSTEM */
+    .meeting-card {
+      background: linear-gradient(180deg, #020617 0%, #0B1329 100%);
+      border: 2px solid rgba(217, 119, 6, 0.6);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #1E293B;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #D97706;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .info-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background-color: #020617;
+      border: 1px solid #1E293B;
+      font-size: 20px;
+    }
+    .info-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748B;
+      font-weight: 600;
+    }
+    .info-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-top: 2px;
+    }
+    .address-block {
+      font-style: normal;
+      font-size: 16px;
+      font-weight: 600;
+      color: #FFFFFF;
+      line-height: 1.4;
+    }
+    .address-sub {
+      font-size: 14px;
+      color: #94A3B8;
+      font-weight: 400;
+      display: block;
+      margin-top: 2px;
+    }
+    .card-footer {
+      border-top: 1px solid #1E293B;
+      padding-top: 24px;
+      margin-top: 24px;
+    }
+    .btn-rsvp {
+      display: block;
+      width: 100%;
+      background: linear-gradient(90deg, #D97706 0%, #B45309 100%);
+      color: #020617;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      text-align: center;
+      font-size: 16px;
+      transition: opacity 0.2s ease;
+    }
+    .btn-rsvp:hover {
+      opacity: 0.95;
+    }
+    .card-note {
+      font-size: 12px;
+      color: #64748B;
+      text-align: center;
+      margin-top: 12px;
+    }
+    
+    /* MOBILE NAVIGATION DISPLAY CONFIG */
+    @media (max-width: 767px) {
+      .nav-links { display: none; }
+    }
   </style>
 </head>
-<body class="font-sans antialiased">
+<body>
 
-  <!-- ACCESSIBILITY: Skip to main content link for keyboard navigation users -->
-  <a href="#main-content" class="sr-only focus:not-only-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold">
-    Skip to main content
-  </a>
+  <!-- ACCESSIBILITY: Keyboard Skip Navigation target Link -->
+  <a href="#main-content" class="sr-only">Skip to main content</a>
 
-  <!-- RESPONSIVE NAVBAR -->
-  <header class="w-full bg-black border-b border-yellow-600 border-opacity-20 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        
-        <!-- Logo Branding Section -->
-        <div class="flex items-center space-x-3">
-          <span class="text-2xl text-yellow-500" aria-hidden="true">♞</span>
-          <span class="text-xl font-bold tracking-tight text-white">
-            Goderich <span class="text-yellow-500">Chess Club</span>
-          </span>
-        </div>
-
-        <!-- Desktop Navigation Items -->
-        <nav class="hidden md:flex items-center space-x-8" aria-label="Main Navigation">
-          <a href="#" class="text-yellow-500 font-medium border-b-2 border-yellow-500 px-1 py-1" aria-current="page">Home</a>
-          <a href="#" class="text-gray-300 hover:text-white font-medium transition duration-200 px-1 py-1">About Us</a>
-          <a href="#" class="text-gray-300 hover:text-white font-medium transition duration-200 px-1 py-1">Tournaments</a>
-          <a href="#" class="text-gray-300 hover:text-white font-medium transition duration-200 px-1 py-1">Resources</a>
-          <a href="#" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-5 py-2.5 rounded-lg shadow-md transition duration-200">
-            Join Club
-          </a>
+  <!-- RESPONSIVE NAVBAR CONTAINER -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-flex">
+        <a href="#" class="brand-logo">
+          <span aria-hidden="true">♞</span>
+          Goderich <span class="gold-text">Chess Club</span>
+        </a>
+        <nav class="nav-links" aria-label="Main Navigation">
+          <a href="#" class="nav-item active" aria-current="page">Home</a>
+          <a href="#" class="nav-item">About Us</a>
+          <a href="#" class="nav-item">Tournaments</a>
+          <a href="#" class="nav-item">Resources</a>
+          <a href="#" class="btn-join">Join Club</a>
         </nav>
-
       </div>
     </div>
   </header>
 
-  <!-- HERO SECTION WITH INTEGRATED MEETING INFO CARD -->
-  <main id="main-content" class="relative overflow-hidden py-12 lg:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+  <!-- HERO SECTION WITH MEETING INFO DISPLAY -->
+  <main id="main-content" class="hero-main">
+    <div class="container">
+      <div class="split-grid">
         
-        <!-- Left Side: Hero Title Copy & Call To Actions -->
-        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-yellow-500 bg-opacity-10 border border-yellow-500 border-opacity-30 text-yellow-500 text-sm font-semibold tracking-wide uppercase">
-            <span>🛡️</span> Huron County Chess Community
+        <!-- Copywriting Left Column Column -->
+        <div class="hero-text-block">
+          <div class="badge">
+            <span aria-hidden="true">🛡️</span> Huron County Chess Community
           </div>
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            Master Your Next Move in <span class="text-yellow-500">Goderich</span>
+          <h1 class="hero-title">
+            Master Your Next Move in <span class="gold-text">Goderich</span>
           </h1>
-          <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+          <p class="hero-desc">
             Welcome to the premier community hub for chess enthusiasts of all generations in Goderich, Ontario. Whether you are discovering your first opening or mastering masterclass endgame play, pull up a chair at our table.
           </p>
-          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-            <a href="#" class="w-full sm:w-auto text-center bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200 text-lg">
-              Explore Our Programs
-            </a>
-            <a href="#" class="w-full sm:w-auto text-center border-2 border-gray-700 hover:border-yellow-500 text-gray-200 hover:text-white font-semibold px-8 py-4 rounded-xl transition duration-200 text-lg">
-              View Calendar
-            </a>
+          <div class="btn-group">
+            <a href="#" class="btn-primary">Explore Our Programs</a>
+            <a href="#" class="btn-secondary">View Calendar</a>
           </div>
         </div>
 
-        <!-- Right Side: Next Meeting Info Interface Card Container -->
-        <div class="lg:col-span-5 w-full max-w-md mx-auto">
-          <section class="bg-royal border-2 border-yellow-500 border-opacity-60 rounded-2xl shadow-2xl p-6 sm:p-8 relative overflow-hidden" aria-labelledby="card-heading">
-            
-            <div class="flex items-center space-x-3 border-b border-gray-800 pb-4 mb-6">
-              <span class="text-2xl text-yellow-500" aria-hidden="true">📋</span>
-              <h2 id="card-heading" class="text-xl font-bold uppercase tracking-wider text-yellow-500">
-                Next Official Meeting
-              </h2>
+        <!-- Next Meeting Information Card Column -->
+        <div class="hero-card-block">
+          <section class="meeting-card" aria-labelledby="card-heading">
+            <div class="card-header-flex">
+              <span class="gold-text" style="font-size: 24px;" aria-hidden="true">📋</span>
+              <h2 id="card-heading" class="card-title">Next Official Meeting</h2>
             </div>
 
-            <!-- Content Definition Details Block -->
-            <div class="space-y-5">
-              
-              <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-black border border-gray-800 text-xl" aria-hidden="true">📅</div>
-                <div>
-                  <p class="text-xs uppercase tracking-wider text-gray-400 font-medium">Date</p>
-                  <p class="text-base sm:text-lg font-semibold text-white">Thursday, July 16, 2026</p>
-                </div>
+            <div class="info-row">
+              <div class="info-icon" aria-hidden="true">📅</div>
+              <div>
+                <p class="info-label">Date</p>
+                <p class="info-value">Thursday, July 16, 2026</p>
               </div>
-
-              <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-black border border-gray-800 text-xl" aria-hidden="true">⏰</div>
-                <div>
-                  <p class="text-xs uppercase tracking-wider text-gray-400 font-medium">Time Interval</p>
-                  <p class="text-base sm:text-lg font-semibold text-white">6:30 PM &ndash; 9:00 PM EST</p>
-                </div>
-              </div>
-
-              <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-black border border-gray-800 text-xl" aria-hidden="true">📍</div>
-                <div>
-                  <p class="text-xs uppercase tracking-wider text-gray-400 font-medium">Location Venue</p>
-                  <address class="not-italic text-base sm:text-lg font-semibold text-white leading-snug">
-                    Goderich Public Library<br>
-                    <span class="text-sm text-gray-400 font-normal">52 Montreal St, Goderich, ON N7A 2G4</span>
-                  </address>
-                </div>
-              </div>
-
             </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col space-y-3">
-              <a href="#" class="w-full text-center bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md">
-                RSVP / Save Your Board
-              </a>
-              <p class="text-xs text-center text-gray-400">
-                * Drop-ins are always free. Chessboards and timers provided!
-              </p>
+            <div class="info-row">
+              <div class="info-icon" aria-hidden="true">⏰</div>
+              <div>
+                <p class="info-label">Time Interval</p>
+                <p class="info-value">6:30 PM &ndash; 9:00 PM EST</p>
+              </div>
             </div>
 
-          </section>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-</body>
-</html>
+            <div class="info-row">
