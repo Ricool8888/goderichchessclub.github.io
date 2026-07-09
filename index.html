@@ -23,6 +23,9 @@
       color: #F1F5F9;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     
     .container {
@@ -104,6 +107,7 @@
     /* HERO SECTION LAYOUT */
     .hero-main {
       padding: 60px 0;
+      flex: 1; /* Pushes footer to the bottom on short screens */
     }
     .split-grid {
       display: flex;
@@ -277,6 +281,93 @@
       text-align: center;
       margin-top: 12px;
     }
+
+    /* FOOTER ARCHITECTURE */
+    .site-footer {
+      background-color: #020617;
+      border-top: 1px solid rgba(217, 119, 6, 0.2);
+      padding: 40px 0;
+      margin-top: auto;
+    }
+    .footer-flex {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+    @media (min-width: 768px) {
+      .footer-flex {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+    .footer-text {
+      color: #64748B;
+      font-size: 14px;
+    }
+    .footer-text a {
+      color: #94A3B8;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-text a:hover {
+      color: #D97706;
+    }
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .footer-right {
+        align-items: flex-end;
+      }
+    }
+    .footer-nav {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-nav-link {
+      color: #94A3B8;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+    .footer-nav-link:hover {
+      color: #D97706;
+    }
+    .social-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .social-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #0B1329;
+      border: 1px solid #1E293B;
+      color: #94A3B8;
+      transition: all 0.2s ease;
+    }
+    .social-icon-btn:hover {
+      color: #D97706;
+      border-color: #D97706;
+      transform: translateY(-2px);
+    }
+    .social-icon-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
     
     @media (max-width: 767px) {
       .nav-links { display: none; }
@@ -297,7 +388,7 @@
         </a>
         <nav class="nav-links" aria-label="Main Navigation">
           <a href="index.html" class="nav-item active" aria-current="page">Home</a>
-          <a href="about.html" class="nav-item">About Us</a> <!-- Linked to about.html -->
+          <a href="about.html" class="nav-item">About Us</a>
           <a href="#" class="nav-item">Tournaments</a>
           <a href="#" class="nav-item">Resources</a>
           <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
@@ -311,7 +402,7 @@
     <div class="container">
       <div class="split-grid">
         
-        <!-- Left Text Block (Updated with actual goderichchessclub.com text) -->
+        <!-- Left Text Block -->
         <div class="hero-text-block">
           <div class="badge">
             <span aria-hidden="true">🛡️</span> Friendly & Supportive Environment
@@ -320,47 +411,3 @@
             Welcome to <span class="gold-text">Goderich Chess Club</span>
           </h1>
           <p class="hero-desc">
-            Whether you are a seasoned player looking to sharpen your skills or a newcomer eager to learn the game, this is the perfect opportunity to immerse yourself in the fascinating world of chess. Engage in fun and challenging matches while making new friends along the way.
-          </p>
-          <div class="btn-group">
-            <a href="about.html" class="btn-primary">Learn About Our Club</a>
-            <a href="mailto:goderichchessclub@gmail.com" class="btn-secondary">Email Inquiries</a>
-          </div>
-        </div>
-
-        <!-- Right Next Meeting Info Card (Updated Schedule & Contact Info) -->
-        <div class="hero-card-block">
-          <section class="meeting-card" aria-labelledby="card-heading">
-            <div class="card-header-flex">
-              <span class="gold-text" style="font-size: 20px;" aria-hidden="true">📋</span>
-              <h2 id="card-heading" class="card-title">Weekly Club Schedule</h2>
-            </div>
-
-            <div class="info-row">
-              <div class="info-icon" aria-hidden="true">📅</div>
-              <div>
-                <p class="info-label">Meeting Day</p>
-                <p class="info-value">Every Tuesday Night</p>
-              </div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-icon" aria-hidden="true">⏰</div>
-              <div>
-                <p class="info-label">Time</p>
-                <p class="info-value">6:00 PM &ndash; 8:00 PM</p>
-              </div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-icon" aria-hidden="true">📍</div>
-              <div>
-                <p class="info-label">Location Venue</p>
-                <address class="address-block">
-                  Goderich Branch Library<br>
-                  <span class="address-sub">52 Montreal St, Goderich, ON N7A 2G4</span>
-                </address>
-              </div>
-            </div>
-
-            <div class="info-row">
