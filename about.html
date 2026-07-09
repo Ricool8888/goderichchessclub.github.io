@@ -395,6 +395,33 @@
     color: #81B64C;
     border-color: #81B64C;
   }
+
+       /* Typography System Content Formatting rules */
+  .about-item {
+    background: linear-gradient(180deg, #020617 0%, #060B18 100%);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    border-left: 4px solid #D97706; /* Distinctive Gold Edge Anchor accent */
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .about-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(217, 119, 6, 0.4);
+  }
+  .about-header {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .about-answer {
+    font-size: 15px;
+    color: #CBD5E1;
+    line-height: 1.6;
+  }
   </style>
 </head>
 <body>
@@ -418,10 +445,9 @@
     </div>
   </header>
     <main>
-      <div class="container">
-      <h1>About Our Club</h1>
-      <div class="content-card">
-        <p>Volunteer-run, weekly community chess club, safe space for all to play at Goderich Branch, Huron County Library, 52 Montreal St, Goderich, Tuesday 6-8 pm. Players of all skill levels are welcome, even those who’ve never played. Admission / membership is free.  The club was established on January 20th, 2026</p>
+        <div class="about-item">
+        <h1 class="about-header">About Our Club</h1>
+        <p class="about-answer">Volunteer-run, weekly community chess club, safe space for all to play at Goderich Branch, Huron County Library, 52 Montreal St, Goderich, Tuesday 6-8 pm. Players of all skill levels are welcome, even those who’ve never played. Admission / membership is free.  The club was established on January 20th, 2026</p>
       </div>
       <div class="content-card">
         <h2>What We Offer</h2>
@@ -445,7 +471,6 @@ Riley possesses advanced proficiency in the Swiss Manager pairing system and is 
 <br></br>
 Riley is an active and proud member of several prominent chess clubs, including the Etobicoke Chess Club, Mississauga Chess Club, and Goderich Chess Club.FIDE Arbiter with 1900+ CFC rating.</p>
       </div>
-        </div>
     </main>
   </div>
 </body>
