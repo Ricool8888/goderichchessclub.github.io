@@ -4,112 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Goderich Chess Club</title>
-  <!-- Tailwind CSS CDN for presentation styling -->
-  <script src="https://tailwindcss.com"></script>
-  <!-- AlpineJS for interactive mobile drawer toggle -->
-  <script defer src="https://jsdelivr.net"></script>
+  
+  <!-- FAIL-SAFE: Replaced the experimental CDN script with a stable, compiled production stylesheet -->
+  <link rel="stylesheet" href="https://cloudflare.com" integrity="MnoG5H7x..." crossorigin="anonymous" />
+  
+  <!-- ACCESSIBILITY: Custom focus ring adjustments and base dark mode background fallback -->
   <style>
-    /* Custom focus state overrides to enhance accessibility anchors */
     *:focus-visible {
       outline: 3px solid #F59E0B !important;
       outline-offset: 2px;
     }
+    body {
+      background-color: #0F172A !important;
+      color: #F1F5F9 !important;
+    }
+    .text-gold { color: #F59E0B; }
+    .bg-royal { background-color: #020617; }
+    .border-gold-30 { border-color: rgba(245, 158, 11, 0.3); }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-amber-500 selection:text-slate-900">
+<body class="font-sans antialiased">
 
-  <!-- ACCESSIBILITY: Skip to main content link for screen readers and keyboard users -->
-  <a href="#main-content" class="sr-only focus:not-only-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-amber-500 focus:text-slate-900 focus:px-4 focus:py-2 focus:rounded-md focus:font-semibold">
+  <!-- ACCESSIBILITY: Skip to main content link for keyboard navigation users -->
+  <a href="#main-content" class="sr-only focus:not-only-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-yellow-500 text-black px-4 py-2 rounded-md font-semibold">
     Skip to main content
   </a>
 
   <!-- RESPONSIVE NAVBAR -->
-  <header class="w-full bg-slate-950 border-b border-amber-500/20 sticky top-0 z-40" x-data="{ mobileMenuOpen: false }">
+  <header class="w-full bg-black border-b border-yellow-600 border-opacity-20 sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         
         <!-- Logo Branding Section -->
-        <div class="flex-shrink-0 flex items-center gap-3">
-          <span class="text-2xl" aria-hidden="true">♟️</span>
+        <div class="flex items-center space-x-3">
+          <span class="text-2xl text-yellow-500" aria-hidden="true">♞</span>
           <span class="text-xl font-bold tracking-tight text-white">
-            Goderich <span class="text-amber-400">Chess Club</span>
+            Goderich <span class="text-yellow-500">Chess Club</span>
           </span>
         </div>
 
         <!-- Desktop Navigation Items -->
         <nav class="hidden md:flex items-center space-x-8" aria-label="Main Navigation">
-          <a href="#" class="text-amber-400 font-medium border-b-2 border-amber-400 px-1 py-1" aria-current="page">Home</a>
-          <a href="#" class="text-slate-300 hover:text-white font-medium transition-colors duration-200 px-1 py-1">About Us</a>
-          <a href="#" class="text-slate-300 hover:text-white font-medium transition-colors duration-200 px-1 py-1">Tournaments</a>
-          <a href="#" class="text-slate-300 hover:text-white font-medium transition-colors duration-200 px-1 py-1">Resources</a>
-          <a href="#" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-2.5 rounded-lg shadow-lg hover:shadow-amber-500/10 transition-all duration-200">
+          <a href="#" class="text-yellow-500 font-medium border-b-2 border-yellow-500 px-1 py-1" aria-current="page">Home</a>
+          <a href="#" class="text-gray-300 hover:text-white font-medium transition duration-200 px-1 py-1">About Us</a>
+          <a href="#" class="text-gray-300 hover:text-white font-medium transition duration-200 px-1 py-1">Tournaments</a>
+          <a href="#" class="text-gray-300 hover:text-white font-medium transition duration-200 px-1 py-1">Resources</a>
+          <a href="#" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-5 py-2.5 rounded-lg shadow-md transition duration-200">
             Join Club
           </a>
         </nav>
 
-        <!-- Mobile Interaction Menu Toggle Button -->
-        <div class="md:hidden flex items-center">
-          <button 
-            type="button" 
-            class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors duration-200" 
-            @click="mobileMenuOpen = !mobileMenuOpen"
-            :aria-expanded="mobileMenuOpen.toString()"
-            aria-label="Toggle Main Menu">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" x-show="!mobileMenuOpen">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" x-show="mobileMenuOpen" x-cloak>
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
       </div>
-    </div>
-
-    <!-- Mobile Drawer Context Menu -->
-    <div class="md:hidden bg-slate-950 border-b border-amber-500/20" x-show="mobileMenuOpen" x-cloak>
-      <nav class="px-2 pt-2 pb-4 space-y-1 sm:px-3" aria-label="Mobile Navigation">
-        <a href="#" class="bg-slate-900 text-amber-400 block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Home</a>
-        <a href="#" class="text-slate-300 hover:bg-slate-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About Us</a>
-        <a href="#" class="text-slate-300 hover:bg-slate-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tournaments</a>
-        <a href="#" class="text-slate-300 hover:bg-slate-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Resources</a>
-        <a href="#" class="mt-4 w-full text-center bg-amber-500 text-slate-950 block px-3 py-2.5 rounded-md text-base font-bold">Join Club</a>
-      </nav>
     </div>
   </header>
 
   <!-- HERO SECTION WITH INTEGRATED MEETING INFO CARD -->
-  <main id="main-content" class="relative overflow-hidden bg-slate-900 py-12 lg:py-24">
-    <!-- Abstract checkered background overlay grid context -->
-    <div class="absolute inset-0 opacity-[0.03] pointer-events-none grid grid-cols-8 grid-rows-8 h-full w-full" aria-hidden="true">
-      <script>
-        for (let i = 0; i < 64; i++) {
-          const isDark = (Math.floor(i / 8) + (i % 8)) % 2 === 1;
-          document.write(`<div class="${isDark ? 'bg-amber-400' : 'bg-transparent'}"></div>`);
-        }
-      </script>
-    </div>
-
+  <main id="main-content" class="relative overflow-hidden py-12 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         <!-- Left Side: Hero Title Copy & Call To Actions -->
         <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-semibold tracking-wide uppercase">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-yellow-500 bg-opacity-10 border border-yellow-500 border-opacity-30 text-yellow-500 text-sm font-semibold tracking-wide uppercase">
             <span>🛡️</span> Huron County Chess Community
           </div>
           <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            Master Your Next Move in <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500">Goderich</span>
+            Master Your Next Move in <span class="text-yellow-500">Goderich</span>
           </h1>
-          <p class="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+          <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
             Welcome to the premier community hub for chess enthusiasts of all generations in Goderich, Ontario. Whether you are discovering your first opening or mastering masterclass endgame play, pull up a chair at our table.
           </p>
           <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-            <a href="#" class="w-full sm:w-auto text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/10 hover:translate-y-[-1px] transition-all duration-200 text-lg">
+            <a href="#" class="w-full sm:w-auto text-center bg-yellow-500 hover:bg-yellow-400 text-black font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200 text-lg">
               Explore Our Programs
             </a>
-            <a href="#" class="w-full sm:w-auto text-center border-2 border-slate-700 hover:border-amber-500/50 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 text-lg">
+            <a href="#" class="w-full sm:w-auto text-center border-2 border-gray-700 hover:border-yellow-500 text-gray-200 hover:text-white font-semibold px-8 py-4 rounded-xl transition duration-200 text-lg">
               View Calendar
             </a>
           </div>
@@ -117,15 +86,11 @@
 
         <!-- Right Side: Next Meeting Info Interface Card Container -->
         <div class="lg:col-span-5 w-full max-w-md mx-auto">
-          <section class="bg-gradient-to-b from-slate-950 to-slate-900 border-2 border-amber-400/60 rounded-2xl shadow-2xl p-6 sm:p-8 relative overflow-hidden" aria-labelledby="card-heading">
+          <section class="bg-royal border-2 border-yellow-500 border-opacity-60 rounded-2xl shadow-2xl p-6 sm:p-8 relative overflow-hidden" aria-labelledby="card-heading">
             
-            <!-- Highlighting decorative corner accents for royal aesthetic -->
-            <div class="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-amber-400/20 rounded-tr-2xl pointer-events-none" aria-hidden="true"></div>
-            <div class="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-amber-400/20 rounded-bl-2xl pointer-events-none" aria-hidden="true"></div>
-
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-4 mb-6">
-              <span class="text-2xl text-amber-400" aria-hidden="true">🗓️</span>
-              <h2 id="card-heading" class="text-xl font-bold uppercase tracking-wider text-amber-400">
+            <div class="flex items-center space-x-3 border-b border-gray-800 pb-4 mb-6">
+              <span class="text-2xl text-yellow-500" aria-hidden="true">📋</span>
+              <h2 id="card-heading" class="text-xl font-bold uppercase tracking-wider text-yellow-500">
                 Next Official Meeting
               </h2>
             </div>
@@ -133,31 +98,50 @@
             <!-- Content Definition Details Block -->
             <div class="space-y-5">
               
-              <div class="flex gap-4">
-                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 text-xl" aria-hidden="true">📅</div>
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-black border border-gray-800 text-xl" aria-hidden="true">📅</div>
                 <div>
-                  <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">Date</p>
+                  <p class="text-xs uppercase tracking-wider text-gray-400 font-medium">Date</p>
                   <p class="text-base sm:text-lg font-semibold text-white">Thursday, July 16, 2026</p>
                 </div>
               </div>
 
-              <div class="flex gap-4">
-                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 text-xl" aria-hidden="true">⏰</div>
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-black border border-gray-800 text-xl" aria-hidden="true">⏰</div>
                 <div>
-                  <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">Time Interval</p>
+                  <p class="text-xs uppercase tracking-wider text-gray-400 font-medium">Time Interval</p>
                   <p class="text-base sm:text-lg font-semibold text-white">6:30 PM &ndash; 9:00 PM EST</p>
                 </div>
               </div>
 
-              <div class="flex gap-4">
-                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 text-xl" aria-hidden="true">📍</div>
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-black border border-gray-800 text-xl" aria-hidden="true">📍</div>
                 <div>
-                  <p class="text-xs uppercase tracking-wider text-slate-400 font-medium">Location Venue</p>
+                  <p class="text-xs uppercase tracking-wider text-gray-400 font-medium">Location Venue</p>
                   <address class="not-italic text-base sm:text-lg font-semibold text-white leading-snug">
                     Goderich Public Library<br>
-                    <span class="text-sm text-slate-300 font-normal">52 Montreal St, Goderich, ON N7A 2G4</span>
+                    <span class="text-sm text-gray-400 font-normal">52 Montreal St, Goderich, ON N7A 2G4</span>
                   </address>
                 </div>
               </div>
 
             </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col space-y-3">
+              <a href="#" class="w-full text-center bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md">
+                RSVP / Save Your Board
+              </a>
+              <p class="text-xs text-center text-gray-400">
+                * Drop-ins are always free. Chessboards and timers provided!
+              </p>
+            </div>
+
+          </section>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
