@@ -450,7 +450,45 @@
   .books-table tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.03);
   }
+/* RESPONSIVE ASPECT RATIO LOCK FOR MOBILE SCREENS */
+  .calendar-responsive-frame {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 75%; /* Forces a standard 4:3 presentation box shape */
+    border: 2px solid rgba(217, 119, 6, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    background-color: #ffffff; /* Gives iframe content a crisp light backdrop inside the calendar matrix */
+  }
+  .calendar-responsive-frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 
+  /* Calendar footer subscription link callout */
+  .calendar-footer-sync {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 15px;
+    color: #CBD5E1;
+  }
+  .calendar-footer-sync a {
+    color: #D97706;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s ease;
+    display: inline-block;
+    margin-left: 4px;
+  }
+  .calendar-footer-sync a:hover {
+    color: #F59E0B;
+    text-decoration: underline;
+  }
+    
   </style>
 </head>
 <body>
@@ -488,7 +526,24 @@
           <h1 class="hero-title">
             <span class="gold-text">Events Calendar</span>
           </h1>
+          <section class="calendar-section" aria-labelledby="calendar-heading">
+  <div class="calendar-container">
 
+    <!-- CALENDAR CORE DISPLAY FRAME -->
+    <div class="calendar-responsive-frame">
+<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=America%2FToronto&showCalendars=0&showPrint=0&mode=AGENDA&src=Z29kZXJpY2hjaGVzc2NsdWJAZ21haWwuY29t&color=%23039be5" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+
+    <div class="calendar-footer-sync">
+      <p>Want these events on your phone? 
+        <a href="https://google.com" target="_blank" rel="noopener noreferrer">
+          👉 Click here to subscribe and sync to your personal calendar
+        </a>
+      </p>
+    </div>
+
+  </div>
+</section>
         </div>
 
         <!-- Social media Container -->
