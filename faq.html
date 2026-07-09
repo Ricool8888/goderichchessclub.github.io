@@ -405,52 +405,88 @@
     border: 1px solid rgba(217, 119, 6, 0.3);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
   }
-
-  /* Table base structure */
-  .books-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #020617;
-    text-align: left;
-    font-size: 16px;
+  /* Base Container & Structural Framing */
+  .faq-section {
+    padding: 60px 0;
+    background-color: transparent;
   }
-
-  /* Header row design */
-  .books-table th {
-    background-color: #0B1329;
+  .faq-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Section Header Styling */
+  .faq-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .faq-badge {
+    display: inline-flex;
+    background-color: rgba(217, 119, 6, 0.1);
+    border: 1px solid rgba(217, 119, 6, 0.3);
     color: #D97706;
-    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    padding: 16px 20px;
-    border-bottom: 2px solid rgba(217, 119, 6, 0.5);
+    margin-bottom: 16px;
+  }
+  .faq-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 12px;
+  }
+  .faq-subtitle {
+    font-size: 16px;
+    color: #94A3B8;
   }
 
-  /* Data cell layout rows */
-  .books-table td {
-    padding: 14px 20px;
-    color: #E2E8F0;
-    border-bottom: 1px solid #1E293B;
+  /* List & Individual Item Modular Grid Blocks */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .faq-item {
+    background: linear-gradient(180deg, #020617 0%, #060B18 100%);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    border-left: 4px solid #D97706; /* Distinctive Gold Edge Anchor accent */
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .faq-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(217, 119, 6, 0.4);
   }
 
-  /* Right column grid cell align */
-  .books-table th:last-child,
-  .books-table td:last-child {
-    text-align: right;
-    width: 120px;
+  /* Typography System Content Formatting rules */
+  .faq-question {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    line-height: 1.4;
   }
-
-  /* Highlight accent text for pricing elements */
-  .price-cell {
-    color: #D97706 !important;
-    font-weight: 600;
+  .faq-answer {
+    font-size: 15px;
+    color: #CBD5E1;
+    line-height: 1.6;
   }
-
-  /* Interactive hover highlight tracks */
-  .books-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.03);
+  .faq-answer strong {
+    color: #FFFFFF;
   }
-
+  .faq-note {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #64748B;
+  }
   </style>
 </head>
 <body>
@@ -488,7 +524,107 @@
           <h1 class="hero-title">
             <span class="gold-text">FAQ</span>
           </h1>
+          
+<section class="faq-section" aria-labelledby="faq-main-heading">
+  <div class="faq-container">
+    
+    <div class="faq-header">
+      <p class="faq-subtitle">Everything you need to know about joining the Goderich Chess Club.</p>
+    </div>
 
+    <div class="faq-list">
+      
+      <!-- FAQ Item 1 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Do I need to bring my own chess board, pieces or clock?</h3>
+        <p class="faq-answer">No, all equipment is provided.</p>
+      </div>
+
+      <!-- FAQ Item 2 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Where is the chess club located?</h3>
+        <p class="faq-answer">
+          Goderich Branch, Huron County Library, <br>
+          <strong>52 Montreal St, Goderich, ON N7A 2G4</strong>
+        </p>
+      </div>
+
+      <!-- FAQ Item 3 -->
+      <div class="faq-item">
+        <h3 class="faq-question">When does the club meet?</h3>
+        <p class="faq-answer">Tuesday evenings from 6:00 PM to 8:00 PM. Participants may come and go as they please during this timeframe.</p>
+      </div>
+
+      <!-- FAQ Item 4 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Is there a cost to join the club?</h3>
+        <p class="faq-answer">No, this club is a non-profit club. Donations are accepted and used to directly fund: replacement of defective equipment, purchasing of new equipment, and a maintenance fee to keep the website hosted.</p>
+      </div>
+
+      <!-- FAQ Item 5 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Who is this club for?</h3>
+        <p class="faq-answer">This club warmly welcomes all chess enthusiasts of any age to join us. Whether you are a seasoned player or a newcomer eager to learn the game, this is the perfect opportunity to immerse yourself in the world of chess.</p>
+      </div>
+
+      <!-- FAQ Item 6 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Do I need to register for the club?</h3>
+        <p class="faq-answer">No, there is no registration required.</p>
+      </div>
+
+      <!-- FAQ Item 7 -->
+      <div class="faq-item">
+        <h3 class="faq-question">What is the skill level of the club?</h3>
+        <p class="faq-answer">You can be a beginner, intermediate, expert, or master level player. Players of all skill levels are welcome to join the club.</p>
+      </div>
+
+      <!-- FAQ Item 8 -->
+      <div class="faq-item">
+        <h3 class="faq-question">How many people normally attend the club?</h3>
+        <p class="faq-answer">Information will be gathered after the launch of the club to determine the average visitors of the club.</p>
+      </div>
+
+      <!-- FAQ Item 9 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Are games recorded? Can I record games? Are score sheets provided?</h3>
+        <p class="faq-answer">Games are not recorded unless both participants agree to have the game recorded. Score sheets are not provided.</p>
+      </div>
+
+      <!-- FAQ Item 10 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Does the club use chess clocks? Do I need to know how to use one?</h3>
+        <p class="faq-answer">Yes, the club uses chess clocks. Players are not required to use one but are free to use one if they like. If needed, training can be provided to teach players how to use the chess clock correctly.</p>
+      </div>
+
+      <!-- FAQ Item 11 -->
+      <div class="faq-item">
+        <h3 class="faq-question">How do players get paired / matched up?</h3>
+        <p class="faq-answer">Players are free to play anyone they like at the club. No pairing software is used unless the game is to be rated.</p>
+      </div>
+
+      <!-- FAQ Item 12 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Are spectators allowed?</h3>
+        <p class="faq-answer">Yes, spectators are allowed.</p>
+      </div>
+
+      <!-- FAQ Item 13 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Where should I go for announcements of the club (if the club is closed a certain day, etc)?</h3>
+        <p class="faq-answer">If the club is closed, there will be a post on the website. Please refer to the posts / news web page for the latest updates.</p>
+      </div>
+
+      <!-- FAQ Item 14 -->
+      <div class="faq-item">
+        <h3 class="faq-question">Can I bring snacks / drinks to the club?</h3>
+        <p class="faq-answer">Drinks in covered containers (with lids) are allowed provided they are non-alcoholic. Snacks are fine to bring as along as it's not fast food. <br><em class="faq-note">*Note to be confirmed with library staff on the official policy*</em></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+          
         </div>
 
         <!-- Social media Container -->
