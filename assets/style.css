@@ -827,3 +827,180 @@ a { color: var(--chess-green); }
   margin-bottom: 24px;
 }
 .storage-note strong { color: var(--slate-200); }
+
+/* =========================================================
+   ABOUT / FAQ / BOOKS FOR SALE - shared content components
+   ========================================================= */
+.content-section { padding: 0 0 48px; }
+.content-section:first-of-type { padding-top: 0; }
+
+.section-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.section-heading { font-size: 26px; font-weight: 800; color: var(--white); margin-bottom: 16px; }
+
+.content-card {
+  background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  border: 1px solid var(--slate-800);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.content-card p { color: var(--slate-300); font-size: 16px; line-height: 1.7; margin-bottom: 14px; }
+.content-card p:last-child { margin-bottom: 0; }
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .offer-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.offer-item {
+  background: var(--navy-800);
+  border: 1px solid var(--slate-800);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+}
+
+.offer-icon { font-size: 28px; margin-bottom: 10px; }
+.offer-label { color: var(--white); font-weight: 700; font-size: 15px; }
+
+.founder-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .founder-card { grid-template-columns: auto 1fr; }
+}
+
+.founder-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--gold-10);
+  border: 2px solid var(--gold-30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.founder-name { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.founder-title { font-size: 14px; color: var(--gold); font-weight: 600; margin-bottom: 12px; }
+
+.established-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--gold-10);
+  border: 1px solid var(--gold-30);
+  color: var(--gold);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* FAQ accordion */
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+
+.faq-item {
+  background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  border: 1px solid var(--slate-800);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  padding: 18px 22px;
+  cursor: pointer;
+}
+
+.faq-question:hover { color: var(--gold); }
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--slate-600);
+  color: var(--slate-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.faq-item.open .faq-icon { transform: rotate(45deg); border-color: var(--gold); color: var(--gold); }
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+  color: var(--slate-300);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.faq-answer-inner { padding: 0 22px 20px; }
+.faq-item.open .faq-answer { max-height: 400px; }
+
+/* Books for sale */
+.table-wrap {
+  background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  border: 1px solid var(--slate-800);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.price-table { width: 100%; border-collapse: collapse; }
+.price-table thead th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--slate-400);
+  font-weight: 700;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--slate-800);
+}
+.price-table thead th.price-col { text-align: right; }
+.price-table tbody td { padding: 16px 22px; font-size: 15px; color: var(--slate-100); border-bottom: 1px solid var(--slate-800); }
+.price-table tbody tr:last-child td { border-bottom: none; }
+.price-table tbody td.price-col { text-align: right; color: var(--gold); font-weight: 700; white-space: nowrap; }
+.price-table tbody tr:hover { background: rgba(217, 119, 6, 0.04); }
+
+.books-note {
+  font-size: 14px;
+  color: var(--slate-400);
+  margin-top: 16px;
+}
