@@ -1,36 +1,19 @@
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "gcc_draft_events_v1";
   var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var WEEKDAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
   var state = {
     viewYear: new Date().getFullYear(),
     viewMonth: new Date().getMonth(), // 0-indexed
-    publishedEvents: [], // loaded from assets/events.json
-    draftEvents: []      // loaded from localStorage (this browser only, not yet published)
+    publishedEvents: [] // loaded from assets/events.json - the only source of one-off events
   };
 
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
   function toISODate(y, m, d) {
     return y + "-" + pad(m + 1) + "-" + pad(d);
-  }
-
-  function loadDraftEvents() {
-    try {
-      var raw = window.localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveDraftEvents() {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.draftEvents));
-    } catch (e) { /* storage unavailable, ignore */ }
   }
 
   function fetchPublishedEvents() {
@@ -40,8 +23,7 @@
   }
 
   function eventsForDate(iso) {
-    var all = state.publishedEvents.concat(state.draftEvents);
-    return all.filter(function (e) { return e.date === iso; });
+    return state.publishedEvents.filter(function (e) { return e.date === iso; });
   }
 
   function isTuesday(y, m, d) {
@@ -128,14 +110,9 @@
       var p = document.createElement("p");
       p.style.color = "#94A3B8";
       p.style.fontSize = "14px";
-      p.textContent = "No events scheduled for this day yet.";
+      p.textContent = "No events scheduled for this day.";
       listEl.appendChild(p);
     }
-
-    document.getElementById("addEventDate").value = iso;
-    document.getElementById("addEventForm").reset();
-    document.getElementById("addEventDate").value = iso;
-    document.getElementById("publishBox").style.display = "none";
 
     overlay.classList.add("open");
     overlay.setAttribute("aria-hidden", "false");
@@ -165,34 +142,6 @@
     overlay.setAttribute("aria-hidden", "true");
   }
 
-  function handleAddEvent(e) {
-    e.preventDefault();
-    var date = document.getElementById("addEventDate").value;
-    var time = document.getElementById("addEventTime").value.trim();
-    var title = document.getElementById("addEventTitle").value.trim();
-    var description = document.getElementById("addEventDesc").value.trim();
-    if (!date || !title) return;
-
-    var newEvent = {
-      id: "draft-" + Date.now(),
-      date: date,
-      time: time,
-      title: title,
-      description: description
-    };
-    state.draftEvents.push(newEvent);
-    saveDraftEvents();
-    render();
-    var parts = date.split("-").map(Number);
-    var tuesdayCheck = isTuesday(parts[0], parts[1] - 1, parts[2]);
-    openDayModal(date, tuesdayCheck);
-
-    var box = document.getElementById("publishBox");
-    var textarea = document.getElementById("publishJson");
-    textarea.value = JSON.stringify(state.publishedEvents.concat(state.draftEvents), null, 2);
-    box.style.display = "block";
-  }
-
   function init() {
     document.getElementById("prevMonthBtn").addEventListener("click", function () {
       state.viewMonth--;
@@ -214,22 +163,7 @@
     document.getElementById("dayModalOverlay").addEventListener("click", function (e) {
       if (e.target === this) closeDayModal();
     });
-    document.getElementById("addEventForm").addEventListener("submit", handleAddEvent);
 
-    var copyBtn = document.getElementById("copyJsonBtn");
-    if (copyBtn) {
-      copyBtn.addEventListener("click", function () {
-        var textarea = document.getElementById("publishJson");
-        textarea.select();
-        try {
-          document.execCommand("copy");
-          copyBtn.textContent = "Copied!";
-          setTimeout(function () { copyBtn.textContent = "Copy JSON"; }, 1500);
-        } catch (e) { /* clipboard unavailable */ }
-      });
-    }
-
-    state.draftEvents = loadDraftEvents();
     fetchPublishedEvents().then(function (events) {
       state.publishedEvents = events;
       render();
