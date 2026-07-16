@@ -675,7 +675,7 @@ a { color: var(--chess-green); }
 }
 .existing-event-item .ev-time { color: var(--gold); font-size: 12px; font-weight: 700; text-transform: uppercase; }
 .existing-event-item .ev-title { color: var(--white); font-weight: 600; margin: 2px 0; }
-.existing-event-item .ev-desc { color: var(--slate-300); font-size: 14px; }
+.existing-event-item .ev-desc { color: var(--slate-300); font-size: 14px; white-space: pre-line; line-height: 1.6; }
 
 .publish-box {
   margin-top: 8px;
