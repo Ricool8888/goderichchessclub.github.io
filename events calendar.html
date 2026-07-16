@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events Calendar - Goderich Chess Club</title>
-<meta name="description" content="See upcoming Goderich Chess Club meetings and special events, and add new ones to the calendar.">
+<meta name="description" content="See upcoming Goderich Chess Club meetings and special events.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -35,7 +35,7 @@
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">Events <span class="gold-text">Calendar</span></h1>
-      <p class="page-desc">The club meets every Tuesday, 6-8pm, at Goderich Library. Tournaments, holiday closures, and other one-off events are marked below — click any day for details or to add something new.</p>
+      <p class="page-desc">The club meets every Tuesday, 6-8pm, at Goderich Library. Tournaments, holiday closures, and other one-off events are marked below — click any day for details.</p>
     </div>
 
     <section class="calendar-wrap" aria-label="Month calendar">
@@ -57,7 +57,7 @@
     </section>
 
     <p class="storage-note">
-      <strong>How this calendar works:</strong> weekly meetings show automatically every Tuesday. Special events come from <code>assets/events.json</code>. Click a day to add a new event — it previews instantly in your browser, and you'll get a JSON snippet to paste into <code>events.json</code> so it shows up for every visitor once committed to GitHub.
+      <strong>How this calendar works:</strong> weekly meetings show automatically every Tuesday. Special events come from <code>assets/events.json</code>. Click a day to view what's scheduled. To add a new event yourself, edit <code>assets/events.json</code> directly in the repo and commit the change — visitors can view the calendar but can't submit events.
     </p>
   </div>
 </main>
@@ -69,7 +69,7 @@
   </div>
 </footer>
 
-<!-- Day detail / add-event modal -->
+<!-- Day detail modal (view-only) -->
 <div class="modal-overlay" id="dayModalOverlay" aria-hidden="true">
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
     <div class="modal-header">
@@ -78,29 +78,6 @@
     </div>
 
     <div id="dayModalEvents" class="existing-events-list"></div>
-
-    <form id="addEventForm">
-      <input type="hidden" id="addEventDate">
-      <div class="form-field">
-        <label class="form-label" for="addEventTitle">Event title</label>
-        <input type="text" class="form-input" id="addEventTitle" placeholder="e.g. Fall Tournament" required>
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="addEventTime">Time</label>
-        <input type="text" class="form-input" id="addEventTime" placeholder="e.g. 6:00 PM - 8:00 PM">
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="addEventDesc">Description</label>
-        <textarea class="form-textarea" id="addEventDesc" placeholder="Optional details for members"></textarea>
-      </div>
-      <button type="submit" class="btn-primary" style="width:100%;">Add Event</button>
-    </form>
-
-    <div class="publish-box" id="publishBox" style="display:none;">
-      <p>Copy this into <code>assets/events.json</code> and commit it to GitHub to make this event visible to everyone:</p>
-      <textarea id="publishJson" readonly></textarea>
-      <button type="button" class="btn-secondary" id="copyJsonBtn" style="margin-top:10px;padding:8px 16px;font-size:14px;">Copy JSON</button>
-    </div>
   </div>
 </div>
 
