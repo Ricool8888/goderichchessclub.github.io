@@ -1,519 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Goderich Chess Club</title>
-  
-  <style>
-    /* Reset & Base System Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    }
-    *:focus-visible {
-      outline: 3px solid #D97706 !important;
-      outline-offset: 2px;
-    }
-    body {
-      background-color: #0B1329;
-      color: #F1F5F9;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      /* FIX: Removed rigid viewport locks to allow natural scroll tracking down the page */
-      overflow-y: auto;
-      min-height: 100vh;
-    }
-    
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-
-    /* HEADER & Navigation Bar */
-    .site-header {
-      background-color: #020617;
-      border-bottom: 1px solid rgba(217, 119, 6, 0.2);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .navbar-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 80px;
-    }
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 22px;
-      font-weight: 700;
-      color: #FFFFFF;
-      text-decoration: none;
-    }
-    .gold-text {
-      color: #D97706;
-    }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-    .nav-item {
-      color: #CBD5E1;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 16px;
-      transition: color 0.2s ease;
-    }
-    .nav-item:hover, .nav-item.active {
-      color: #D97706;
-    }
-    .nav-item.active {
-      border-bottom: 2px solid #D97706;
-      padding-bottom: 4px;
-    }
-    .btn-join {
-      background-color: #D97706;
-      color: #020617;
-      font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background-color 0.2s ease;
-    }
-    .btn-join:hover {
-      background-color: #F59E0B;
-    }
-
-    /* HERO STABLE GRID SYSTEM Layout */
-    .hero-main {
-      padding: 60px 0;
-    }
-    .split-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 48px;
-    }
-    
-    @media (min-width: 992px) {
-      .hero-main { padding: 80px 0; }
-      .split-layout {
-        grid-template-columns: 7fr 5fr;
-        align-items: start;
-      }
-    }
-
-    /* Content Layout Typographies */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: rgba(217, 119, 6, 0.1);
-      border: 1px solid rgba(217, 119, 6, 0.3);
-      color: #D97706;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 24px;
-    }
-    .hero-title {
-      font-size: 40px;
-      font-weight: 800;
-      line-height: 1.15;
-      color: #FFFFFF;
-      margin-bottom: 20px;
-    }
-    @media (min-width: 768px) {
-      .hero-title { font-size: 54px; }
-    }
-    .hero-desc {
-      font-size: 18px;
-      color: #94A3B8;
-      margin-bottom: 36px;
-      line-height: 1.6;
-    }
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    @media (min-width: 480px) {
-      .btn-group { flex-direction: row; }
-    }
-    .btn-primary {
-      background-color: #D97706;
-      color: #020617;
-      font-weight: 700;
-      font-size: 18px;
-      padding: 14px 28px;
-      border-radius: 12px;
-      text-decoration: none;
-      text-align: center;
-      transition: background-color 0.2s ease;
-    }
-    .btn-primary:hover { background-color: #F59E0B; }
-    
-    .btn-secondary {
-      border: 2px solid #334155;
-      color: #E2E8F0;
-      font-weight: 600;
-      font-size: 18px;
-      padding: 12px 26px;
-      border-radius: 12px;
-      text-decoration: none;
-      text-align: center;
-      transition: all 0.2s ease;
-    }
-    .btn-secondary:hover {
-      border-color: rgba(217, 119, 6, 0.5);
-      background-color: #1E293B;
-    }
-
-    /* CARD Container Details Block */
-    .meeting-card {
-      background: linear-gradient(180deg, #020617 0%, #060B18 100%);
-      border: 2px solid rgba(217, 119, 6, 0.6);
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-    .card-header-flex {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid #1E293B;
-      padding-bottom: 16px;
-      margin-bottom: 24px;
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #D97706;
-    }
-    .info-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .info-icon {
-      font-size: 22px;
-      line-height: 1;
-      margin-top: 4px;
-    }
-    .info-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #64748B;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    .info-value {
-      font-size: 16px;
-      font-weight: 600;
-      color: #FFFFFF;
-    }
-    .address-block {
-      font-style: normal;
-      font-size: 16px;
-      font-weight: 600;
-      color: #FFFFFF;
-    }
-    .address-sub {
-      font-size: 14px;
-      color: #94A3B8;
-      font-weight: 400;
-      display: block;
-      margin-top: 2px;
-    }
-    .card-footer {
-      border-top: 1px solid #1E293B;
-      padding-top: 24px;
-      margin-top: 8px;
-    }
-    .btn-rsvp {
-      display: block;
-      width: 100%;
-      background: #D97706;
-      color: #020617;
-      font-weight: 700;
-      padding: 14px;
-      border-radius: 12px;
-      text-decoration: none;
-      text-align: center;
-      font-size: 16px;
-      transition: background-color 0.2s ease;
-    }
-    .btn-rsvp:hover { background-color: #F59E0B; }
-    
-    .card-note {
-      font-size: 12px;
-      color: #64748B;
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    /* FOOTER Elements CSS */
-    .site-footer {
-      background-color: #020617;
-      border-top: 1px solid rgba(217, 119, 6, 0.2);
-      padding: 40px 0;
-      margin-top: 60px;
-    }
-    .footer-flex {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      text-align: center;
-    }
-    @media (min-width: 768px) {
-      .footer-flex {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-      }
-    }
-    .footer-text {
-      color: #64748B;
-      font-size: 14px;
-    }
-    .footer-right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-    @media (min-width: 768px) { align-items: flex-end; }
-    
-    .footer-nav {
-      display: flex;
-      gap: 16px;
-    }
-    .footer-nav-link {
-      color: #94A3B8;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .footer-nav-link:hover { color: #D97706; }
-    
-    .social-links {
-      display: flex;
-      gap: 12px;
-      margin-top: 4px;
-    }
-    .social-icon-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background-color: #0B1329;
-      border: 1px solid #1E293B;
-      color: #94A3B8;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    .social-icon-btn:hover {
-      color: #D97706;
-      border-color: #D97706;
-      transform: translateY(-2px);
-    }
-    .social-icon-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-    }
-    
-    @media (max-width: 767px) {
-      .nav-links { display: none; }
-    }
-  /* Button container layout alignment */
-  .social-container {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  /* Core button design frames */
-  .social-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background-color: #0B1329;
-    border: 2px solid #1E293B;
-    color: #94A3B8;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-  }
-
-  /* Nested graphic element parameters */
-  .social-btn svg {
-    width: 22px;
-    height: 22px;
-    fill: currentColor;
-  }
-
-  /* Hover color states using the gold chess theme */
-  .social-btn:hover {
-    color: #D97706;
-    border-color: #D97706;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
-  }
-/* Chess.com authentic pawn green brand styling */
-  .social-btn.chess:hover {
-    color: #81B64C;
-    border-color: #81B64C;
-  }
-      /* Responsive outer container */
-  .table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin: 32px 0;
-    border-radius: 12px;
-    border: 1px solid rgba(217, 119, 6, 0.3);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-  }
-
-  /* Table base structure */
-  .books-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #020617;
-    text-align: left;
-    font-size: 16px;
-  }
-
-  /* Header row design */
-  .books-table th {
-    background-color: #0B1329;
-    color: #D97706;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 16px 20px;
-    border-bottom: 2px solid rgba(217, 119, 6, 0.5);
-  }
-
-  /* Data cell layout rows */
-  .books-table td {
-    padding: 14px 20px;
-    color: #E2E8F0;
-    border-bottom: 1px solid #1E293B;
-  }
-
-  /* Right column grid cell align */
-  .books-table th:last-child,
-  .books-table td:last-child {
-    text-align: right;
-    width: 120px;
-  }
-
-  /* Highlight accent text for pricing elements */
-  .price-cell {
-    color: #D97706 !important;
-    font-weight: 600;
-  }
-
-  /* Interactive hover highlight tracks */
-  .books-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-  }
-a{
-  color: #81B64C;
-}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Posts &amp; News - Goderich Chess Club</title>
+<meta name="description" content="Club announcements, tournament recaps, and news from Goderich Chess Club.">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+<a href="#main-content" class="sr-only">Skip to main content</a>
 
-  <a href="#main-content" class="sr-only">Skip to main content</a>
-
-  <!-- TOP STICKY NAVIGATION BAR -->
-  <header class="site-header">
-    <div class="container">
-      <div class="navbar-flex">
-        <a href="index.html" class="brand-logo">
-          <img src="Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" style="height: 32px; width: auto; display: inline-block; vertical-align: middle; margin-right: 8px;">
-          <span class="gold-text">Goderich Chess Club</span>
-        </a>
-        <nav class="nav-links" aria-label="Main Navigation">
-          <a href="index.html" class="nav-item" aria-current="page">Home</a>
-          <a href="about.html" class="nav-item">About Us</a>
-          <a href="posts and news.html" class="nav-item active">Posts / News</a>
-          <a href="events calendar.html" class="nav-item">Events Calendar</a>
-          <a href="faq.html" class="nav-item">FAQ</a>
-          <a href="books for sale.html" class="nav-item">Books for sale</a>
-          <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
-        </nav>
-      </div>
+<header class="site-header">
+  <div class="container">
+    <div class="navbar-flex">
+      <a href="index.html" class="brand-logo">
+        <img src="Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" width="32" height="32" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
+        <span class="gold-text">Goderich Chess Club</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
+      <nav class="nav-links" id="primaryNav" aria-label="Main Navigation">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="about.html" class="nav-item">About Us</a>
+        <a href="posts and news.html" class="nav-item active" aria-current="page">Posts / News</a>
+        <a href="events calendar.html" class="nav-item">Events Calendar</a>
+        <a href="faq.html" class="nav-item">FAQ</a>
+        <a href="books for sale.html" class="nav-item">Books for sale</a>
+        <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
+      </nav>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- CONTENT VIEW AREA -->
-  <main id="main-content" class="hero-main">
-    <div class="container">
-      <div class="split-layout">
-        
-        <!-- Left Side Copy Block Container -->
-        <div class="hero-text-block">
-          <h1 class="hero-title">
-            <span class="gold-text">Posts and News</span>
-          </h1>
+<main id="main-content">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Posts &amp; <span class="gold-text">News</span></h1>
+      <p class="page-desc">Announcements, tournament recaps, and updates from the club, all in one place.</p>
+    </div>
 
+    <div class="section-toolbar">
+      <div></div>
+      <button type="button" class="btn-primary" id="openNewPostBtn" style="padding:12px 22px;font-size:15px;">+ New Post</button>
+    </div>
+
+    <div class="blog-layout">
+      <div class="blog-list" id="blogList" aria-live="polite">
+        <div class="empty-state">Loading posts…</div>
+      </div>
+
+      <aside class="blog-sidebar">
+        <div class="sidebar-box">
+          <div class="sidebar-title">Search</div>
+          <div class="search-box">
+            <input type="search" class="form-input" id="searchInput" placeholder="Search posts…">
+          </div>
         </div>
+        <div class="sidebar-box">
+          <div class="sidebar-title">Categories</div>
+          <div class="category-pill-list" id="categoryList"></div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-title">Archive</div>
+          <div id="archiveList"></div>
+        </div>
+        <button type="button" class="reset-filters" id="resetFiltersBtn" style="display:none;">Clear all filters</button>
+      </aside>
+    </div>
 
-        <!-- Social media Container -->
-        <div class="social-container">
-  <!-- Facebook Button -->
-  <a href="https://www.facebook.com/groups/goderichchessclub" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Visit Facebook">
-    <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg>
-  </a>
+    <p class="storage-note">
+      <strong>How this blog works:</strong> published posts come from <code>assets/posts.json</code>. New posts you add preview instantly in your own browser, and you'll get a JSON snippet to paste into <code>posts.json</code> so the post shows up for every visitor once committed to GitHub.
+    </p>
+  </div>
+</main>
 
-  <!-- Instagram Button -->
-  <a href="https://www.instagram.com/goderichchessclub?igsh=c2VkY3VzNXFnMTky" target="_blank" rel="noopener noreferrer" class="social-btn instagram" aria-label="Visit Instagram">
-    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-  </a>
+<footer class="site-footer">
+  <div class="container">
+    <p>Goderich Chess Club &copy; 2026 Volunteer Community Initiative. All Rights Reserved.<br>
+    Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a></p>
+  </div>
+</footer>
 
-  <!-- Chess.com Button -->
-  <a href="https://www.chess.com/club/huron-county-chess-club" target="_blank" rel="noopener noreferrer" class="social-btn chess" aria-label="Visit Chess.com">
-    <svg viewBox="0 0 24 24">
-      <path d="M12 2C9.5 2 7.5 4 7.5 6.5C7.5 7.8 8 9 9 9.8C7.5 10.5 6 12 6 14C6 14.5 6.2 15 6.5 15.5C5.5 16.5 4.5 18 4.5 20C4.5 21.1 5.4 22 6.5 22H17.5C18.6 22 19.5 21.1 19.5 20C19.5 18 18.5 16.5 17.5 15.5C17.8 15 18 14.5 18 14C18 12 16.5 10.5 15 9.8C16 9 16.5 7.8 16.5 6.5C16.5 4 14.5 2 12 2Z"/>
-    </svg>
-  </a>
+<!-- New Post modal -->
+<div class="modal-overlay" id="newPostModalOverlay" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="newPostModalTitle">
+    <div class="modal-header">
+      <h2 class="modal-title" id="newPostModalTitle">New Post</h2>
+      <button type="button" class="modal-close" id="newPostModalCloseBtn" aria-label="Close">&times;</button>
+    </div>
+
+    <form id="newPostForm">
+      <div class="form-field">
+        <label class="form-label" for="newPostTitle">Title</label>
+        <input type="text" class="form-input" id="newPostTitle" placeholder="e.g. August Tournament Results" required>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="newPostCategory">Category</label>
+        <input type="text" class="form-input" id="newPostCategory" placeholder="e.g. Announcement, Club Update, Results">
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="newPostDate">Date</label>
+        <input type="date" class="form-input" id="newPostDate" required>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="newPostExcerpt">Short summary (optional)</label>
+        <input type="text" class="form-input" id="newPostExcerpt" placeholder="One sentence shown in the list view">
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="newPostContent">Full post</label>
+        <textarea class="form-textarea" id="newPostContent" placeholder="Write the full post here…" required style="min-height:160px;"></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;">Publish (preview)</button>
+    </form>
+
+    <div class="publish-box" id="publishBox" style="display:none;">
+      <p>Copy this into <code>assets/posts.json</code> and commit it to GitHub to make this post visible to everyone:</p>
+      <textarea id="publishJson" readonly></textarea>
+      <button type="button" class="btn-secondary" id="copyPostJsonBtn" style="margin-top:10px;padding:8px 16px;font-size:14px;">Copy JSON</button>
+    </div>
+  </div>
 </div>
-        <footer>
-          <p> Goderich Chess Club © 2026 Volunteer Community Initiative. All Rights Reserved. <br> </br> Affiliated Platforms: <a href="https://www.chess.ca/en/" style="color: #81B64C;">CFC</a> • <a href="https://www.fide.com/" style="color: #81B64C;">FIDE</a>
-        </p>
-        </footer>
-</div>
+
+<script src="assets/blog.js"></script>
+<script>
+  var navToggle = document.getElementById('navToggle');
+  var primaryNav = document.getElementById('primaryNav');
+  navToggle.addEventListener('click', function () {
+    var isOpen = primaryNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+</script>
+</body>
+</html>
