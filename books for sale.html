@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events Calendar - Goderich Chess Club</title>
-<meta name="description" content="See upcoming Goderich Chess Club meetings and special events.">
+<title>Books for Sale - Goderich Chess Club</title>
+<meta name="description" content="Chess books for sale from Goderich Chess Club, including Dvoretsky's Endgame Manual, The Exchange Sacrifice, and more.">
+<link rel="canonical" href="https://ricool8888.github.io/goderichchessclub.github.io/books%20for%20sale.html">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -22,11 +23,11 @@
         <a href="index.html" class="nav-item">Home</a>
         <a href="about.html" class="nav-item">About Us</a>
         <a href="posts and news.html" class="nav-item">Posts / News</a>
-        <a href="events calendar.html" class="nav-item active" aria-current="page">Events Calendar</a>
+        <a href="events calendar.html" class="nav-item">Events Calendar</a>
         <a href="tournaments.html" class="nav-item">Tournaments</a>
         <a href="sponsors.html" class="nav-item">Sponsors</a>
         <a href="faq.html" class="nav-item">FAQ</a>
-        <a href="books for sale.html" class="nav-item">Books for sale</a>
+        <a href="books for sale.html" class="nav-item active" aria-current="page">Books for sale</a>
         <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
       </nav>
     </div>
@@ -36,31 +37,35 @@
 <main id="main-content">
   <div class="container">
     <div class="page-header">
-      <h1 class="page-title">Events <span class="gold-text">Calendar</span></h1>
-      <p class="page-desc">The club meets every Tuesday, 6-8pm, at Goderich Library. Tournaments, holiday closures, and other one-off events are marked below — click any day for details.</p>
+      <h1 class="page-title">Books for <span class="gold-text">Sale</span></h1>
+      <p class="page-desc">Secondhand chess books, sold to help fund club equipment. Email us to arrange pickup at a Tuesday meeting.</p>
     </div>
 
-    <section class="calendar-wrap" aria-label="Month calendar">
-      <div class="calendar-toolbar">
-        <button type="button" class="calendar-nav-btn" id="prevMonthBtn" aria-label="Previous month">&#8592;</button>
-        <div class="calendar-month-label" id="calendarMonthLabel">Loading…</div>
-        <div class="calendar-toolbar-actions">
-          <button type="button" class="btn-secondary" id="todayBtn" style="padding:8px 16px;font-size:14px;">Today</button>
-          <button type="button" class="calendar-nav-btn" id="nextMonthBtn" aria-label="Next month">&#8594;</button>
-        </div>
-      </div>
-
-      <div class="calendar-grid" id="calendarGrid" role="grid"></div>
-
-      <div class="legend">
-        <span class="legend-item"><span class="legend-dot" style="background:#81B64C;"></span> Weekly club meeting</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#D97706;"></span> Special event</span>
-      </div>
-    </section>
-
-    <p class="storage-note">
-      <strong>How this calendar works:</strong> weekly meetings show automatically every Tuesday. Special events come from <code>assets/events.json</code>. Click a day to view what's scheduled. To add a new event yourself, edit <code>assets/events.json</code> directly in the repo and commit the change — visitors can view the calendar but can't submit events.
-    </p>
+    <div class="table-wrap" role="region" aria-label="Books for sale">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col" class="price-col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dvoretsky's Endgame Manual</td><td class="price-col">$35</td></tr>
+          <tr><td>The Exchange Sacrifice</td><td class="price-col">$35</td></tr>
+          <tr><td>How Not to Play Chess</td><td class="price-col">$35</td></tr>
+          <tr><td>My Best Games of Chess 1905-1954</td><td class="price-col">$30</td></tr>
+          <tr><td>Why You Lose at Chess</td><td class="price-col">$30</td></tr>
+          <tr><td>Chess Movies 1</td><td class="price-col">$30</td></tr>
+          <tr><td>Chess Movies 2</td><td class="price-col">$30</td></tr>
+          <tr><td>Back to Basics: Strategy</td><td class="price-col">$30</td></tr>
+          <tr><td>How to Think in Chess</td><td class="price-col">$30</td></tr>
+          <tr><td>Checkmate</td><td class="price-col">$30</td></tr>
+          <tr><td>Your First Chess Lessons</td><td class="price-col">$30</td></tr>
+          <tr><td>The Art of Sacrifice in Chess</td><td class="price-col">$30</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="books-note">Interested in a title? Email <a href="mailto:goderichchessclub@gmail.com">goderichchessclub@gmail.com</a> and we'll set it aside for you at the next meeting.</p>
 
     <div class="social-container">
       <a href="https://www.facebook.com/groups/goderichchessclub" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Visit Facebook">
@@ -83,19 +88,6 @@
   </div>
 </footer>
 
-<!-- Day detail modal (view-only) -->
-<div class="modal-overlay" id="dayModalOverlay" aria-hidden="true">
-  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
-    <div class="modal-header">
-      <h2 class="modal-title" id="dayModalTitle">Day details</h2>
-      <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Close">&times;</button>
-    </div>
-
-    <div id="dayModalEvents" class="existing-events-list"></div>
-  </div>
-</div>
-
-<script src="assets/calendar.js"></script>
 <script>
   var navToggle = document.getElementById('navToggle');
   var primaryNav = document.getElementById('primaryNav');
