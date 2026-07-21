@@ -1,30 +1,16 @@
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "gcc_draft_posts_v1";
   var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   var state = {
-    publishedPosts: [],
-    draftPosts: [],
+    publishedPosts: [], // loaded from assets/posts.json - the only source of posts
     filterYear: null,
     filterMonth: null, // 0-indexed
     filterCategory: null,
     searchTerm: "",
     expandedId: null
   };
-
-  function loadDraftPosts() {
-    try {
-      var raw = window.localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) { return []; }
-  }
-
-  function saveDraftPosts() {
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.draftPosts)); }
-    catch (e) { /* storage unavailable */ }
-  }
 
   function fetchPublishedPosts() {
     return fetch("assets/posts.json")
@@ -33,7 +19,7 @@
   }
 
   function allPosts() {
-    return state.publishedPosts.concat(state.draftPosts).sort(function (a, b) {
+    return state.publishedPosts.slice().sort(function (a, b) {
       return new Date(b.date) - new Date(a.date);
     });
   }
@@ -207,87 +193,49 @@
     renderCategories();
     renderList();
     var resetBtn = document.getElementById("resetFiltersBtn");
-    var hasFilter = state.filterYear !== null || state.filterCategory || state.searchTerm;
-    resetBtn.style.display = hasFilter ? "inline" : "none";
-  }
-
-  function handleNewPost(e) {
-    e.preventDefault();
-    var title = document.getElementById("newPostTitle").value.trim();
-    var category = document.getElementById("newPostCategory").value.trim() || "General";
-    var date = document.getElementById("newPostDate").value;
-    var excerpt = document.getElementById("newPostExcerpt").value.trim();
-    var content = document.getElementById("newPostContent").value.trim();
-    if (!title || !date || !content) return;
-
-    var post = {
-      id: "draft-" + Date.now(),
-      date: date,
-      title: title,
-      category: category,
-      excerpt: excerpt || content.slice(0, 140) + (content.length > 140 ? "…" : ""),
-      content: content
-    };
-    state.draftPosts.push(post);
-    saveDraftPosts();
-    renderAll();
-
-    var box = document.getElementById("publishBox");
-    var textarea = document.getElementById("publishJson");
-    textarea.value = JSON.stringify(state.publishedPosts.concat(state.draftPosts).sort(function (a,b) { return new Date(b.date) - new Date(a.date); }), null, 2);
-    box.style.display = "block";
+    if (resetBtn) {
+      var hasFilter = state.filterYear !== null || state.filterCategory || state.searchTerm;
+      resetBtn.style.display = hasFilter ? "inline" : "none";
+    }
   }
 
   function init() {
-    document.getElementById("searchInput").addEventListener("input", function (e) {
-      state.searchTerm = e.target.value;
-      renderAll();
-    });
-    document.getElementById("resetFiltersBtn").addEventListener("click", function () {
-      state.filterYear = null;
-      state.filterMonth = null;
-      state.filterCategory = null;
-      state.searchTerm = "";
-      document.getElementById("searchInput").value = "";
-      renderAll();
-    });
+    var searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", function (e) {
+        state.searchTerm = e.target.value;
+        renderAll();
+      });
+    }
 
-    var newPostModal = document.getElementById("newPostModalOverlay");
-    document.getElementById("openNewPostBtn").addEventListener("click", function () {
-      document.getElementById("newPostDate").value = new Date().toISOString().slice(0, 10);
-      document.getElementById("publishBox").style.display = "none";
-      newPostModal.classList.add("open");
-      newPostModal.setAttribute("aria-hidden", "false");
-    });
-    document.getElementById("newPostModalCloseBtn").addEventListener("click", function () {
-      newPostModal.classList.remove("open");
-      newPostModal.setAttribute("aria-hidden", "true");
-    });
-    newPostModal.addEventListener("click", function (e) {
-      if (e.target === this) {
-        this.classList.remove("open");
-        this.setAttribute("aria-hidden", "true");
-      }
-    });
-    document.getElementById("newPostForm").addEventListener("submit", handleNewPost);
+    var resetBtn = document.getElementById("resetFiltersBtn");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        state.filterYear = null;
+        state.filterMonth = null;
+        state.filterCategory = null;
+        state.searchTerm = "";
+        if (searchInput) searchInput.value = "";
+        renderAll();
+      });
+    }
 
-    var copyBtn = document.getElementById("copyPostJsonBtn");
-    copyBtn.addEventListener("click", function () {
-      var textarea = document.getElementById("publishJson");
-      textarea.select();
-      try {
-        document.execCommand("copy");
-        copyBtn.textContent = "Copied!";
-        setTimeout(function () { copyBtn.textContent = "Copy JSON"; }, 1500);
-      } catch (e) { /* clipboard unavailable */ }
-    });
-
-    state.draftPosts = loadDraftPosts();
     fetchPublishedPosts().then(function (posts) {
       state.publishedPosts = posts;
       renderAll();
     });
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      init();
+    } catch (err) {
+      console.error("blog.js failed to initialize:", err);
+      // Still try to load and show posts even if a sidebar control is missing
+      fetchPublishedPosts().then(function (posts) {
+        state.publishedPosts = posts;
+        renderAll();
+      });
+    }
+  });
 })();
