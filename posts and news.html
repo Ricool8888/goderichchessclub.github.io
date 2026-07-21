@@ -23,6 +23,8 @@
         <a href="about.html" class="nav-item">About Us</a>
         <a href="posts and news.html" class="nav-item active" aria-current="page">Posts / News</a>
         <a href="events calendar.html" class="nav-item">Events Calendar</a>
+        <a href="tournaments.html" class="nav-item">Tournaments</a>
+        <a href="sponsors.html" class="nav-item">Sponsors</a>
         <a href="faq.html" class="nav-item">FAQ</a>
         <a href="books for sale.html" class="nav-item">Books for sale</a>
         <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
@@ -40,7 +42,6 @@
 
     <div class="section-toolbar">
       <div></div>
-      <button type="button" class="btn-primary" id="openNewPostBtn" style="padding:12px 22px;font-size:15px;">+ New Post</button>
     </div>
 
     <div class="blog-layout">
@@ -67,9 +68,9 @@
       </aside>
     </div>
 
-    <!--<p class="storage-note">
-      <strong>How this blog works:</strong> published posts come from <code>assets/posts.json</code>. New posts you add preview instantly in your own browser, and you'll get a JSON snippet to paste into <code>posts.json</code> so the post shows up for every visitor once committed to GitHub.
-    </p>-->
+    <p class="storage-note">
+      <strong>How this blog works:</strong> posts come from <code>assets/posts.json</code>. To publish a new post, add it directly to that file in the repo and commit — visitors can read, search, and filter posts, but can't submit their own.
+    </p>
 
     <div class="social-container">
       <a href="https://www.facebook.com/groups/goderichchessclub" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Visit Facebook">
@@ -91,46 +92,6 @@
     Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a></p>
   </div>
 </footer>
-
-<!-- New Post modal -->
-<div class="modal-overlay" id="newPostModalOverlay" aria-hidden="true">
-  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="newPostModalTitle">
-    <div class="modal-header">
-      <h2 class="modal-title" id="newPostModalTitle">New Post</h2>
-      <button type="button" class="modal-close" id="newPostModalCloseBtn" aria-label="Close">&times;</button>
-    </div>
-
-    <form id="newPostForm">
-      <div class="form-field">
-        <label class="form-label" for="newPostTitle">Title</label>
-        <input type="text" class="form-input" id="newPostTitle" placeholder="e.g. August Tournament Results" required>
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="newPostCategory">Category</label>
-        <input type="text" class="form-input" id="newPostCategory" placeholder="e.g. Announcement, Club Update, Results">
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="newPostDate">Date</label>
-        <input type="date" class="form-input" id="newPostDate" required>
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="newPostExcerpt">Short summary (optional)</label>
-        <input type="text" class="form-input" id="newPostExcerpt" placeholder="One sentence shown in the list view">
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="newPostContent">Full post</label>
-        <textarea class="form-textarea" id="newPostContent" placeholder="Write the full post here…" required style="min-height:160px;"></textarea>
-      </div>
-      <button type="submit" class="btn-primary" style="width:100%;">Publish (preview)</button>
-    </form>
-
-    <div class="publish-box" id="publishBox" style="display:none;">
-      <p>Copy this into <code>assets/posts.json</code> and commit it to GitHub to make this post visible to everyone:</p>
-      <textarea id="publishJson" readonly></textarea>
-      <button type="button" class="btn-secondary" id="copyPostJsonBtn" style="margin-top:10px;padding:8px 16px;font-size:14px;">Copy JSON</button>
-    </div>
-  </div>
-</div>
 
 <script src="assets/blog.js"></script>
 <script>
