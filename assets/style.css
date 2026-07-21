@@ -1004,3 +1004,146 @@ a { color: var(--chess-green); }
   color: var(--slate-400);
   margin-top: 16px;
 }
+
+/* =========================================================
+   TOURNAMENTS
+   ========================================================= */
+.tab-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+
+.tab-btn {
+  background: var(--navy-900);
+  border: 1px solid var(--slate-800);
+  color: var(--slate-300);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover { border-color: var(--gold-30); color: var(--gold); }
+.tab-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy-950); }
+
+.tournament-grid { display: flex; flex-direction: column; gap: 18px; }
+
+.tournament-card {
+  background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  border: 1px solid var(--slate-800);
+  border-radius: 16px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .tournament-card { grid-template-columns: 100px 1fr; align-items: start; }
+}
+
+.tournament-date-block {
+  background: var(--navy-900);
+  border: 1px solid var(--slate-800);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  height: fit-content;
+}
+
+.tournament-date-block .month { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--gold); letter-spacing: 0.5px; }
+.tournament-date-block .day { font-size: 26px; font-weight: 800; color: var(--white); line-height: 1.1; }
+.tournament-date-block .year { font-size: 12px; color: var(--slate-400); }
+
+.tournament-body-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.tournament-title { font-size: 20px; font-weight: 700; color: var(--white); }
+
+.status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.status-pill.upcoming { background: var(--gold-10); border: 1px solid var(--gold-30); color: var(--gold); }
+.status-pill.completed { background: rgba(148, 163, 184, 0.1); border: 1px solid var(--slate-600); color: var(--slate-300); }
+
+.tournament-meta-row { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+.tournament-meta-item { font-size: 13px; color: var(--slate-300); display: flex; align-items: center; gap: 6px; }
+.tournament-meta-item strong { color: var(--slate-100); }
+
+.tournament-desc { color: var(--slate-300); font-size: 15px; line-height: 1.65; white-space: pre-line; margin-bottom: 12px; }
+
+.tournament-links { display: flex; gap: 14px; flex-wrap: wrap; }
+.tournament-links a { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; }
+.tournament-links a:hover { color: var(--gold); }
+
+/* =========================================================
+   SPONSORS
+   ========================================================= */
+.sponsor-tier { margin-bottom: 40px; }
+.sponsor-tier-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .sponsor-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 992px) {
+  .sponsor-grid.tier-gold { grid-template-columns: 1fr; }
+  .sponsor-grid.tier-community { grid-template-columns: repeat(3, 1fr); }
+}
+
+.sponsor-card {
+  background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  border: 1px solid var(--slate-800);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.sponsor-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: var(--gold-10);
+  border: 1px solid var(--gold-30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.sponsor-name { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.sponsor-desc { font-size: 14px; color: var(--slate-300); line-height: 1.55; margin-bottom: 8px; }
+.sponsor-link { font-size: 13px; font-weight: 700; color: var(--chess-green); text-decoration: none; }
+.sponsor-link:hover { color: var(--gold); }
+
+.sponsor-cta {
+  background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+  border: 2px solid var(--gold-60);
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+}
+
+.sponsor-cta h2 { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
+.sponsor-cta p { color: var(--slate-300); font-size: 15px; max-width: 560px; margin: 0 auto 20px; line-height: 1.6; }
