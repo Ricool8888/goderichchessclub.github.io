@@ -4,10 +4,31 @@
   var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var WEEKDAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+  var RECURRING_EVENTS = [
+    {
+      id: "recurring-tuesday-library",
+      dayOfWeek: 2,
+      startDate: null,
+      cssClass: "recurring",
+      time: "6:00 PM - 8:00 PM",
+      title: "Weekly Club Meeting",
+      description: "Open play at Goderich Library. All skill levels welcome, free admission."
+    },
+    {
+      id: "recurring-friday-legion",
+      dayOfWeek: 5,
+      startDate: "2026-07-24",
+      cssClass: "recurring-alt",
+      time: "6:00 PM - 9:00 PM",
+      title: "Weekly Club Meeting",
+      description: "Open play at Goderich Legion. All skill levels welcome, free admission."
+    }
+  ];
+
   var state = {
     viewYear: new Date().getFullYear(),
-    viewMonth: new Date().getMonth(), // 0-indexed
-    publishedEvents: [] // loaded from assets/events.json - the only source of one-off events
+    viewMonth: new Date().getMonth(),
+    publishedEvents: []
   };
 
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
@@ -26,8 +47,12 @@
     return state.publishedEvents.filter(function (e) { return e.date === iso; });
   }
 
-  function isTuesday(y, m, d) {
-    return new Date(y, m, d).getDay() === 2;
+  function recurringEventsForDate(iso, dayOfWeek) {
+    return RECURRING_EVENTS.filter(function (r) {
+      if (r.dayOfWeek !== dayOfWeek) return false;
+      if (r.startDate && iso < r.startDate) return false;
+      return true;
+    });
   }
 
   function render() {
@@ -56,26 +81,27 @@
 
     for (var d = 1; d <= daysInMonth; d++) {
       var iso = toISODate(state.viewYear, state.viewMonth, d);
+      var dayOfWeek = new Date(state.viewYear, state.viewMonth, d).getDay();
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "calendar-day";
       if (iso === todayISO) btn.classList.add("today");
 
       var dayEvents = eventsForDate(iso);
-      var tuesday = isTuesday(state.viewYear, state.viewMonth, d);
-      if (dayEvents.length || tuesday) btn.classList.add("has-event");
+      var recurring = recurringEventsForDate(iso, dayOfWeek);
+      if (dayEvents.length || recurring.length) btn.classList.add("has-event");
 
       var num = document.createElement("span");
       num.className = "day-number";
       num.textContent = d;
       btn.appendChild(num);
 
-      if (tuesday) {
-        var meetingDot = document.createElement("span");
-        meetingDot.className = "day-event-dot recurring";
-        meetingDot.textContent = "Club Meeting";
-        btn.appendChild(meetingDot);
-      }
+      recurring.forEach(function (r) {
+        var dot = document.createElement("span");
+        dot.className = "day-event-dot " + r.cssClass;
+        dot.textContent = r.title;
+        btn.appendChild(dot);
+      });
 
       dayEvents.slice(0, 2).forEach(function (ev) {
         var dot = document.createElement("span");
@@ -84,16 +110,20 @@
         btn.appendChild(dot);
       });
 
-      btn.setAttribute("aria-label", MONTH_NAMES[state.viewMonth] + " " + d + (tuesday ? ", club meeting" : "") + (dayEvents.length ? ", " + dayEvents.length + " event(s)" : ""));
-      btn.addEventListener("click", function (isoDate, tues) {
-        return function () { openDayModal(isoDate, tues); };
-      }(iso, tuesday));
+      var ariaLabel = MONTH_NAMES[state.viewMonth] + " " + d;
+      if (recurring.length) ariaLabel += ", " + recurring.map(function (r) { return r.title; }).join(", ");
+      if (dayEvents.length) ariaLabel += ", " + dayEvents.length + " event(s)";
+      btn.setAttribute("aria-label", ariaLabel);
+
+      btn.addEventListener("click", function (isoDate, dow) {
+        return function () { openDayModal(isoDate, dow); };
+      }(iso, dayOfWeek));
 
       grid.appendChild(btn);
     }
   }
 
-  function openDayModal(iso, tuesday) {
+  function openDayModal(iso, dayOfWeek) {
     var overlay = document.getElementById("dayModalOverlay");
     var titleEl = document.getElementById("dayModalTitle");
     var listEl = document.getElementById("dayModalEvents");
@@ -102,11 +132,11 @@
     titleEl.textContent = dateObj.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 
     listEl.innerHTML = "";
-    if (tuesday) {
-      listEl.appendChild(buildEventItem({ time: "6:00 PM - 8:00 PM", title: "Weekly Club Meeting", description: "Open play at Goderich Library. All skill levels welcome, free admission." }));
-    }
+    var recurring = recurringEventsForDate(iso, dayOfWeek);
+    recurring.forEach(function (r) { listEl.appendChild(buildEventItem(r)); });
     eventsForDate(iso).forEach(function (ev) { listEl.appendChild(buildEventItem(ev)); });
-    if (!tuesday && eventsForDate(iso).length === 0) {
+
+    if (!recurring.length && eventsForDate(iso).length === 0) {
       var p = document.createElement("p");
       p.style.color = "#94A3B8";
       p.style.fontSize = "14px";
@@ -170,5 +200,11 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      init();
+    } catch (err) {
+      console.error("calendar.js failed to initialize:", err);
+    }
+  });
 })();
