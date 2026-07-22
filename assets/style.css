@@ -590,6 +590,7 @@ a { color: var(--chess-green); }
 }
 
 .day-event-dot.recurring { background: rgba(129, 182, 76, 0.1); border-color: rgba(129, 182, 76, 0.35); color: var(--chess-green); }
+.day-event-dot.recurring-alt { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.35); color: #38BDF8; }
 
 @media (max-width: 640px) {
   .calendar-day { min-height: 56px; padding: 6px; }
