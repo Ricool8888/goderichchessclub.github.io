@@ -361,6 +361,25 @@ a { color: var(--chess-green); }
   align-items: center;
   justify-content: center;
   padding: 20px;
+   /* Adds top padding so the new border sits nicely above the icons */
+  padding: 40px 20px 10px; 
+  
+  /* Applies the footer styling directly to the social block */
+  background-color: var(--navy-950);
+  border-top: 1px solid var(--gold-20);
+}
+
+/* --- MERGE FIXES --- */
+/* Remove the empty space below the main content ONLY on pages with a social container */
+main:has(.social-container) {
+  padding-bottom: 0 !important;
+}
+
+/* Hide the native footer border and remove gaps ONLY when merging with the social container */
+main:has(.social-container) + .site-footer {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 10px; 
 }
 
 .social-btn {
