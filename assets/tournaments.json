@@ -7,23 +7,22 @@
     "format": "5 rounds \u00b7 Swiss \u00b7 15+10 rapid",
     "location": "Knights of Columbus \u2013 Main Hall, 390 Parsons Court, Goderich, ON",
     "entryFee": "$20 + CFC Membership",
-    "description": "Time Control: 15 minutes + 10 seconds increment per move. CFC Rated (quick time control).\n \n Round Schedule: \n Round 1: 10:00 AM \n Round 2: 11:00 AM \n Round 3: 1:00 PM \n Round 4: 2:00 PM \n Round 5: 3:00 PM \n \n Forfeit Time: 5 minutes \n Sections: Open and U1700 \n Registration: Please send your $20 entry fee e-transfer to goderichchessclub@gmail.com. Once that’s completed, please fill out the register / inquire form. Registration will close on September 4th, 2026 at 9:00 PM. \n To obtain a CFC membership, please use the Join the CFC button below. For membership fees please use the CFC Membership – Fees button below.",
-    "registerUrl": "https://forms.gle/94d8p1GNezjKaPhQ9"
-        "extraLinks": [
+    "description": "Time Control: 15 minutes + 10 seconds increment per move. CFC Rated (quick time control).\nRound Schedule: Round 1: 10:00 AM \u00b7 Round 2: 11:00 AM \u00b7 Round 3: 1:00 PM \u00b7 Round 4: 2:00 PM \u00b7 Round 5: 3:00 PM\nForfeit Time: 5 minutes\nSections: Open and U1700\nRegistration: Please send your $20 entry fee e-transfer to goderichchessclub@gmail.com. Once that's completed, please fill out the register / inquire form. Registration will close on September 4th, 2026 at 9:00 PM.\nTo obtain a CFC membership, please use the Join the CFC button below. For membership fees please use the CFC Membership - Fees button below.",
+    "registerUrl": "mailto:goderichchessclub@gmail.com",
+    "extraLinks": [
       { "label": "Join the CFC", "url": "https://www.chess.ca/en/players/membership-join/" },
       { "label": "CFC Membership - Fees", "url": "https://www.chess.ca/en/players/membership-fees/" }
     ]
   },
   {
-    "id": "trn-2026-06-13-Goderich-Gambit",
+    "id": "trn-2026-05-10-spring-open",
     "status": "completed",
-    "date": "2026-06-13",
-    "title": "Goderich Gambit",
+    "date": "2026-05-10",
+    "title": "Spring Open",
     "format": "5 rounds \u00b7 Swiss \u00b7 CFC Rated",
     "location": "Goderich Library, 52 Montreal St, Goderich, ON",
-    "entryFee": "CFC Membership",
-    "description": "Our first official CFC rated tournament. One open section with a strong turnout from across Huron County and beyond.",
+    "entryFee": "$15 + CFC Membership",
+    "description": "Our first official CFC rated tournament. Two sections, Open and U1700, with a strong turnout from across Huron County.",
     "resultsUrl": "https://s3.chess-results.com/tnr1404449.aspx?lan=1"
   }
 ]
-
