@@ -15,14 +15,14 @@
     ]
   },
   {
-    "id": "trn-2026-05-10-spring-open",
+    "id": "trn-2026-06-13-Goderich-Gambit",
     "status": "completed",
-    "date": "2026-05-10",
-    "title": "Spring Open",
+    "date": "2026-06-13",
+    "title": "Goderich Gambit",
     "format": "5 rounds \u00b7 Swiss \u00b7 CFC Rated",
     "location": "Goderich Library, 52 Montreal St, Goderich, ON",
-    "entryFee": "$15 + CFC Membership",
-    "description": "Our first official CFC rated tournament. Two sections, Open and U1700, with a strong turnout from across Huron County.",
+    "entryFee": "CFC Membership",
+    "description": "Our first official CFC rated tournament. One open section, with a strong turnout from across Huron County.",
     "resultsUrl": "https://s3.chess-results.com/tnr1404449.aspx?lan=1"
   }
 ]
