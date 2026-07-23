@@ -97,6 +97,16 @@
       res.textContent = "View Full Results \u2192";
       links.appendChild(res);
     }
+    if (Array.isArray(t.extraLinks)) {
+      t.extraLinks.forEach(function (link) {
+        if (!link || !link.url || !link.label) return;
+        var a = document.createElement("a");
+        a.href = link.url;
+        if (!/^mailto:/.test(link.url)) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+        a.textContent = link.label + " \u2192";
+        links.appendChild(a);
+      });
+    }
     if (links.childNodes.length) body.appendChild(links);
 
     card.appendChild(body);
