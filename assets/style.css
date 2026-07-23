@@ -1075,6 +1075,7 @@ a { color: var(--chess-green); }
 .tournament-meta-item strong { color: var(--slate-100); }
 
 .tournament-desc { color: var(--slate-300); font-size: 15px; line-height: 1.65; white-space: pre-line; margin-bottom: 12px; }
+.tournament-desc strong { color: var(--white); font-weight: 700; }
 
 .tournament-links { display: flex; gap: 14px; flex-wrap: wrap; }
 .tournament-links a { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; }
