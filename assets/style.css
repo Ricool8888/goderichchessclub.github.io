@@ -361,6 +361,28 @@ a { color: var(--chess-green); }
   align-items: center;
   justify-content: center;
   padding: 20px;
+   
+/* Apply the footer's background and border here to move the line above the icons */
+  background-color: var(--navy-950);
+  border-top: 1px solid var(--gold-20);
+  
+/* Pull the actual footer upwards to merge them */
+  margin-bottom: -60px;
+  position: relative;
+  z-index: 10;
+}
+
+/* --- MERGE FIXES --- */
+/* Remove the empty space below the main content ONLY on pages with a social container */
+main:has(.social-container) {
+  padding-bottom: 0 !important;
+}
+
+/* Hide the native footer border and adjust spacing ONLY when merging with the social container */
+main:has(.social-container) + .site-footer {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 20px; 
 }
 
 .social-btn {
