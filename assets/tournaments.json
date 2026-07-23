@@ -11,7 +11,7 @@
     "registerUrl": "mailto:goderichchessclub@gmail.com",
     "extraLinks": [
       { "label": "Join the CFC", "url": "https://www.chess.ca/en/players/membership-join/" },
-      { "label": "CFC Membership - Fees", "url": "https://www.chess.ca/en/players/membership-fees/" }
+      { "label": "CFC Membership - Fees", "url": "https://www.chess.ca/en/players/membership-fees/" },
       { "label": "Registration list", "url": "https://s2.chess-results.com/tnr1460936.aspx?lan=1" }
     ]
   },
