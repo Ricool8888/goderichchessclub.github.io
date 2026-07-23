@@ -9,6 +9,10 @@
     "entryFee": "$20 + CFC Membership",
     "description": "Time Control: 15 minutes + 10 seconds increment per move. CFC Rated (quick time control).\n \n Round Schedule: \n Round 1: 10:00 AM \n Round 2: 11:00 AM \n Round 3: 1:00 PM \n Round 4: 2:00 PM \n Round 5: 3:00 PM \n \n Forfeit Time: 5 minutes \n Sections: Open and U1700 \n Registration: Please send your $20 entry fee e-transfer to goderichchessclub@gmail.com. Once that’s completed, please fill out the register / inquire form. Registration will close on September 4th, 2026 at 9:00 PM. \n To obtain a CFC membership, please use the Join the CFC button below. For membership fees please use the CFC Membership – Fees button below.",
     "registerUrl": "https://forms.gle/94d8p1GNezjKaPhQ9"
+        "extraLinks": [
+      { "label": "Join the CFC", "url": "https://www.chess.ca/en/players/membership-join/" },
+      { "label": "CFC Membership - Fees", "url": "https://www.chess.ca/en/players/membership-fees/" }
+    ]
   },
   {
     "id": "trn-2026-06-13-Goderich-Gambit",
@@ -22,3 +26,4 @@
     "resultsUrl": "https://s3.chess-results.com/tnr1404449.aspx?lan=1"
   }
 ]
+
