@@ -76,7 +76,7 @@
     if (t.description) {
       var desc = document.createElement("p");
       desc.className = "tournament-desc";
-      desc.textContent = t.description;
+      desc.innerHTML = formatRichText(t.description);
       body.appendChild(desc);
     }
 
@@ -117,6 +117,15 @@
     var div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // Very small "markdown-lite" formatter: escapes all HTML first (so nothing
+  // unsafe or broken can be injected via the JSON), then turns **text** into
+  // bold. Line breaks are already handled by the .tournament-desc CSS
+  // (white-space: pre-line), so plain \n in the JSON still works as before.
+  function formatRichText(str) {
+    var escaped = escapeHtml(str);
+    return escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   }
 
   function render() {
