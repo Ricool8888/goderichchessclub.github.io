@@ -91,6 +91,16 @@
       var recurring = recurringEventsForDate(iso, dayOfWeek);
       if (dayEvents.length || recurring.length) btn.classList.add("has-event");
 
+      // Special events (from events.json) take visual priority over a
+      // recurring weekly meeting if a day happens to have both.
+      if (dayEvents.length) {
+        btn.classList.add("day-special-event");
+      } else if (recurring.some(function (r) { return r.cssClass === "recurring"; })) {
+        btn.classList.add("day-tuesday-meeting");
+      } else if (recurring.some(function (r) { return r.cssClass === "recurring-alt"; })) {
+        btn.classList.add("day-friday-meeting");
+      }
+
       var num = document.createElement("span");
       num.className = "day-number";
       num.textContent = d;
