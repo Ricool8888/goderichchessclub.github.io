@@ -545,6 +545,35 @@ a { color: var(--chess-green); }
 
 .calendar-toolbar-actions { display: flex; gap: 10px; }
 
+@media (max-width: 480px) {
+  .calendar-toolbar {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .calendar-month-label {
+    min-width: 0;
+    flex: 1 1 auto;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .calendar-nav-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .calendar-toolbar-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .calendar-toolbar-actions #todayBtn {
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
