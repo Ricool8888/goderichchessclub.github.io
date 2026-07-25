@@ -1020,7 +1020,8 @@ a { color: var(--chess-green); }
   background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
   border: 1px solid var(--slate-800);
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .price-table { width: 100%; border-collapse: collapse; }
@@ -1044,6 +1045,10 @@ a { color: var(--chess-green); }
   font-size: 14px;
   color: var(--slate-400);
   margin-top: 16px;
+}
+
+@media (max-width: 640px) {
+  .price-table { min-width: 560px; }
 }
 
 /* =========================================================
