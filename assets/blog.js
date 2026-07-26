@@ -62,8 +62,7 @@
 
     if (!years.length) {
       var p = document.createElement("p");
-      p.style.color = "#94A3B8";
-      p.style.fontSize = "14px";
+      p.className = "muted-note";
       p.textContent = "No posts yet.";
       container.appendChild(p);
       return;
