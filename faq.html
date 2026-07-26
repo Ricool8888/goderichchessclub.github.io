@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem("gcc-theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (e) {}
+  })();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FAQ - Goderich Chess Club</title>
@@ -50,12 +59,12 @@
 
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false">Where is the chess club located?<span class="faq-icon" aria-hidden="true">+</span></button>
-        <div class="faq-answer"><div class="faq-answer-inner">On Tuesdays at Goderich Branch, Huron County Library, 52 Montreal St, Goderich, ON N7A 2G4. On Fridays at Goderich Legion, 56 Kingston St, Goderich, ON N7A 3K5.</div></div>
+        <div class="faq-answer"><div class="faq-answer-inner">Goderich Branch, Huron County Library, 52 Montreal St, Goderich, ON N7A 2G4.</div></div>
       </div>
 
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false">When does the club meet?<span class="faq-icon" aria-hidden="true">+</span></button>
-        <div class="faq-answer"><div class="faq-answer-inner">Tuesday evenings from 6:00 PM to 8:00 PM at the Goderich Library.  Friday evenings from 6:00 PM to 9:00 PM at the Goderich Legion. Participants may come and go as they please during this timeframe.</div></div>
+        <div class="faq-answer"><div class="faq-answer-inner">Tuesday evenings from 6:00 PM to 8:00 PM. Participants may come and go as they please during this timeframe.</div></div>
       </div>
 
       <div class="faq-item">
@@ -146,12 +155,17 @@
 
 <footer class="site-footer">
   <div class="container">
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle light and dark mode" aria-pressed="false">
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
     <p>Goderich Chess Club &copy; 2026 Volunteer Community Initiative. All Rights Reserved.<br>
     Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a></p>
   </div>
 </footer>
 
 <script src="assets/faq.js"></script>
+<script src="assets/theme.js"></script>
 <script>
   var navToggle = document.getElementById('navToggle');
   var primaryNav = document.getElementById('primaryNav');
