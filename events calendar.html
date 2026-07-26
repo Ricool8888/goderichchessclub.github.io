@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem("gcc-theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (e) {}
+  })();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events Calendar - Goderich Chess Club</title>
@@ -59,9 +68,9 @@
       </div>
     </section>
 
-    <!--<p class="storage-note">
+    <p class="storage-note">
       <strong>How this calendar works:</strong> weekly meetings show automatically every Tuesday. Special events come from <code>assets/events.json</code>. Click a day to view what's scheduled. To add a new event yourself, edit <code>assets/events.json</code> directly in the repo and commit the change — visitors can view the calendar but can't submit events.
-    </p>-->
+    </p>
 
     <div class="social-container">
       <a href="https://www.facebook.com/groups/goderichchessclub" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Visit Facebook">
@@ -79,6 +88,10 @@
 
 <footer class="site-footer">
   <div class="container">
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle light and dark mode" aria-pressed="false">
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
     <p>Goderich Chess Club &copy; 2026 Volunteer Community Initiative. All Rights Reserved.<br>
     Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a></p>
   </div>
@@ -97,6 +110,7 @@
 </div>
 
 <script src="assets/calendar.js"></script>
+<script src="assets/theme.js"></script>
 <script>
   var navToggle = document.getElementById('navToggle');
   var primaryNav = document.getElementById('primaryNav');
