@@ -26,6 +26,7 @@
   --gold-30: rgba(217, 119, 6, 0.3);
   --gold-60: rgba(217, 119, 6, 0.6);
   --chess-green: #81B64C;
+  --body-text: #F1F5F9;
 }
 
 /* Reset & Base */
@@ -52,11 +53,53 @@ html {
 
 body {
   background-color: var(--navy-900);
-  color: #F1F5F9;
+  color: var(--body-text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-y: auto;
   min-height: 100vh;
+}
+
+/* =========================================================
+   LIGHT THEME
+   Toggled via data-theme="light" on <html>. Every color in the
+   site is already driven by these custom properties, so
+   overriding them here re-themes the whole site consistently.
+   Dark mode (no attribute / data-theme="dark") is the default.
+   ========================================================= */
+html[data-theme="light"] {
+  --navy-950: #F8FAFC;
+  --navy-900: #FFFFFF;
+  --navy-800: #F1F5F9;
+  --slate-800: #E2E8F0;
+  --slate-600: #CBD5E1;
+  --slate-500: #94A3B8;
+  --slate-400: #64748B;
+  --slate-300: #475569;
+  --slate-200: #334155;
+  --slate-100: #1E293B;
+  --white: #0F172A;
+  --body-text: #1E293B;
+}
+
+html[data-theme="light"] body {
+  background-color: var(--navy-900);
+}
+
+/* A few components use a navy->darker-navy gradient for depth on
+   dark backgrounds; in light mode that same gradient direction
+   would look muddy, so flatten it to a plain, very light surface. */
+html[data-theme="light"] .meeting-card,
+html[data-theme="light"] .calendar-wrap,
+html[data-theme="light"] .content-card,
+html[data-theme="light"] .founder-card,
+html[data-theme="light"] .faq-item,
+html[data-theme="light"] .table-wrap,
+html[data-theme="light"] .tournament-card,
+html[data-theme="light"] .sponsor-card,
+html[data-theme="light"] .sponsor-cta,
+html[data-theme="light"] .post-card {
+  background: var(--navy-950);
 }
 
 .container {
@@ -500,6 +543,30 @@ a { color: var(--chess-green); }
   color: var(--slate-400);
   font-size: 14px;
 }
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--navy-900);
+  border: 2px solid var(--slate-800);
+  color: var(--slate-300);
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s ease-in-out;
+}
+
+.theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+.theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+.muted-note { color: var(--slate-400); font-size: 14px; }
 
 /* =========================================================
    EVENTS CALENDAR
