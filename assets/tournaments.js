@@ -85,7 +85,7 @@
     if (t.registerUrl) {
       var reg = document.createElement("a");
       reg.href = t.registerUrl;
-      reg.textContent = "Register \u2192";
+      reg.textContent = "Register / Inquire \u2192";
       if (!/^mailto:/.test(t.registerUrl)) { reg.target = "_blank"; reg.rel = "noopener noreferrer"; }
       links.appendChild(reg);
     }
@@ -107,10 +107,54 @@
         links.appendChild(a);
       });
     }
+
+    if (t.status === "upcoming") {
+      var timeRange = parseTimeRange(t.time);
+      if (timeRange) {
+        var calBtn = document.createElement("button");
+        calBtn.type = "button";
+        calBtn.className = "btn-calendar";
+        calBtn.style.marginTop = "4px";
+        calBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Add to Calendar';
+        calBtn.addEventListener("click", function () {
+          if (window.GCCCalendar) {
+            window.GCCCalendar.downloadICS({
+              uid: t.id,
+              title: t.title,
+              description: (t.description || "").replace(/\*\*/g, ""),
+              location: t.location,
+              startDate: t.date,
+              startTime: timeRange.start,
+              endTime: timeRange.end
+            }, t.id + ".ics");
+          }
+        });
+        links.appendChild(calBtn);
+      }
+    }
+
     if (links.childNodes.length) body.appendChild(links);
 
     card.appendChild(body);
     return card;
+  }
+
+  function parseTimeRange(timeStr) {
+    if (!timeStr) return null;
+    var matches = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/gi);
+    if (!matches || matches.length < 2) return null;
+
+    function to24Hour(part) {
+      var m = part.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+      var hour = parseInt(m[1], 10);
+      var minute = m[2];
+      var period = m[3].toUpperCase();
+      if (period === "PM" && hour !== 12) hour += 12;
+      if (period === "AM" && hour === 12) hour = 0;
+      return (hour < 10 ? "0" + hour : "" + hour) + ":" + minute;
+    }
+
+    return { start: to24Hour(matches[0]), end: to24Hour(matches[1]) };
   }
 
   function escapeHtml(str) {
