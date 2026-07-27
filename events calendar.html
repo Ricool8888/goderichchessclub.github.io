@@ -68,6 +68,17 @@
       </div>
     </section>
 
+    <div class="add-to-calendar-row">
+      <button type="button" class="btn-calendar" id="addTuesdayBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Add Tuesday Meeting to Calendar
+      </button>
+      <button type="button" class="btn-calendar" id="addFridayBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Add Friday Meeting to Calendar
+      </button>
+    </div>
+
     <!--
       How this calendar works: weekly meetings show automatically every
       Tuesday and Friday. Special events come from assets/events.json.
@@ -113,7 +124,35 @@
   </div>
 </div>
 
+<script src="assets/ics.js"></script>
 <script src="assets/calendar.js"></script>
+<script>
+  document.getElementById("addTuesdayBtn").addEventListener("click", function () {
+    GCCCalendar.downloadICS({
+      uid: "recurring-tuesday-library",
+      title: "Weekly Club Meeting",
+      description: "Open play at Goderich Library. All skill levels welcome, free admission.",
+      location: "Goderich Library, 52 Montreal St, Goderich, ON N7A 2G4",
+      startDate: "2026-01-20",
+      startTime: "18:00",
+      endTime: "20:00",
+      rrule: "FREQ=WEEKLY;BYDAY=TU"
+    }, "goderich-chess-club-tuesday-meeting.ics");
+  });
+
+  document.getElementById("addFridayBtn").addEventListener("click", function () {
+    GCCCalendar.downloadICS({
+      uid: "recurring-friday-legion",
+      title: "Weekly Club Meeting",
+      description: "Open play at Goderich Legion. All skill levels welcome, free admission.",
+      location: "Goderich Legion, 56 Kingston St, Goderich, ON N7A 3K5",
+      startDate: "2026-07-24",
+      startTime: "18:00",
+      endTime: "21:00",
+      rrule: "FREQ=WEEKLY;BYDAY=FR"
+    }, "goderich-chess-club-friday-meeting.ics");
+  });
+</script>
 <script src="assets/theme.js"></script>
 <script>
   var navToggle = document.getElementById('navToggle');
