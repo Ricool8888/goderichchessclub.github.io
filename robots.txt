@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ricool8888.github.io/goderichchessclub.github.io/sitemap.xml
