@@ -60,6 +60,7 @@
     metaRow.className = "tournament-meta-row";
     var metas = [
       ["\uD83D\uDCC5", formatFullDate(t.date)],
+      ["\uD83D\uDD52", t.time],
       ["\u265F", t.format],
       ["\uD83D\uDCCD", t.location],
       ["\uD83D\uDCB5", t.entryFee]
