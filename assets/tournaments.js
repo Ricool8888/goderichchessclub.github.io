@@ -85,7 +85,7 @@
     if (t.registerUrl) {
       var reg = document.createElement("a");
       reg.href = t.registerUrl;
-      reg.textContent = "Register / Inquire \u2192";
+      reg.textContent = "Register \u2192";
       if (!/^mailto:/.test(t.registerUrl)) { reg.target = "_blank"; reg.rel = "noopener noreferrer"; }
       links.appendChild(reg);
     }
