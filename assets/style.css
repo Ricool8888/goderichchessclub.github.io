@@ -26,6 +26,7 @@
   --gold-30: rgba(217, 119, 6, 0.3);
   --gold-60: rgba(217, 119, 6, 0.6);
   --chess-green: #81B64C;
+  --friday-accent: #38BDF8;
   --body-text: #F1F5F9;
 }
 
@@ -96,29 +97,24 @@ html[data-theme="light"] {
 
   /* Secondary accent (links, "read more", chess.com hover) -> blue */
   --chess-green: #1D4ED8;
+
+  /* Friday/Legion meetings get their own deep navy so they stay visually
+     distinct from the Tuesday/Library blue and the red special-event
+     markers, while still sitting firmly in the red/white/blue family. */
+  --friday-accent: #1E3A8A;
 }
 
 html[data-theme="light"] body {
   background-color: var(--navy-900);
 }
 
-/* Friday/Legion meetings get their own deep navy so they stay visually
-   distinct from the Tuesday/Library blue and the red special-event
-   markers, while still sitting firmly in the red/white/blue family. */
-html[data-theme="light"] .calendar-day.day-friday-meeting .day-number,
-html[data-theme="light"] .day-event-dot.recurring-alt {
-  color: #1E3A8A;
+html[data-theme="light"] .btn-secondary:hover {
+  background-color: var(--slate-800);
 }
+
 html[data-theme="light"] .day-event-dot.recurring-alt {
   background: rgba(30, 58, 138, 0.08);
   border-color: rgba(30, 58, 138, 0.3);
-}
-html[data-theme="light"] .calendar-day.day-friday-meeting::after {
-  background: #1E3A8A;
-}
-
-html[data-theme="light"] .btn-secondary:hover {
-  background-color: var(--slate-800);
 }
 
 /* A few components use a navy->darker-navy gradient for depth on
@@ -712,7 +708,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 .calendar-day.today { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
 .calendar-day .day-number { font-size: 14px; font-weight: 700; color: var(--white); }
 .calendar-day.day-tuesday-meeting .day-number { color: var(--chess-green); }
-.calendar-day.day-friday-meeting .day-number { color: #38BDF8; }
+.calendar-day.day-friday-meeting .day-number { color: var(--friday-accent); }
 .calendar-day.day-special-event .day-number { color: var(--gold); }
 
 .day-event-dot {
@@ -728,7 +724,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 }
 
 .day-event-dot.recurring { background: rgba(129, 182, 76, 0.1); border-color: rgba(129, 182, 76, 0.35); color: var(--chess-green); }
-.day-event-dot.recurring-alt { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.35); color: #38BDF8; }
+.day-event-dot.recurring-alt { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.35); color: var(--friday-accent); }
 
 @media (max-width: 640px) {
   .calendar-day { min-height: 56px; padding: 6px; }
@@ -741,7 +737,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
     position: absolute; bottom: 6px; right: 6px;
   }
   .calendar-day.day-tuesday-meeting::after { background: var(--chess-green); }
-  .calendar-day.day-friday-meeting::after { background: #38BDF8; }
+  .calendar-day.day-friday-meeting::after { background: var(--friday-accent); }
   .calendar-day.day-special-event::after { background: var(--gold); }
 }
 
@@ -842,6 +838,9 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; font-size: 13px; color: var(--slate-300); }
 .legend-item { display: flex; align-items: center; gap: 8px; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.legend-dot-tuesday { background: var(--chess-green); }
+.legend-dot-friday { background: var(--friday-accent); }
+.legend-dot-special { background: var(--gold); }
 
 /* =========================================================
    BLOG / POSTS & NEWS
