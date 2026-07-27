@@ -470,7 +470,6 @@ a { color: var(--chess-green); }
   box-shadow: 0 4px 12px var(--gold-15);
 }
 
-.social-btn.chess:hover { color: var(--chess-green); border-color: var(--chess-green); }
 
 /* Newsletter */
 .newsletter-section {
