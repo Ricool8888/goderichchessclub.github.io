@@ -63,28 +63,62 @@ body {
 
 /* =========================================================
    LIGHT THEME
-   Toggled via data-theme="light" on <html>. Every color in the
-   site is already driven by these custom properties, so
-   overriding them here re-themes the whole site consistently.
+   Toggled via data-theme="light" on <html>. Re-themed to the
+   Town of Goderich's official colours (red, white, and blue)
+   rather than just inverting the dark navy/gold palette.
    Dark mode (no attribute / data-theme="dark") is the default.
    ========================================================= */
 html[data-theme="light"] {
-  --navy-950: #F8FAFC;
-  --navy-900: #FFFFFF;
-  --navy-800: #F1F5F9;
-  --slate-800: #E2E8F0;
-  --slate-600: #CBD5E1;
-  --slate-500: #94A3B8;
-  --slate-400: #64748B;
-  --slate-300: #475569;
-  --slate-200: #334155;
-  --slate-100: #1E293B;
-  --white: #0F172A;
-  --body-text: #1E293B;
+  /* Backgrounds: white / very light blue-white surfaces */
+  --navy-950: #FFFFFF;
+  --navy-900: #F7F9FC;
+  --navy-800: #EEF3FA;
+  --slate-800: #D7E3F0;
+  --slate-600: #AFC4DD;
+  --slate-500: #6B7C93;
+  --slate-400: #5B6B80;
+  --slate-300: #33475A;
+  --slate-200: #1F2A37;
+  --slate-100: #101823;
+
+  /* High-contrast text (headings etc.) */
+  --white: #0B1F3A;
+  --body-text: #1F2937;
+
+  /* Primary accent -> Goderich red (was gold) */
+  --gold: #C8102E;
+  --gold-light: #E23349;
+  --gold-10: rgba(200, 16, 46, 0.08);
+  --gold-15: rgba(200, 16, 46, 0.12);
+  --gold-20: rgba(200, 16, 46, 0.18);
+  --gold-30: rgba(200, 16, 46, 0.28);
+  --gold-60: rgba(200, 16, 46, 0.55);
+
+  /* Secondary accent (links, "read more", chess.com hover) -> blue */
+  --chess-green: #1D4ED8;
 }
 
 html[data-theme="light"] body {
   background-color: var(--navy-900);
+}
+
+/* Friday/Legion meetings get their own deep navy so they stay visually
+   distinct from the Tuesday/Library blue and the red special-event
+   markers, while still sitting firmly in the red/white/blue family. */
+html[data-theme="light"] .calendar-day.day-friday-meeting .day-number,
+html[data-theme="light"] .day-event-dot.recurring-alt {
+  color: #1E3A8A;
+}
+html[data-theme="light"] .day-event-dot.recurring-alt {
+  background: rgba(30, 58, 138, 0.08);
+  border-color: rgba(30, 58, 138, 0.3);
+}
+html[data-theme="light"] .calendar-day.day-friday-meeting::after {
+  background: #1E3A8A;
+}
+
+html[data-theme="light"] .btn-secondary:hover {
+  background-color: var(--slate-800);
 }
 
 /* A few components use a navy->darker-navy gradient for depth on
