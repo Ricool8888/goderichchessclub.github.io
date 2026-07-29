@@ -607,6 +607,18 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 .muted-note { color: var(--slate-400); font-size: 14px; }
 
+.last-updated {
+  font-size: 12px;
+  color: var(--slate-500);
+  margin-top: 10px;
+}
+
+.last-updated {
+  font-size: 12px;
+  color: var(--slate-500);
+  margin-top: 8px;
+}
+
 /* =========================================================
    EVENTS CALENDAR
    ========================================================= */
@@ -1030,6 +1042,38 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 .content-card p { color: var(--slate-300); font-size: 16px; line-height: 1.7; margin-bottom: 14px; }
 .content-card p:last-child { margin-bottom: 0; }
+
+.rules-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--slate-300);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.rules-list .rule-number {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--gold-10);
+  border: 1px solid var(--gold-30);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
 
 .offer-grid {
   display: grid;
