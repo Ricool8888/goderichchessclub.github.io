@@ -1,5 +1,5 @@
 {
-  "enabled": false,
+  "enabled": true,
   "id": "banner-001",
   "style": "info",
   "message": "We're now meeting every Friday evening at Goderich Legion, in addition to Tuesdays at the Library!",
