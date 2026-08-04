@@ -1,8 +1,8 @@
 {
-  "enabled": false,
+  "enabled": true,
   "id": "banner-001",
   "style": "info",
-  "message": "We're now meeting every Friday evening at Goderich Legion, in addition to Tuesdays at the Library!",
-  "linkText": "View Events Calendar",
-  "linkUrl": "events calendar.html"
+  "message": "Registration is now open for the Goderich Beachside Rapid",
+  "linkText": "View upcoming tournaments",
+  "linkUrl": "tournaments.html"
 }
