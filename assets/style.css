@@ -1075,6 +1075,87 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   margin-top: 2px;
 }
 
+/* =========================================================
+   404 PAGE
+   ========================================================= */
+.error-page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.error-code {
+  font-size: 96px;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.error-piece { font-size: 48px; margin-bottom: 16px; }
+
+.error-title { font-size: 28px; font-weight: 800; color: var(--white); margin-bottom: 12px; }
+.error-desc { font-size: 16px; color: var(--slate-300); max-width: 480px; margin: 0 auto 32px; line-height: 1.6; }
+
+.error-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* =========================================================
+   SITE BANNER
+   ========================================================= */
+.site-banner-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 1px solid var(--gold-30);
+}
+
+.site-banner-info {
+  background: var(--gold-10);
+  color: var(--slate-100);
+}
+
+.site-banner-urgent {
+  background: rgba(220, 38, 38, 0.12);
+  border-bottom-color: rgba(220, 38, 38, 0.4);
+  color: var(--slate-100);
+}
+
+.site-banner-text { font-weight: 600; }
+
+.site-banner-link {
+  color: var(--gold);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.site-banner-link:hover { text-decoration: underline; }
+
+.site-banner-close {
+  background: none;
+  border: none;
+  color: var(--slate-400);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-left: 4px;
+}
+.site-banner-close:hover { color: var(--gold); }
+
 .offer-grid {
   display: grid;
   grid-template-columns: 1fr;
