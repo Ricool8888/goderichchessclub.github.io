@@ -1,8 +1,12 @@
 {
   "enabled": true,
-  "id": "banner-001",
-  "style": "info",
-  "message": "Registration is now open for the Goderich Beachside Rapid",
-  "linkText": "View upcoming tournaments",
-  "linkUrl": "tournaments.html"
+  "id": "banner-beachside-rapid-countdown",
+  "style": "urgent",
+  "message": "Goderich Beachside Rapid registration closes in:",
+  "linkText": "Tournament Details",
+  "linkUrl": "tournaments.html",
+  "countdown": {
+    "enabled": true,
+    "deadlineUTC": "2026-09-05T01:00:00Z"
+  }
 }
