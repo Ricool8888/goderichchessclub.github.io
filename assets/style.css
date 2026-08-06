@@ -1136,6 +1136,16 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 .site-banner-text { font-weight: 600; }
 
+.site-banner-countdown {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
+  background: rgba(0, 0, 0, 0.15);
+  padding: 3px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
 .site-banner-link {
   color: var(--gold);
   font-weight: 700;
