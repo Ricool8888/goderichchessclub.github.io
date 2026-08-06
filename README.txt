@@ -1,4 +1,10 @@
-When changing files from claude ensure the following is updated:
+When modifying / changing files from claude ensure the following is updated:
+
+Index page:
+Club rules
+
+About us page:
+Person profiles (board of directors)
 
 FAQ page:
 Tile for where the club is located
