@@ -56,7 +56,11 @@ How pages work:
 
 Description of extra pages
       - Robots.txt tells automated web crawlers and search engine bots which pages and files they can or cannot visit on a website.
+      - 400.html is a custom error page that a web server displays when a user tries to visit a web page with a broken URL or invalid request
+      - 403.html is a custom error page that a web server displays when a user tries to visit a web page without proper access
       - 404.html is a custom error page that a web server displays when a user tries to visit a web page that does not exist, has been moved, or has a broken link
+      - 500.html is a custom error page that a web server displays when a user tries to visit a web page and the webpage has an internal server error
+      - 503.html is a custom error page that a web server displays when a user tries to visit a web page that has active maintenance ongoing
       - sitemap.xml acts as a roadmap for your website. It lists all your important URLs and tells search engines like Google how to find and crawl your content.
       - .nojekyll is an empty configuration file placed in the root directory of a GitHub Pages repository. It tells GitHub to skip running the site through the Jekyll static site generator. This prevents Jekyll from ignoring files or folders that start with an underscore
       - static.yml file is most commonly used as a GitHub Actions workflow configuration template. It automates building and deploying static web content—such as HTML, CSS, and JavaScript—directly to hosting platforms like GitHub Pages whenever you push code changes to your repository.
