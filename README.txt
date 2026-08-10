@@ -54,6 +54,11 @@ How pages work:
             To add a new one or mark one as complete, edit that file in the repo
             and commit the change.
 
+      Banners on index.html
+            There are 2 styles of banners: info and urgent.  To add a banner, add json
+            to the banner.json file and the next banner should appear.  If the banner
+            doesn't appear, make sure the json is correct.  
+
 Description of extra pages
       - Robots.txt tells automated web crawlers and search engine bots which pages and files they can or cannot visit on a website.
       - 400.html is a custom error page that a web server displays when a user tries to visit a web page with a broken URL or invalid request
