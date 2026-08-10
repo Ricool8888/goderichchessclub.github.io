@@ -8,5 +8,10 @@
   "countdown": {
     "enabled": true,
     "deadlineUTC": "2026-09-05T01:00:00Z"
-  }
+  },
+  {
+  "enabled": true,
+  "id": "banner-closed-august-14",
+  "style": "info",
+  "message": "The Chess Club will be closed this Friday August 14th, 2026",
 }
