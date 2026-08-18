@@ -23,6 +23,7 @@ Tournaments page:
 Sponsors page: 
       Info paragraph
       Each sponsor's description
+      Ensure community sponsors only have their name, no card or photo
 
 Merch page:
       Info paragraph
