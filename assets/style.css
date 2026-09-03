@@ -1154,18 +1154,6 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 }
 .site-banner-link:hover { text-decoration: underline; }
 
-.site-banner-close {
-  background: none;
-  border: none;
-  color: var(--slate-400);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0 4px;
-  margin-left: 4px;
-}
-.site-banner-close:hover { color: var(--gold); }
-
 .offer-grid {
   display: grid;
   grid-template-columns: 1fr;
