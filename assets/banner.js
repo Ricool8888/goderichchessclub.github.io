@@ -1,30 +1,6 @@
 (function () {
   "use strict";
 
-  var DISMISS_KEY = "gcc-dismissed-banners";
-
-  function getDismissedIds() {
-    try {
-      var raw = window.localStorage.getItem(DISMISS_KEY);
-      var parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function wasDismissed(id) {
-    return getDismissedIds().indexOf(id) !== -1;
-  }
-
-  function markDismissed(id) {
-    try {
-      var ids = getDismissedIds();
-      if (ids.indexOf(id) === -1) ids.push(id);
-      window.localStorage.setItem(DISMISS_KEY, JSON.stringify(ids));
-    } catch (e) { /* storage unavailable, ignore */ }
-  }
-
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
   function formatCountdown(msRemaining) {
@@ -40,13 +16,12 @@
     return pad(hours) + "h " + pad(minutes) + "m " + pad(seconds) + "s";
   }
 
-  // Renders exactly one banner. Each call has its own local
-  // countdown-interval variable, so multiple banners with their own
-  // countdowns never interfere with each other's timers or dismiss state.
+  // Renders exactly one banner. Banners are permanent (no dismiss control) -
+  // the only way a banner disappears is if its own countdown expires, or
+  // you set "enabled": false / remove it from banner.json.
   function renderOne(data, mount) {
     if (!data || !data.enabled) return;
     if (!data.id || !data.message) return;
-    if (wasDismissed(data.id)) return;
 
     var deadline = null;
     if (data.countdown && data.countdown.enabled && data.countdown.deadlineUTC) {
@@ -68,8 +43,6 @@
     text.textContent = data.message;
     bar.appendChild(text);
 
-    var localInterval = null;
-
     if (deadline) {
       var countdownEl = document.createElement("span");
       countdownEl.className = "site-banner-countdown";
@@ -77,7 +50,7 @@
       countdownEl.textContent = formatCountdown(deadline.getTime() - Date.now());
       bar.appendChild(countdownEl);
 
-      localInterval = setInterval(function () {
+      var localInterval = setInterval(function () {
         var remaining = deadline.getTime() - Date.now();
         if (remaining <= 0) {
           clearInterval(localInterval);
@@ -95,18 +68,6 @@
       link.textContent = data.linkText + " \u2192";
       bar.appendChild(link);
     }
-
-    var closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.className = "site-banner-close";
-    closeBtn.setAttribute("aria-label", "Dismiss announcement");
-    closeBtn.innerHTML = "&times;";
-    closeBtn.addEventListener("click", function () {
-      markDismissed(data.id);
-      if (localInterval) clearInterval(localInterval);
-      bar.remove();
-    });
-    bar.appendChild(closeBtn);
 
     mount.appendChild(bar);
   }
