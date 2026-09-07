@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  function fetchPhotos() {
+  function fetchSections() {
     return fetch("assets/gallery.json")
       .then(function (res) { if (!res.ok) throw new Error("no gallery file"); return res.json(); })
       .catch(function () { return []; });
@@ -26,39 +26,69 @@
     overlay.setAttribute("aria-hidden", "true");
   }
 
-  function renderGrid(photos) {
-    var grid = document.getElementById("galleryGrid");
-    grid.innerHTML = "";
+  function buildGalleryItem(photo) {
+    var card = document.createElement("button");
+    card.type = "button";
+    card.className = "gallery-item";
 
+    var img = document.createElement("img");
+    img.src = "assets/gallery/" + photo.filename;
+    img.alt = photo.alt || photo.caption || "";
+    img.loading = "lazy";
+    card.appendChild(img);
+
+    if (photo.caption) {
+      var cap = document.createElement("span");
+      cap.className = "gallery-item-caption";
+      cap.textContent = photo.caption;
+      card.appendChild(cap);
+    }
+
+    card.addEventListener("click", function () { openLightbox(photo); });
+    return card;
+  }
+
+  function buildSection(section) {
+    var wrap = document.createElement("section");
+    wrap.className = "content-section gallery-section";
+
+    if (section.title) {
+      var heading = document.createElement("h2");
+      heading.className = "section-heading";
+      heading.textContent = section.title;
+      wrap.appendChild(heading);
+    }
+
+    var grid = document.createElement("div");
+    grid.className = "gallery-grid";
+
+    var photos = Array.isArray(section.photos) ? section.photos : [];
     if (!photos.length) {
       var empty = document.createElement("div");
       empty.className = "empty-state";
-      empty.textContent = "No photos have been added yet.";
+      empty.textContent = "No photos in this section yet.";
       grid.appendChild(empty);
+    } else {
+      photos.forEach(function (photo) { grid.appendChild(buildGalleryItem(photo)); });
+    }
+
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  function render(sections) {
+    var container = document.getElementById("galleryContainer");
+    container.innerHTML = "";
+
+    if (!sections.length) {
+      var empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = "No photos have been added yet.";
+      container.appendChild(empty);
       return;
     }
 
-    photos.forEach(function (photo) {
-      var card = document.createElement("button");
-      card.type = "button";
-      card.className = "gallery-item";
-
-      var img = document.createElement("img");
-      img.src = "assets/gallery/" + photo.filename;
-      img.alt = photo.alt || photo.caption || "";
-      img.loading = "lazy";
-      card.appendChild(img);
-
-      if (photo.caption) {
-        var cap = document.createElement("span");
-        cap.className = "gallery-item-caption";
-        cap.textContent = photo.caption;
-        card.appendChild(cap);
-      }
-
-      card.addEventListener("click", function () { openLightbox(photo); });
-      grid.appendChild(card);
-    });
+    sections.forEach(function (section) { container.appendChild(buildSection(section)); });
   }
 
   function init() {
@@ -70,7 +100,7 @@
       if (e.key === "Escape") closeLightbox();
     });
 
-    fetchPhotos().then(renderGrid);
+    fetchSections().then(render);
   }
 
   document.addEventListener("DOMContentLoaded", init);
