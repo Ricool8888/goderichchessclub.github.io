@@ -4,5 +4,11 @@
     "filename": "example-tournament.jpg",
     "caption": "Replace this with a real photo and caption",
     "alt": "Description of the photo for screen readers"
+  },
+  {
+    "id": "photo-002",
+    "filename": "IMG-20260905-WA0019.jpg",
+    "caption": "Tied 3rd place winners of the unrated section in our Goderich Beachside tournament",
+    "alt": "Tied 3rd place winners of the unrated section in our Goderich Beachside tournament"
   }
 ]
