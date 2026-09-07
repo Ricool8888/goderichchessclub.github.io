@@ -1,5 +1,9 @@
 [
   {
+    "id": "section-001",
+    "title": "Goderich Beachside Rapid",
+    "photos": [
+ {
     "id": "photo-002",
     "filename": "IMG-20260905-WA0019.jpg",
     "caption": "Tied 3rd place winners (Levi - Left) (Graham - Right) of the unrated section in our Goderich Beachside tournament",
@@ -46,5 +50,7 @@
     "filename": "IMG-20260906-WA0000.jpg",
     "caption": "Photo of the venue for the Goderich Beachside Rapid",
     "alt": "Photo of the venue for the Goderich Beachside Rapid"
+  }
+    ]
   }
 ]
