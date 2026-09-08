@@ -1,55 +1,141 @@
 [
   {
-    "id": "section-001",
+    "id": "section-002",
     "title": "Goderich Beachside Rapid",
     "photos": [
   {
-    "id": "photo-002",
+    "id": "photo-001",
     "filename": "IMG-20260905-WA0019.jpg",
     "caption": "Tied 3rd place winners (Levi - Left) (Graham - Right) of the unrated section in our Goderich Beachside tournament",
     "alt": "Tied 3rd place winners (Levi - Left) (Graham - Right) of the unrated section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-003",
+    "id": "photo-002",
     "filename": "IMG-20260905-WA0020.jpg",
     "caption": "Riley and Jamison - Jamison was the 2nd place winner of the unrated section in our Goderich Beachside tournament",
     "alt": "Riley and Jamison - Jamison was the 2nd place winner of the unrated section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-004",
+    "id": "photo-003",
     "filename": "IMG-20260905-WA0021.jpg",
     "caption": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament",
     "alt": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-005",
+    "id": "photo-004",
     "filename": "IMG-20260905-WA0023.jpg",
     "caption": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament",
     "alt": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-006",
+    "id": "photo-005",
     "filename": "IMG-20260905-WA0022.jpg",
     "caption": "Riley and Rob - Rob was the 3rd place winner of the open section in our Goderich Beachside tournament",
     "alt": "Riley and Rob - Rob was the 3rd place winner of the open section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-007",
+    "id": "photo-006",
     "filename": "IMG-20260905-WA0024.jpg",
     "caption": "Riley and William - William was the 2nd place winner of the open section in our Goderich Beachside tournament",
     "alt": "Riley and William - William was the 2nd place winner of the open section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-008",
+    "id": "photo-007",
     "filename": "IMG-20260905-WA0025.jpg",
     "caption": "Riley and Andrew - Andrew was the 1st place winner of the open section in our Goderich Beachside tournament",
     "alt": "Riley and Andrew - Andrew was the 1st place winner of the open section in our Goderich Beachside tournament"
   },
   {
-    "id": "photo-009",
+    "id": "photo-008",
     "filename": "IMG-20260906-WA0000.jpg",
     "caption": "Photo of the venue for the Goderich Beachside Rapid",
     "alt": "Photo of the venue for the Goderich Beachside Rapid"
+  }
+          ]
+  },
+  {
+    "id": "section-001",
+    "title": "Goderich Gambit",
+    "photos": [
+  {
+    "id": "photo-009",
+    "filename": "20260613_105937.jpg",
+    "alt": "Tied 3rd place winners (Levi - Left) (Graham - Right) of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-010",
+    "filename": "20260613_110214.jpg",
+    "alt": "Riley and Jamison - Jamison was the 2nd place winner of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-011",
+    "filename": "20260613_111000.jpg",
+    "alt": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-012",
+    "filename": "20260613_111010.jpg",
+    "alt": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-013",
+    "filename": "20260613_112532.jpg",
+    "alt": "Riley and Rob - Rob was the 3rd place winner of the open section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-014",
+    "filename": "20260613_130534.jpg",
+    "alt": "Riley and William - William was the 2nd place winner of the open section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-015",
+    "filename": "20260613_131023.jpg",
+    "alt": "Riley and Andrew - Andrew was the 1st place winner of the open section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-016",
+    "filename": "20260613_131625.jpg",
+    "alt": "Photo of the venue for the Goderich Beachside Rapid"
+  },
+  {
+    "id": "photo-017",
+    "filename": "20260613_135924.jpg",
+    "alt": "Tied 3rd place winners (Levi - Left) (Graham - Right) of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-018",
+    "filename": "20260613_140516.jpg",
+    "alt": "Riley and Jamison - Jamison was the 2nd place winner of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-019",
+    "filename": "20260613_140619.jpg",
+    "alt": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-021",
+    "filename": "20260613_140643.jpg",
+    "alt": "Riley and Sean - Sean was the 1st place winner of the unrated section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-022",
+    "filename": "20260613_140659.jpg",
+    "alt": "Riley and Rob - Rob was the 3rd place winner of the open section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-023",
+    "filename": "20260613_140832.jpg",
+    "alt": "Riley and William - William was the 2nd place winner of the open section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-024",
+    "filename": "20260613_141715.jpg",
+    "alt": "Riley and Andrew - Andrew was the 1st place winner of the open section in our Goderich Beachside tournament"
+  },
+  {
+    "id": "photo-025",
+    "filename": "20260613_150004.jpg",
+    "alt": "Riley and Andrew - Andrew was the 1st place winner of the open section in our Goderich Beachside tournament"
   }
           ]
   }
