@@ -32,10 +32,13 @@
   }
 
   // opts: { uid, title, description, location, startDate ("YYYY-MM-DD"),
-  //         startTime ("HH:MM" 24hr), endTime ("HH:MM" 24hr), rrule (optional, e.g. "FREQ=WEEKLY;BYDAY=TU") }
+  //         startTime ("HH:MM" 24hr), endTime ("HH:MM" 24hr),
+  //         endDate (optional "YYYY-MM-DD" - for multi-day events; defaults
+  //         to startDate when omitted), rrule (optional, e.g. "FREQ=WEEKLY;BYDAY=TU") }
   function buildICS(opts) {
+    var endDate = opts.endDate || opts.startDate;
     var dtStart = opts.startDate.replace(/-/g, "") + "T" + opts.startTime.replace(":", "") + "00";
-    var dtEnd = opts.startDate.replace(/-/g, "") + "T" + opts.endTime.replace(":", "") + "00";
+    var dtEnd = endDate.replace(/-/g, "") + "T" + opts.endTime.replace(":", "") + "00";
 
     var lines = [
       "BEGIN:VCALENDAR",
