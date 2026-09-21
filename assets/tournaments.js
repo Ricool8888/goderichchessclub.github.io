@@ -9,7 +9,7 @@
   };
 
   function fetchTournaments() {
-    return fetch("assets/tournaments.json")
+    return fetch("/assets/tournaments.json")
       .then(function (res) { if (!res.ok) throw new Error("no tournaments file"); return res.json(); })
       .catch(function () { return []; });
   }
@@ -21,14 +21,42 @@
     });
   }
 
-  function buildDateBlock(iso) {
-    var d = new Date(iso + "T00:00:00");
+  function buildDateBlock(t) {
+    var start = new Date(t.date + "T00:00:00");
+    var endIso = t.endDate || t.date;
+    var end = new Date(endIso + "T00:00:00");
+
     var wrap = document.createElement("div");
     wrap.className = "tournament-date-block";
+
+    var monthHtml, dayHtml, yearHtml, dayClass = "day";
+
+    if (endIso === t.date) {
+      // Single-day event - unchanged from before.
+      monthHtml = MONTH_SHORT[start.getMonth()];
+      dayHtml = start.getDate();
+      yearHtml = start.getFullYear();
+    } else if (start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth()) {
+      // Multi-day, same month (the common case - a weekend tournament etc.)
+      monthHtml = MONTH_SHORT[start.getMonth()];
+      dayHtml = start.getDate() + "\u2013" + end.getDate();
+      yearHtml = start.getFullYear();
+    } else {
+      // Multi-day spanning different months (and/or years) - fall back to a
+      // smaller, compact full range rather than trying to force it into the
+      // normal month/day layout.
+      dayClass = "day range-compact";
+      monthHtml = "";
+      dayHtml = MONTH_SHORT[start.getMonth()] + " " + start.getDate() + "\u2013" + MONTH_SHORT[end.getMonth()] + " " + end.getDate();
+      yearHtml = (start.getFullYear() === end.getFullYear())
+        ? start.getFullYear()
+        : (start.getFullYear() + "\u2013" + end.getFullYear());
+    }
+
     wrap.innerHTML =
-      '<div class="month">' + MONTH_SHORT[d.getMonth()] + '</div>' +
-      '<div class="day">' + d.getDate() + '</div>' +
-      '<div class="year">' + d.getFullYear() + '</div>';
+      '<div class="month">' + monthHtml + '</div>' +
+      '<div class="' + dayClass + '">' + dayHtml + '</div>' +
+      '<div class="year">' + yearHtml + '</div>';
     return wrap;
   }
 
@@ -37,10 +65,31 @@
     return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
   }
 
+  // Formats a tournament's date (or date range, when endDate is present and
+  // different from date) for the meta row - e.g. "September 5, 2026",
+  // "September 5-7, 2026", or "September 30 - October 2, 2026".
+  function formatDateRange(t) {
+    if (!t.endDate || t.endDate === t.date) return formatFullDate(t.date);
+
+    var start = new Date(t.date + "T00:00:00");
+    var end = new Date(t.endDate + "T00:00:00");
+
+    if (start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth()) {
+      var monthName = start.toLocaleDateString(undefined, { month: "long" });
+      return monthName + " " + start.getDate() + "\u2013" + end.getDate() + ", " + start.getFullYear();
+    }
+    if (start.getFullYear() === end.getFullYear()) {
+      var startPart = start.toLocaleDateString(undefined, { month: "long", day: "numeric" });
+      var endPart = end.toLocaleDateString(undefined, { month: "long", day: "numeric" });
+      return startPart + " \u2013 " + endPart + ", " + start.getFullYear();
+    }
+    return formatFullDate(t.date) + " \u2013 " + formatFullDate(t.endDate);
+  }
+
   function buildCard(t) {
     var card = document.createElement("article");
     card.className = "tournament-card";
-    card.appendChild(buildDateBlock(t.date));
+    card.appendChild(buildDateBlock(t));
 
     var body = document.createElement("div");
 
@@ -59,7 +108,7 @@
     var metaRow = document.createElement("div");
     metaRow.className = "tournament-meta-row";
     var metas = [
-      ["\uD83D\uDCC5", formatFullDate(t.date)],
+      ["\uD83D\uDCC5", formatDateRange(t)],
       ["\uD83D\uDD52", t.time],
       ["\u265F", t.format],
       ["\uD83D\uDCCD", t.location],
@@ -125,6 +174,7 @@
               description: (t.description || "").replace(/\*\*/g, ""),
               location: t.location,
               startDate: t.date,
+              endDate: t.endDate,
               startTime: timeRange.start,
               endTime: timeRange.end
             }, t.id + ".ics");
