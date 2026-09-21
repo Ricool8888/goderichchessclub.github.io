@@ -7,26 +7,26 @@
    ========================================================= */
 
 :root {
-  --navy-950: #020617;
-  --navy-900: #0B1329;
-  --navy-800: #060B18;
-  --slate-800: #1E293B;
-  --slate-600: #334155;
-  --slate-500: #475569;
-  --slate-400: #64748B;
-  --slate-300: #94A3B8;
-  --slate-200: #CBD5E1;
-  --slate-100: #E2E8F0;
-  --white: #FFFFFF;
-  --gold: #D97706;
-  --gold-light: #F59E0B;
-  --gold-10: rgba(217, 119, 6, 0.1);
-  --gold-15: rgba(217, 119, 6, 0.15);
-  --gold-20: rgba(217, 119, 6, 0.2);
-  --gold-30: rgba(217, 119, 6, 0.3);
-  --gold-60: rgba(217, 119, 6, 0.6);
-  --chess-green: #81B64C;
-  --friday-accent: #38BDF8;
+  --navy-950: #130B23;
+  --navy-900: #1D1138;
+  --navy-800: #28174C;
+  --slate-800: #3A3252;
+  --slate-600: #524870;
+  --slate-500: #6A5E8D;
+  --slate-400: #857BA3;
+  --slate-300: #A7A0BA;
+  --slate-200: #C8C5D3;
+  --slate-100: #E4E3E8;
+  --white: #F6F5FA;
+  --gold: #E1B12C;
+  --gold-light: #E9C158;
+  --gold-10: rgba(225, 177, 44, 0.1);
+  --gold-15: rgba(225, 177, 44, 0.15);
+  --gold-20: rgba(225, 177, 44, 0.2);
+  --gold-30: rgba(225, 177, 44, 0.3);
+  --gold-60: rgba(225, 177, 44, 0.6);
+  --chess-green: #A490DF;
+  --friday-accent: #B18725;
   --body-text: #F1F5F9;
 }
 
@@ -346,7 +346,7 @@ a { color: var(--chess-green); }
 
 .btn-secondary:hover {
   border-color: var(--gold-30);
-  background-color: #1E293B;
+  background-color: var(--slate-800);
 }
 
 /* CARD */
@@ -744,8 +744,8 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   white-space: nowrap;
 }
 
-.day-event-dot.recurring { background: rgba(129, 182, 76, 0.1); border-color: rgba(129, 182, 76, 0.35); color: var(--chess-green); }
-.day-event-dot.recurring-alt { background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.35); color: var(--friday-accent); }
+.day-event-dot.recurring { background: rgba(164, 144, 223, 0.15); border-color: rgba(164, 144, 223, 0.4); color: var(--chess-green); }
+.day-event-dot.recurring-alt { background: rgba(177, 135, 37, 0.15); border-color: rgba(177, 135, 37, 0.4); color: var(--friday-accent); }
 
 @media (max-width: 640px) {
   .calendar-day { min-height: 56px; padding: 6px; }
@@ -1297,7 +1297,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 .price-table tbody td { padding: 16px 22px; font-size: 15px; color: var(--slate-100); border-bottom: 1px solid var(--slate-800); }
 .price-table tbody tr:last-child td { border-bottom: none; }
 .price-table tbody td.price-col { text-align: right; color: var(--gold); font-weight: 700; white-space: nowrap; }
-.price-table tbody tr:hover { background: rgba(217, 119, 6, 0.04); }
+.price-table tbody tr:hover { background: rgba(225, 177, 44, 0.05); }
 
 .books-note {
   font-size: 14px;
@@ -1356,6 +1356,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 .tournament-date-block .month { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--gold); letter-spacing: 0.5px; }
 .tournament-date-block .day { font-size: 26px; font-weight: 800; color: var(--white); line-height: 1.1; }
+.tournament-date-block .day.range-compact { font-size: 14px; line-height: 1.3; white-space: nowrap; }
 .tournament-date-block .year { font-size: 12px; color: var(--slate-400); }
 
 .tournament-body-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
