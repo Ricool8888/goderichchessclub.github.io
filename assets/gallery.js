@@ -3,25 +3,17 @@
 
   /*
    * Gallery performance:
-   *
-   * - Photos are NOT given a src immediately.
-   * - IntersectionObserver watches each photo.
-   * - A photo begins loading when it is approximately 400px
-   *   away from entering the viewport.
+   * - Photos load only as they approach the viewport.
+   * - IntersectionObserver starts loading images about 400px
+   *   before they enter the screen.
    * - Images are decoded asynchronously.
-   * - Gallery cards are created in small batches so the main
-   *   thread remains responsive.
+   * - Gallery cards are created in small batches.
+   * - Loaded photos fade smoothly into view.
    */
 
   var LAZY_LOAD_MARGIN = "400px";
   var BATCH_SIZE = 8;
-
   var imageObserver = null;
-
-
-  /* ---------------------------------------------------------
-     Fetch gallery data
-     --------------------------------------------------------- */
 
   function fetchSections() {
     return fetch("assets/gallery.json", {
@@ -39,148 +31,125 @@
       });
   }
 
-
-  /* ---------------------------------------------------------
-     Lazy image loading
-     --------------------------------------------------------- */
-
-function loadImage(img) {
-  if (!img) {
-    return;
-  }
-
-  if (img.dataset.loaded === "true") {
-    return;
-  }
-
-  var src = img.dataset.src;
-
-  if (!src) {
-    return;
-  }
-
   /*
-   * Start with the image transparent.
-   * The CSS transition below will smoothly reveal it.
+   * Load an image once it gets close to the viewport.
    */
-  img.classList.add("gallery-image-loading");
-
-  /*
-   * Set the real source only when the image approaches
-   * the viewport.
-   */
-  img.src = src;
-
-  img.dataset.loaded = "true";
-
-  img.decoding = "async";
-
-  try {
-    img.fetchPriority = "low";
-  } catch (e) {}
-
-  /*
-   * When the actual photo has finished loading,
-   * smoothly reveal it.
-   */
-  img.addEventListener(
-    "load",
-    function () {
-      img.classList.remove("gallery-image-loading");
-      img.classList.add("gallery-image-loaded");
-    },
-    { once: true }
-  );
-
-  /*
-   * If the image fails to load, don't leave it
-   * permanently transparent.
-   */
-  img.addEventListener(
-    "error",
-    function () {
-      img.classList.remove("gallery-image-loading");
-    },
-    { once: true }
-  );
-
-  if (imageObserver) {
-    imageObserver.unobserve(img);
-  }
-}
-
-
-  function setupLazyLoading() {
-
-    /*
-     * IntersectionObserver is supported by all modern browsers.
-     */
-    if ("IntersectionObserver" in window) {
-
-      imageObserver = new IntersectionObserver(
-        function (entries) {
-
-          entries.forEach(function (entry) {
-
-            if (entry.isIntersecting) {
-              loadImage(entry.target);
-            }
-
-          });
-
-        },
-        {
-          /*
-           * Begin loading the image before it actually
-           * reaches the viewport.
-           */
-          rootMargin: LAZY_LOAD_MARGIN,
-
-          /*
-           * We only need to know whether the image has
-           * entered the loading zone.
-           */
-          threshold: 0
-        }
-      );
-
+  function loadImage(img) {
+    if (!img || img.dataset.loaded === "true") {
       return;
     }
 
+    var src = img.dataset.src;
+
+    if (!src) {
+      return;
+    }
 
     /*
-     * Fallback for very old browsers that don't support
-     * IntersectionObserver.
-     *
-     * In that case, simply load all images.
+     * Keep the image transparent while it is loading.
      */
-    imageObserver = null;
-  }
+    img.classList.add("gallery-image-loading");
 
+    /*
+     * Setting src here actually starts the image request.
+     */
+    img.src = src;
+    img.dataset.loaded = "true";
 
-  function observeImage(img) {
+    /*
+     * Ask the browser to decode the image asynchronously.
+     */
+    img.decoding = "async";
 
+    /*
+     * Keep gallery thumbnails lower priority than more
+     * important page resources.
+     */
+    try {
+      img.fetchPriority = "low";
+    } catch (e) {}
+
+    /*
+     * Once the image has completely loaded, fade it into view.
+     */
+    img.addEventListener(
+      "load",
+      function () {
+        img.classList.remove("gallery-image-loading");
+        img.classList.add("gallery-image-loaded");
+      },
+      { once: true }
+    );
+
+    /*
+     * If the image fails, don't leave it permanently invisible.
+     */
+    img.addEventListener(
+      "error",
+      function () {
+        img.classList.remove("gallery-image-loading");
+      },
+      { once: true }
+    );
+
+    /*
+     * We no longer need to observe this image.
+     */
     if (imageObserver) {
-
-      imageObserver.observe(img);
-
-    } else {
-
-      /*
-       * Old-browser fallback.
-       */
-      loadImage(img);
-
+      imageObserver.unobserve(img);
     }
   }
 
+  /*
+   * Set up IntersectionObserver for progressive loading.
+   */
+  function setupLazyLoading() {
+    if ("IntersectionObserver" in window) {
+      imageObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              loadImage(entry.target);
+            }
+          });
+        },
+        {
+          /*
+           * Begin loading approximately 400px before
+           * the image reaches the visible viewport.
+           */
+          rootMargin: LAZY_LOAD_MARGIN,
 
-  /* ---------------------------------------------------------
-     Lightbox
-     --------------------------------------------------------- */
+          threshold: 0
+        }
+      );
+    } else {
+      /*
+       * Fallback for older browsers.
+       */
+      imageObserver = null;
+    }
+  }
 
+  /*
+   * Add an image to the lazy-loading observer.
+   */
+  function observeImage(img) {
+    if (imageObserver) {
+      imageObserver.observe(img);
+    } else {
+      /*
+       * Older-browser fallback:
+       * simply load the image.
+       */
+      loadImage(img);
+    }
+  }
+
+  /*
+   * Open the full-size photo lightbox.
+   */
   function openLightbox(photo) {
-
     var overlay =
       document.getElementById("lightboxOverlay");
 
@@ -190,12 +159,9 @@ function loadImage(img) {
     var caption =
       document.getElementById("lightboxCaption");
 
-
     /*
-     * The thumbnail may not have been loaded yet.
-     *
-     * The lightbox still loads the full-size image immediately
-     * when the user actually clicks it.
+     * The full-size image is intentionally loaded immediately
+     * when the visitor clicks the gallery card.
      */
     img.src =
       "assets/gallery/" + photo.filename;
@@ -214,9 +180,10 @@ function loadImage(img) {
     );
   }
 
-
+  /*
+   * Close the lightbox.
+   */
   function closeLightbox() {
-
     var overlay =
       document.getElementById("lightboxOverlay");
 
@@ -228,13 +195,10 @@ function loadImage(img) {
     );
   }
 
-
-  /* ---------------------------------------------------------
-     Create individual gallery item
-     --------------------------------------------------------- */
-
+  /*
+   * Build one gallery card.
+   */
   function buildGalleryItem(photo) {
-
     var card =
       document.createElement("button");
 
@@ -243,44 +207,46 @@ function loadImage(img) {
     card.className =
       "gallery-item";
 
-
     var img =
       document.createElement("img");
-
 
     /*
      * IMPORTANT:
      *
-     * We deliberately do NOT set img.src here.
+     * The actual image URL is stored in data-src.
      *
-     * The URL is stored in data-src until the image approaches
-     * the viewport.
+     * There is intentionally no img.src here.
+     *
+     * IntersectionObserver will assign the src when the
+     * photo gets close to the viewport.
      */
     img.dataset.src =
       "assets/gallery/" + photo.filename;
 
-
     img.alt =
       photo.alt || photo.caption || "";
 
-
     /*
-     * Keep this as an additional browser hint.
-     *
-     * IntersectionObserver is controlling the actual loading,
-     * while this tells supporting browsers that the image is
-     * intended to be lazy.
+     * Keep the native browser hint as an additional
+     * optimization.
      */
     img.loading = "lazy";
 
     img.decoding = "async";
 
+    /*
+     * Start transparent until the image finishes loading.
+     */
+    img.classList.add(
+      "gallery-image-loading"
+    );
 
     card.appendChild(img);
 
-
+    /*
+     * Add the caption if one exists.
+     */
     if (photo.caption) {
-
       var cap =
         document.createElement("span");
 
@@ -293,43 +259,36 @@ function loadImage(img) {
       card.appendChild(cap);
     }
 
-
+    /*
+     * Open the lightbox when the card is clicked.
+     */
     card.addEventListener(
       "click",
       function () {
-
         openLightbox(photo);
-
       }
     );
 
-
     /*
-     * Start watching this image for when it approaches
+     * Begin watching the image for when it approaches
      * the viewport.
      */
     observeImage(img);
 
-
     return card;
   }
 
-
-  /* ---------------------------------------------------------
-     Create gallery section
-     --------------------------------------------------------- */
-
+  /*
+   * Build the shell for a gallery section.
+   */
   function buildSectionShell(section) {
-
     var wrap =
       document.createElement("section");
 
     wrap.className =
       "content-section gallery-section";
 
-
     if (section.title) {
-
       var heading =
         document.createElement("h2");
 
@@ -342,17 +301,15 @@ function loadImage(img) {
       wrap.appendChild(heading);
     }
 
-
     var grid =
       document.createElement("div");
 
     grid.className =
       "gallery-grid";
 
-
     /*
-     * Allows the browser to reduce rendering work for gallery
-     * sections that are far below the current scroll position.
+     * Allows the browser to reduce rendering work for
+     * sections that are far below the current viewport.
      */
     grid.style.contentVisibility =
       "auto";
@@ -360,9 +317,7 @@ function loadImage(img) {
     grid.style.containIntrinsicSize =
       "600px";
 
-
     wrap.appendChild(grid);
-
 
     return {
       wrap: wrap,
@@ -373,13 +328,10 @@ function loadImage(img) {
     };
   }
 
-
-  /* ---------------------------------------------------------
-     Empty gallery message
-     --------------------------------------------------------- */
-
+  /*
+   * Display an empty-state message.
+   */
   function appendEmpty(grid, text) {
-
     var empty =
       document.createElement("div");
 
@@ -392,45 +344,44 @@ function loadImage(img) {
     grid.appendChild(empty);
   }
 
-
-  /* ---------------------------------------------------------
-     Schedule work for next animation frame
-     --------------------------------------------------------- */
-
+  /*
+   * Run work on the next animation frame.
+   *
+   * This keeps large galleries from blocking scrolling
+   * and other user interactions.
+   */
   function scheduleFrame(callback) {
-
     if (
       typeof window.requestAnimationFrame ===
       "function"
     ) {
-
-      window.requestAnimationFrame(callback);
-
+      window.requestAnimationFrame(
+        callback
+      );
     } else {
-
-      window.setTimeout(callback, 0);
-
+      window.setTimeout(
+        callback,
+        0
+      );
     }
   }
 
-
-  /* ---------------------------------------------------------
-     Render gallery
-     --------------------------------------------------------- */
-
+  /*
+   * Render all gallery sections.
+   */
   function renderSections(sections) {
-
     var container =
       document.getElementById(
         "galleryContainer"
       );
 
+    if (!container) {
+      return;
+    }
 
     container.innerHTML = "";
 
-
     if (!sections.length) {
-
       appendEmpty(
         container,
         "No photos have been added yet."
@@ -439,46 +390,36 @@ function loadImage(img) {
       return;
     }
 
-
     /*
-     * Create the IntersectionObserver before creating
-     * the gallery images.
+     * Set up image observation before creating
+     * the gallery cards.
      */
     setupLazyLoading();
 
-
     var sectionIndex = 0;
 
-
     function renderNextSection() {
-
       if (
         sectionIndex >= sections.length
       ) {
         return;
       }
 
-
       var sectionData =
         buildSectionShell(
           sections[sectionIndex]
         );
 
-
       container.appendChild(
         sectionData.wrap
       );
 
-
       sectionIndex += 1;
-
 
       var photos =
         sectionData.photos;
 
-
       if (!photos.length) {
-
         appendEmpty(
           sectionData.grid,
           "No photos in this section yet."
@@ -491,19 +432,15 @@ function loadImage(img) {
         return;
       }
 
-
       var photoIndex = 0;
 
-
       /*
-       * Only create a small number of gallery
-       * cards per animation frame.
+       * Build only a small number of cards per
+       * animation frame.
        */
       function renderBatch() {
-
         var fragment =
           document.createDocumentFragment();
-
 
         var end =
           Math.min(
@@ -511,13 +448,11 @@ function loadImage(img) {
             photos.length
           );
 
-
         for (
           ;
           photoIndex < end;
           photoIndex += 1
         ) {
-
           fragment.appendChild(
             buildGalleryItem(
               photos[photoIndex]
@@ -525,107 +460,84 @@ function loadImage(img) {
           );
         }
 
-
         sectionData.grid.appendChild(
           fragment
         );
 
-
         if (
           photoIndex < photos.length
         ) {
-
           /*
-           * Yield to the browser before
-           * creating the next batch.
+           * Yield to the browser before creating
+           * the next group of cards.
            */
           scheduleFrame(
             renderBatch
           );
-
         } else {
-
           scheduleFrame(
             renderNextSection
           );
         }
       }
 
-
       renderBatch();
     }
-
 
     renderNextSection();
   }
 
-
-  /* ---------------------------------------------------------
-     Initialize
-     --------------------------------------------------------- */
-
+  /*
+   * Initialize the gallery.
+   */
   function init() {
-
     var lightboxCloseBtn =
       document.getElementById(
         "lightboxCloseBtn"
       );
-
 
     var lightboxOverlay =
       document.getElementById(
         "lightboxOverlay"
       );
 
-
     if (lightboxCloseBtn) {
-
       lightboxCloseBtn.addEventListener(
         "click",
         closeLightbox
       );
     }
 
-
     if (lightboxOverlay) {
-
       lightboxOverlay.addEventListener(
         "click",
         function (e) {
-
           if (e.target === this) {
-
             closeLightbox();
-
           }
-
         }
       );
     }
 
-
+    /*
+     * Allow Escape to close the lightbox.
+     */
     document.addEventListener(
       "keydown",
       function (e) {
-
         if (e.key === "Escape") {
-
           closeLightbox();
-
         }
-
       }
     );
 
-
     /*
-     * Fetch the gallery data and start rendering.
+     * Fetch gallery data and begin rendering.
      */
     fetchSections().then(
       renderSections
     );
   }
-
 
   document.addEventListener(
     "DOMContentLoaded",
