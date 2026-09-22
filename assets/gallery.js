@@ -44,54 +44,70 @@
      Lazy image loading
      --------------------------------------------------------- */
 
-  function loadImage(img) {
-    if (!img) {
-      return;
-    }
-
-    /*
-     * Don't load the same image more than once.
-     */
-    if (img.dataset.loaded === "true") {
-      return;
-    }
-
-    var src = img.dataset.src;
-
-    if (!src) {
-      return;
-    }
-
-    /*
-     * Set the real image source only when the image is
-     * approaching the viewport.
-     */
-    img.src = src;
-
-    img.dataset.loaded = "true";
-
-    /*
-     * Tell the browser that decoding the image should happen
-     * asynchronously so it doesn't block the interface.
-     */
-    img.decoding = "async";
-
-    /*
-     * Keep gallery thumbnails lower priority than more
-     * important page resources.
-     */
-    try {
-      img.fetchPriority = "low";
-    } catch (e) {}
-
-    /*
-     * Once the image has been triggered, it no longer needs
-     * to be watched by IntersectionObserver.
-     */
-    if (imageObserver) {
-      imageObserver.unobserve(img);
-    }
+function loadImage(img) {
+  if (!img) {
+    return;
   }
+
+  if (img.dataset.loaded === "true") {
+    return;
+  }
+
+  var src = img.dataset.src;
+
+  if (!src) {
+    return;
+  }
+
+  /*
+   * Start with the image transparent.
+   * The CSS transition below will smoothly reveal it.
+   */
+  img.classList.add("gallery-image-loading");
+
+  /*
+   * Set the real source only when the image approaches
+   * the viewport.
+   */
+  img.src = src;
+
+  img.dataset.loaded = "true";
+
+  img.decoding = "async";
+
+  try {
+    img.fetchPriority = "low";
+  } catch (e) {}
+
+  /*
+   * When the actual photo has finished loading,
+   * smoothly reveal it.
+   */
+  img.addEventListener(
+    "load",
+    function () {
+      img.classList.remove("gallery-image-loading");
+      img.classList.add("gallery-image-loaded");
+    },
+    { once: true }
+  );
+
+  /*
+   * If the image fails to load, don't leave it
+   * permanently transparent.
+   */
+  img.addEventListener(
+    "error",
+    function () {
+      img.classList.remove("gallery-image-loading");
+    },
+    { once: true }
+  );
+
+  if (imageObserver) {
+    imageObserver.unobserve(img);
+  }
+}
 
 
   function setupLazyLoading() {
