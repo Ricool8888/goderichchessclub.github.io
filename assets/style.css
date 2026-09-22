@@ -1601,6 +1601,84 @@ html[data-theme="light"] .theme-thumb {
   .gallery-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
+/*
+ * ============================================================
+ * GALLERY PHOTO LAZY-LOAD TRANSITION
+ * ============================================================
+ *
+ * Photos begin transparent while they are loading.
+ * Once the JavaScript detects that the image has completely
+ * loaded, it changes the image to .gallery-image-loaded.
+ *
+ * The card itself does NOT fade or move, so the gallery layout
+ * remains stable while images are loading.
+ */
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  /*
+   * Default state.
+   */
+  opacity: 1;
+
+  /*
+   * Fade the photo in smoothly while preserving the existing
+   * gallery hover zoom transition.
+   */
+  transition:
+    opacity 0.4s ease,
+    transform 0.25s ease;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * IMAGE WHILE LOADING
+ * ------------------------------------------------------------
+ */
+
+.gallery-item img.gallery-image-loading {
+  opacity: 0;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * IMAGE AFTER LOADING
+ * ------------------------------------------------------------
+ */
+
+.gallery-item img.gallery-image-loaded {
+  opacity: 1;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * REDUCED MOTION
+ * ------------------------------------------------------------
+ *
+ * Respect visitors who have enabled reduced motion in their
+ * operating system or browser.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gallery-item img {
+    transition: none;
+  }
+
+  .gallery-item img.gallery-image-loading,
+  .gallery-item img.gallery-image-loaded {
+    opacity: 1;
+  }
+
+}
+
 .gallery-item {
   position: relative;
   display: block;
@@ -1613,7 +1691,7 @@ html[data-theme="light"] .theme-thumb {
   padding: 0;
   cursor: pointer;
 }
-
+/*
 .gallery-item img {
   width: 100%;
   height: 100%;
@@ -1621,7 +1699,7 @@ html[data-theme="light"] .theme-thumb {
   display: block;
   transition: transform 0.25s ease;
 }
-
+*/
 .gallery-item:hover img { transform: scale(1.06); }
 
 .gallery-item-caption {
@@ -1637,7 +1715,7 @@ html[data-theme="light"] .theme-thumb {
   opacity: 0;
   transition: opacity 0.2s ease;
 }
-
+/*
 .gallery-item img.gallery-image-loading {
   opacity: 0;
 }
@@ -1646,7 +1724,7 @@ html[data-theme="light"] .theme-thumb {
   opacity: 1;
   transition: opacity 0.4s ease;
 }
-
+*/
 .gallery-item:hover .gallery-item-caption,
 .gallery-item:focus .gallery-item-caption { opacity: 1; }
 
