@@ -1638,6 +1638,15 @@ html[data-theme="light"] .theme-thumb {
   transition: opacity 0.2s ease;
 }
 
+.gallery-item img.gallery-image-loading {
+  opacity: 0;
+}
+
+.gallery-item img.gallery-image-loaded {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
 .gallery-item:hover .gallery-item-caption,
 .gallery-item:focus .gallery-item-caption { opacity: 1; }
 
