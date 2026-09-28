@@ -604,7 +604,7 @@ a { color: var(--chess-green); }
   justify-content: space-between;
   width: 76px;
   height: 36px;
-  padding: 0;
+  padding: 0 9px;
   border-radius: 999px;
   background-color: var(--navy-900);
   border: 2px solid var(--slate-800);
@@ -614,24 +614,26 @@ a { color: var(--chess-green); }
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.theme-toggle:hover { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-10); }
-.theme-toggle:focus-visible { outline: 3px solid var(--gold) !important; outline-offset: 3px; }
+.theme-toggle:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold-10);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--gold) !important;
+  outline-offset: 3px;
+}
 
 .theme-option {
-  position: absolute;
-  top: 50%;
+  position: relative;
   z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
   pointer-events: none;
 }
-
-.theme-option-light { left: 2px; }
-.theme-option-dark { right: 2px; }
 
 .theme-toggle svg {
   width: 16px;
@@ -645,29 +647,43 @@ a { color: var(--chess-green); }
 
 .theme-thumb {
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 3px;
+  left: 4px;
   z-index: 1;
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: var(--gold);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
-  pointer-events: none;
   transform: translateX(0);
-  transition: transform 0.25s ease-in-out, background-color 0.2s ease;
+  transition: transform 0.25s ease, background-color 0.2s ease;
 }
 
-html:not([data-theme="light"]) .theme-thumb { transform: translateX(38px); }
-html[data-theme="light"] .theme-thumb { transform: translateX(0); }
-
 html:not([data-theme="light"]) .theme-option-dark,
-html[data-theme="light"] .theme-option-light { color: var(--navy-950); }
+html[data-theme="light"] .theme-option-light {
+  color: var(--navy-950);
+}
 
 html:not([data-theme="light"]) .theme-option-light,
-html[data-theme="light"] .theme-option-dark { color: var(--slate-400); }
+html[data-theme="light"] .theme-option-dark {
+  color: var(--slate-400);
+}
+
+html:not([data-theme="light"]) .theme-thumb {
+  transform: translateX(40px);
+}
+
+html[data-theme="light"] .theme-thumb {
+  transform: translateX(0);
+}
 
 .muted-note { color: var(--slate-400); font-size: 14px; }
+
+.last-updated {
+  font-size: 12px;
+  color: var(--slate-500);
+  margin-top: 10px;
+}
 
 .last-updated {
   font-size: 12px;
@@ -1585,6 +1601,84 @@ html[data-theme="light"] .theme-option-dark { color: var(--slate-400); }
   .gallery-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
+/*
+ * ============================================================
+ * GALLERY PHOTO LAZY-LOAD TRANSITION
+ * ============================================================
+ *
+ * Photos begin transparent while they are loading.
+ * Once the JavaScript detects that the image has completely
+ * loaded, it changes the image to .gallery-image-loaded.
+ *
+ * The card itself does NOT fade or move, so the gallery layout
+ * remains stable while images are loading.
+ */
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  /*
+   * Default state.
+   */
+  opacity: 1;
+
+  /*
+   * Fade the photo in smoothly while preserving the existing
+   * gallery hover zoom transition.
+   */
+  transition:
+    opacity 0.4s ease,
+    transform 0.25s ease;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * IMAGE WHILE LOADING
+ * ------------------------------------------------------------
+ */
+
+.gallery-item img.gallery-image-loading {
+  opacity: 0;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * IMAGE AFTER LOADING
+ * ------------------------------------------------------------
+ */
+
+.gallery-item img.gallery-image-loaded {
+  opacity: 1;
+}
+
+
+/*
+ * ------------------------------------------------------------
+ * REDUCED MOTION
+ * ------------------------------------------------------------
+ *
+ * Respect visitors who have enabled reduced motion in their
+ * operating system or browser.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gallery-item img {
+    transition: none;
+  }
+
+  .gallery-item img.gallery-image-loading,
+  .gallery-item img.gallery-image-loaded {
+    opacity: 1;
+  }
+
+}
+
 .gallery-item {
   position: relative;
   display: block;
@@ -1597,18 +1691,15 @@ html[data-theme="light"] .theme-option-dark { color: var(--slate-400); }
   padding: 0;
   cursor: pointer;
 }
-
+/*
 .gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  opacity: 1;
-  transition: opacity 0.4s ease, transform 0.25s ease;
+  transition: transform 0.25s ease;
 }
-
-.gallery-item img.gallery-image-loading { opacity: 0; }
-.gallery-item img.gallery-image-loaded { opacity: 1; }
+*/
 .gallery-item:hover img { transform: scale(1.06); }
 
 .gallery-item-caption {
@@ -1624,7 +1715,16 @@ html[data-theme="light"] .theme-option-dark { color: var(--slate-400); }
   opacity: 0;
   transition: opacity 0.2s ease;
 }
+/*
+.gallery-item img.gallery-image-loading {
+  opacity: 0;
+}
 
+.gallery-item img.gallery-image-loaded {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+*/
 .gallery-item:hover .gallery-item-caption,
 .gallery-item:focus .gallery-item-caption { opacity: 1; }
 
@@ -1675,539 +1775,3 @@ html[data-theme="light"] .theme-option-dark { color: var(--slate-400); }
   cursor: pointer;
 }
 .lightbox-close:hover { color: var(--gold); }
-
-/* =========================================================
-   DARK MODE — NEW PURPLE / GOLD / CREAM / MINT / LAVENDER PALETTE
-   Light mode remains unchanged.
-   ========================================================= */
-html:not([data-theme="light"]) {
-  /* Core palette */
-  --navy-950: #351F65; /* Dark Purple — dominant background */
-  --navy-900: #351F65; /* Dark Purple — full-screen backgrounds */
-  --navy-800: #241544; /* Darker Purple — depth / inner surfaces */
-
-  --slate-800: #D2C4E9; /* Lavender — borders / structure */
-  --slate-600: #B8A6D5; /* Lavender — secondary borders */
-  --slate-500: #9E8ABD; /* Lavender — subdued metadata */
-  --slate-400: #D2C4E9; /* Lavender — metadata / utility text */
-  --slate-300: #E4DCF2; /* Light Lavender — secondary readable text */
-  --slate-200: #F9F6EE; /* Light Cream — readable text */
-  --slate-100: #F9F6EE; /* Light Cream — primary utility text */
-  --white: #F9F6EE;     /* Light Cream — headings / primary text */
-
-  --gold: #E1B12C;      /* Gold — primary accent / CTA */
-  --gold-light: #E1B12C;
-  --gold-10: rgba(225, 177, 44, 0.10);
-  --gold-15: rgba(225, 177, 44, 0.15);
-  --gold-20: rgba(225, 177, 44, 0.20);
-  --gold-30: rgba(225, 177, 44, 0.30);
-  --gold-60: rgba(225, 177, 44, 0.60);
-
-  --chess-green: #A3E4D7;  /* Mint / Sage — actionable elements */
-  --friday-accent: #D2C4E9; /* Lavender — secondary structure */
-  --body-text: #F9F6EE;
-
-  /* Dark text for cream content surfaces */
-  --cream-text: #351F65;
-  --cream-muted: #5E4B7D;
-  --cream-border: #D2C4E9;
-}
-
-/* Dark purple remains the page/hero foundation. */
-html:not([data-theme="light"]) body {
-  background-color: #351F65;
-}
-
-/* Cream content cards / readable sections. */
-html:not([data-theme="light"]) .meeting-card,
-html:not([data-theme="light"]) .calendar-wrap,
-html:not([data-theme="light"]) .content-card,
-html:not([data-theme="light"]) .founder-card,
-html:not([data-theme="light"]) .faq-item,
-html:not([data-theme="light"]) .table-wrap,
-html:not([data-theme="light"]) .tournament-card,
-html:not([data-theme="light"]) .sponsor-card,
-html:not([data-theme="light"]) .sponsor-cta,
-html:not([data-theme="light"]) .post-card,
-html:not([data-theme="light"]) .sidebar-box,
-html:not([data-theme="light"]) .storage-note,
-html:not([data-theme="light"]) .offer-item,
-html:not([data-theme="light"]) .merch-card {
-  background: #F9F6EE;
-  border-color: #D2C4E9;
-  color: #351F65;
-}
-
-/* Readable text on cream content surfaces. */
-html:not([data-theme="light"]) .meeting-card .card-title,
-html:not([data-theme="light"]) .meeting-card .info-value,
-html:not([data-theme="light"]) .meeting-card .address-block,
-html:not([data-theme="light"]) .calendar-wrap .calendar-month-label,
-html:not([data-theme="light"]) .content-card .section-heading,
-html:not([data-theme="light"]) .content-card p,
-html:not([data-theme="light"]) .founder-card .founder-name,
-html:not([data-theme="light"]) .faq-question,
-html:not([data-theme="light"]) .faq-answer,
-html:not([data-theme="light"]) .price-table tbody td,
-html:not([data-theme="light"]) .tournament-title,
-html:not([data-theme="light"]) .tournament-desc,
-html:not([data-theme="light"]) .sponsor-name,
-html:not([data-theme="light"]) .sponsor-cta h2,
-html:not([data-theme="light"]) .merch-name {
-  color: #351F65;
-}
-
-html:not([data-theme="light"]) .meeting-card .address-sub,
-html:not([data-theme="light"]) .meeting-card .card-note,
-html:not([data-theme="light"]) .content-card .rules-list li,
-html:not([data-theme="light"]) .founder-card .founder-title,
-html:not([data-theme="light"]) .faq-answer,
-html:not([data-theme="light"]) .sponsor-desc,
-html:not([data-theme="light"]) .sponsor-cta p,
-html:not([data-theme="light"]) .merch-desc,
-html:not([data-theme="light"]) .tournament-meta-item,
-html:not([data-theme="light"]) .tournament-desc {
-  color: #5E4B7D;
-}
-
-/* Structure on cream surfaces uses lavender. */
-html:not([data-theme="light"]) .card-header-flex,
-html:not([data-theme="light"]) .card-footer,
-html:not([data-theme="light"]) .faq-item,
-html:not([data-theme="light"]) .price-table thead th,
-html:not([data-theme="light"]) .price-table tbody td,
-html:not([data-theme="light"]) .post-full {
-  border-color: #D2C4E9;
-}
-
-/* Primary CTA styling — gold. */
-html:not([data-theme="light"]) .btn-primary,
-html:not([data-theme="light"]) .btn-join,
-html:not([data-theme="light"]) .btn-rsvp,
-html:not([data-theme="light"]) .newsletter-submit {
-  background-color: #E1B12C;
-  color: #351F65;
-  border-color: #E1B12C;
-}
-
-html:not([data-theme="light"]) .btn-primary:hover,
-html:not([data-theme="light"]) .btn-join:hover,
-html:not([data-theme="light"]) .btn-rsvp:hover,
-html:not([data-theme="light"]) .newsletter-submit:hover {
-  background-color: #A3E4D7;
-  color: #351F65;
-  border-color: #A3E4D7;
-}
-
-/* Mint = actionable / secondary interactive states. */
-html:not([data-theme="light"]) .nav-item:hover,
-html:not([data-theme="light"]) .nav-item.active,
-html:not([data-theme="light"]) .post-readmore,
-html:not([data-theme="light"]) .tournament-links a,
-html:not([data-theme="light"]) .sponsor-link,
-html:not([data-theme="light"]) .post-title a:hover {
-  color: #A3E4D7;
-}
-
-html:not([data-theme="light"]) .nav-item.active {
-  border-bottom-color: #A3E4D7;
-}
-
-html:not([data-theme="light"]) .btn-secondary {
-  border-color: #D2C4E9;
-  color: #F9F6EE;
-}
-
-html:not([data-theme="light"]) .btn-secondary:hover {
-  background-color: #A3E4D7;
-  border-color: #A3E4D7;
-  color: #351F65;
-}
-
-/* Mint feature/action icons and secondary interactive items. */
-html:not([data-theme="light"]) .info-icon,
-html:not([data-theme="light"]) .offer-icon,
-html:not([data-theme="light"]) .merch-icon {
-  color: #A3E4D7;
-}
-
-html:not([data-theme="light"]) .merch-icon {
-  background: rgba(163, 228, 215, 0.14);
-  border-color: rgba(163, 228, 215, 0.45);
-}
-
-html:not([data-theme="light"]) .post-readmore:hover,
-html:not([data-theme="light"]) .tournament-links a:hover,
-html:not([data-theme="light"]) .sponsor-link:hover {
-  color: #E1B12C;
-}
-
-/* Lavender metadata / captions / utility information. */
-html:not([data-theme="light"]) .info-label,
-html:not([data-theme="light"]) .post-date,
-html:not([data-theme="light"]) .price-table thead th,
-html:not([data-theme="light"]) .tournament-date-block .year,
-html:not([data-theme="light"]) .last-updated,
-html:not([data-theme="light"]) .muted-note,
-html:not([data-theme="light"]) .newsletter-privacy,
-html:not([data-theme="light"]) .site-footer,
-html:not([data-theme="light"]) .calendar-weekday,
-html:not([data-theme="light"]) .lightbox-caption {
-  color: #D2C4E9;
-}
-
-/* Calendar / tabs / form controls use the same palette without changing structure. */
-html:not([data-theme="light"]) .calendar-nav-btn,
-html:not([data-theme="light"]) .calendar-day,
-html:not([data-theme="light"]) .btn-calendar,
-html:not([data-theme="light"]) .tab-btn,
-html:not([data-theme="light"]) .category-pill,
-html:not([data-theme="light"]) .newsletter-input,
-html:not([data-theme="light"]) .form-input,
-html:not([data-theme="light"]) .form-textarea,
-html:not([data-theme="light"]) .form-select,
-html:not([data-theme="light"]) .existing-event-item,
-html:not([data-theme="light"]) .publish-box,
-html:not([data-theme="light"]) .storage-note,
-html:not([data-theme="light"]) .tournament-date-block {
-  background-color: #351F65;
-  border-color: #D2C4E9;
-  color: #F9F6EE;
-}
-
-html:not([data-theme="light"]) .calendar-day:hover,
-html:not([data-theme="light"]) .btn-calendar:hover,
-html:not([data-theme="light"]) .tab-btn:hover,
-html:not([data-theme="light"]) .category-pill:hover,
-html:not([data-theme="light"]) .archive-month-btn:hover,
-html:not([data-theme="light"]) .reset-filters:hover {
-  background-color: #A3E4D7;
-  border-color: #A3E4D7;
-  color: #351F65;
-}
-
-html:not([data-theme="light"]) .tab-btn.active {
-  background-color: #E1B12C;
-  border-color: #E1B12C;
-  color: #351F65;
-}
-
-/* Inputs keep cream text and use mint/gold focus states. */
-html:not([data-theme="light"]) .newsletter-input::placeholder {
-  color: #D2C4E9;
-}
-
-html:not([data-theme="light"]) .newsletter-input:focus,
-html:not([data-theme="light"]) .form-input:focus,
-html:not([data-theme="light"]) .form-textarea:focus,
-html:not([data-theme="light"]) .form-select:focus {
-  border-color: #E1B12C;
-  box-shadow: 0 0 0 2px rgba(225, 177, 44, 0.20);
-}
-
-/* Calendar/event accents. */
-html:not([data-theme="light"]) .calendar-day.day-tuesday-meeting .day-number,
-html:not([data-theme="light"]) .day-event-dot.recurring,
-html:not([data-theme="light"]) .legend-dot-tuesday {
-  color: #A3E4D7;
-}
-
-html:not([data-theme="light"]) .day-event-dot.recurring {
-  background: rgba(163, 228, 215, 0.12);
-  border-color: rgba(163, 228, 215, 0.45);
-}
-
-html:not([data-theme="light"]) .calendar-day.day-friday-meeting .day-number,
-html:not([data-theme="light"]) .day-event-dot.recurring-alt,
-html:not([data-theme="light"]) .legend-dot-friday {
-  color: #D2C4E9;
-}
-
-html:not([data-theme="light"]) .day-event-dot.recurring-alt {
-  background: rgba(210, 196, 233, 0.12);
-  border-color: rgba(210, 196, 233, 0.45);
-}
-
-html:not([data-theme="light"]) .calendar-day.day-special-event .day-number,
-html:not([data-theme="light"]) .legend-dot-special {
-  color: #E1B12C;
-}
-
-/* Badges / metadata accents remain gold; structure remains lavender. */
-html:not([data-theme="light"]) .badge,
-html:not([data-theme="light"]) .newsletter-badge,
-html:not([data-theme="light"]) .established-badge,
-html:not([data-theme="light"]) .post-category,
-html:not([data-theme="light"]) .status-pill.upcoming {
-  color: #E1B12C;
-  background: rgba(225, 177, 44, 0.10);
-  border-color: rgba(225, 177, 44, 0.30);
-}
-
-/* Error / utility states. */
-html:not([data-theme="light"]) .site-banner-info {
-  background: rgba(225, 177, 44, 0.10);
-  color: #F9F6EE;
-}
-
-html:not([data-theme="light"]) .site-banner-urgent {
-  background: rgba(225, 177, 44, 0.10);
-  border-bottom-color: rgba(225, 177, 44, 0.30);
-  color: #F9F6EE;
-}
-
-/* Gallery / lightbox keeps imagery dominant and applies the new structure colours. */
-html:not([data-theme="light"]) .gallery-item {
-  background: #241544;
-  border-color: #D2C4E9;
-}
-
-html:not([data-theme="light"]) .gallery-item-caption {
-  background: linear-gradient(0deg, rgba(53, 31, 101, 0.92) 0%, rgba(53, 31, 101, 0) 100%);
-  color: #F9F6EE;
-}
-
-html:not([data-theme="light"]) .lightbox-overlay {
-  background: rgba(53, 31, 101, 0.94);
-}
-
-html:not([data-theme="light"]) .lightbox-caption,
-html:not([data-theme="light"]) .lightbox-close {
-  color: #F9F6EE;
-}
-
-html:not([data-theme="light"]) .lightbox-close:hover {
-  color: #E1B12C;
-}
-
-/* Theme switch itself follows the new dark-mode palette. */
-html:not([data-theme="light"]) .theme-toggle {
-  background-color: #351F65;
-  border-color: #D2C4E9;
-}
-
-html:not([data-theme="light"]) .theme-toggle:hover {
-  border-color: #E1B12C;
-  box-shadow: 0 0 0 2px rgba(225, 177, 44, 0.10);
-}
-
-html:not([data-theme="light"]) .theme-thumb {
-  background: #E1B12C;
-}
-
-
-
-/* =========================================================
-   GALLERY PERFORMANCE
-   ========================================================= */
-.gallery-grid,
-.gallery-grid .gallery-item,
-.gallery-grid .gallery-item * {
-  transition-property: none;
-}
-
-.gallery-grid {
-  content-visibility: auto;
-  contain-intrinsic-size: 600px;
-}
-
-.gallery-item { contain: layout paint; }
-.gallery-item-caption { transition: opacity 0.2s ease; }
-
-@media (prefers-reduced-motion: reduce) {
-  .gallery-item img,
-  .gallery-item-caption { transition: none !important; }
-
-  .gallery-item img.gallery-image-loading,
-  .gallery-item img.gallery-image-loaded { opacity: 1; }
-}
-
-/* =========================================================
-   FINAL THEME TOGGLE + GALLERY OVERRIDES
-   ========================================================= */
-
-/*
- * THEME TOGGLE
- *
- * The toggle's usable interior is 72px wide:
- * 76px total - 4px borders = 72px.
- *
- * Each state therefore occupies exactly 36px (50%) of the
- * usable interior. The indicator is 36px wide, so it fills
- * exactly one half of the slider.
- */
-
-.theme-toggle {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 76px;
-  height: 36px;
-  padding: 0;
-  border-radius: 999px;
-  background-color: var(--navy-900);
-  border: 2px solid var(--slate-800);
-  cursor: pointer;
-  overflow: hidden;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.theme-toggle:hover {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 2px var(--gold-10);
-}
-
-.theme-toggle:focus-visible {
-  outline: 3px solid var(--gold) !important;
-  outline-offset: 3px;
-}
-
-/* Each icon is centered inside its exact 50% section. */
-.theme-option {
-  position: absolute;
-  top: 2px;
-  width: 36px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.theme-option-light {
-  left: 2px;
-}
-
-.theme-option-dark {
-  right: 2px;
-}
-
-.theme-toggle svg {
-  width: 17px;
-  height: 17px;
-  display: block;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* The indicator itself is exactly one half of the usable width. */
-.theme-thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 36px;
-  height: 32px;
-  border-radius: 999px;
-  background: var(--gold);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
-  z-index: 1;
-  pointer-events: none;
-  transform: translateX(0);
-  transition:
-    transform 0.25s ease-in-out,
-    background-color 0.2s ease;
-}
-
-/* Light mode = left 50% / sun side. */
-html[data-theme="light"] .theme-thumb {
-  transform: translateX(0);
-}
-
-html[data-theme="light"] .theme-option-light {
-  color: var(--navy-950);
-}
-
-html[data-theme="light"] .theme-option-dark {
-  color: var(--slate-400);
-}
-
-/* Dark mode = right 50% / moon side. */
-html:not([data-theme="light"]) .theme-thumb {
-  transform: translateX(36px);
-}
-
-html:not([data-theme="light"]) .theme-option-dark {
-  color: var(--navy-950);
-}
-
-html:not([data-theme="light"]) .theme-option-light {
-  color: var(--slate-400);
-}
-
-
-/* =========================================================
-   GALLERY PERFORMANCE + LAZY-LOAD TRANSITIONS
-   ========================================================= */
-
-/*
- * Avoid animating every gallery descendant when the theme changes.
- * The explicit image/caption transitions below remain active.
- */
-.gallery-grid,
-.gallery-grid .gallery-item,
-.gallery-grid .gallery-item * {
-  transition-property: none;
-}
-
-.gallery-grid {
-  content-visibility: auto;
-  contain-intrinsic-size: 600px;
-}
-
-.gallery-item {
-  contain: layout paint;
-}
-
-/* Smoothly fade each photo in after lazy loading completes. */
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 1;
-  transition:
-    opacity 0.4s ease,
-    transform 0.25s ease;
-}
-
-.gallery-item img.gallery-image-loading {
-  opacity: 0;
-}
-
-.gallery-item img.gallery-image-loaded {
-  opacity: 1;
-}
-
-.gallery-item:hover img {
-  transform: scale(1.06);
-}
-
-.gallery-item-caption {
-  transition: opacity 0.2s ease;
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .theme-toggle,
-  .theme-thumb,
-  .gallery-item img,
-  .gallery-item-caption {
-    transition: none !important;
-  }
-
-  .gallery-item img.gallery-image-loading,
-  .gallery-item img.gallery-image-loaded {
-    opacity: 1;
-  }
-}
