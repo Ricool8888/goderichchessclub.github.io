@@ -1792,7 +1792,7 @@ html:not([data-theme="light"]) .theme-option-light {
   opacity: 1;
 
   transition:
-    opacity 0.4s ease,
+    opacity 0.6s ease,
     transform 0.25s ease;
 }
 
