@@ -1831,4 +1831,20 @@ html:not([data-theme="light"]) .theme-option-light {
   .gallery-item img.gallery-image-loaded {
     opacity: 1;
   }
+
+   /* =========================================================
+   THEME TOGGLE — always show BOTH sun and moon icons
+   Overrides any rule that hides one icon per mode.
+   ========================================================= */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon,
+html[data-theme="light"] .theme-toggle .icon-sun,
+html[data-theme="light"] .theme-toggle .icon-moon,
+html[data-theme="dark"] .theme-toggle .icon-sun,
+html[data-theme="dark"] .theme-toggle .icon-moon {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 }
