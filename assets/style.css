@@ -1812,6 +1812,30 @@ html:not([data-theme="light"]) .theme-option-light {
   transition: opacity 0.2s ease;
 }
 
+/*
+ * Scroll-triggered reveal: the CARD fades (and rises slightly)
+ * when it enters the viewport — independent of image load timing.
+ */
+.gallery-item {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+}
+
+.gallery-item.gallery-item-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* =========================================================
    REDUCED MOTION
