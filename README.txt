@@ -35,6 +35,84 @@ FAQ page:
 Books for sale page:
       Book titles, author, and prices
 
+Gallery page:
+
+      <!-- =====================================================================
+         HOW TO ADD PHOTOS TO THIS GALLERY
+         =====================================================================
+         This gallery is data-driven, same idea as events.json / posts.json /
+         tournaments.json elsewhere on this site. Photos are grouped into
+         SECTIONS - each section gets its own heading (e.g. a tournament
+         name) followed by its own row of photos underneath it.
+
+         There are TWO steps to add a new photo - you need to do BOTH or it
+         won't show up:
+
+         STEP 1 - Upload the actual image file
+         ---------------------------------------
+         Put the photo file inside:  assets/gallery/
+         (There's a README.txt in that folder with naming tips too.)
+
+         Keep the file reasonably small for the web (ideally under
+         1-2MB) so the gallery page loads quickly, especially on mobile.
+
+         STEP 2 - Add an entry for it in assets/gallery.json
+         ---------------------------------------------------
+         Open assets/gallery.json. The file is a list of SECTIONS, and each
+         section has a "title" and its own "photos" list, like this:
+
+         [
+           {
+             "id": "section-001",
+             "title": "Summer 2026 Tournament",
+             "photos": [
+               {
+                 "id": "photo-001",
+                 "filename": "summer-2026-01.jpg",
+                 "caption": "A short caption shown under the photo",
+                 "alt": "A plain-language description for screen readers"
+               }
+             ]
+           },
+           {
+             "id": "section-002",
+             "title": "Fall 2026 Tournament",
+             "photos": [
+               { "id": "photo-002", "filename": "fall-2026-01.jpg", "caption": "", "alt": "..." }
+             ]
+           }
+         ]
+
+         TO ADD A NEW PHOTO TO AN EXISTING TOURNAMENT/SECTION:
+         Just add another object to that section's "photos" list, with a
+         comma after the previous photo entry.
+
+         TO ADD A WHOLE NEW TOURNAMENT/SECTION:
+         Copy an entire { "id": ..., "title": ..., "photos": [...] } block
+         and add it to the outer list, with a comma after the previous
+         section's closing "}".
+
+         Notes:
+         - "id" values just need to be unique - increment the number each
+           time (section-001, section-002, ... and photo-001, photo-002, ...
+           the photo numbering can just keep counting up site-wide, it
+           doesn't need to restart for each section).
+         - "filename" must exactly match the file you uploaded in Step 1,
+           including capitalization.
+         - "caption" is optional (shows on hover and in the enlarged view) -
+           you can leave it as an empty string "" if you don't want one.
+         - "alt" should describe the photo for visually impaired visitors
+           and for search engines - a few words is enough.
+         - JSON needs a comma after every entry except the very last one in
+           each list. If the gallery stops showing photos after an edit,
+           this is the most common cause - paste the file into
+           jsonlint.com to check for a missing/extra comma.
+
+         The starter section/photo currently in gallery.json is just a
+         placeholder - replace it with your first real tournament and
+         photos, or delete it once you've added real ones.
+         ===================================================================== -->
+
 How pages work:
 
       Posts and news page:
