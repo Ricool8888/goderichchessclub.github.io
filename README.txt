@@ -150,3 +150,4 @@ Description of extra pages
       - sitemap.xml acts as a roadmap for your website. It lists all your important URLs and tells search engines like Google how to find and crawl your content.
       - .nojekyll is an empty configuration file placed in the root directory of a GitHub Pages repository. It tells GitHub to skip running the site through the Jekyll static site generator. This prevents Jekyll from ignoring files or folders that start with an underscore
       - static.yml file is most commonly used as a GitHub Actions workflow configuration template. It automates building and deploying static web content—such as HTML, CSS, and JavaScript—directly to hosting platforms like GitHub Pages whenever you push code changes to your repository.
+      -CNAME is a DNS setting that maps an alias domain to a primary, canonical domain rather than an IP address.
