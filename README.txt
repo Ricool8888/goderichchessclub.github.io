@@ -37,7 +37,34 @@ Books for sale page:
 
 Gallery page:
 
-      <!-- =====================================================================
+How pages work:
+
+      Posts and news page:
+            How this blog works: posts come from assets/posts.json. To publish
+            a new post, add it directly to that file in the repo and commit —
+            visitors can read, search, and filter posts, but can't submit
+            their own.
+
+      Events calendar page:
+            How this calendar works: weekly meetings show automatically every
+            Tuesday and Friday. Special events come from assets/events.json.
+            Click a day to view what's scheduled. To add a new event yourself,
+            edit assets/events.json directly in the repo and commit the change —
+            visitors can view the calendar but can't submit events.
+
+      Tournaments page:
+            How this page works: tournaments are listed in assets/tournaments.json.
+            To add a new one or mark one as complete, edit that file in the repo
+            and commit the change.
+
+      Banners on index.html
+            There are 2 styles of banners: info and urgent.  To add a banner, add json
+            to the banner.json file and the next banner should appear.  If the banner
+            doesn't appear, make sure the json is correct.  
+
+      Gallery page:
+
+<!-- =====================================================================
          HOW TO ADD PHOTOS TO THIS GALLERY
          =====================================================================
          This gallery is data-driven, same idea as events.json / posts.json /
@@ -112,31 +139,6 @@ Gallery page:
          placeholder - replace it with your first real tournament and
          photos, or delete it once you've added real ones.
          ===================================================================== -->
-
-How pages work:
-
-      Posts and news page:
-            How this blog works: posts come from assets/posts.json. To publish
-            a new post, add it directly to that file in the repo and commit —
-            visitors can read, search, and filter posts, but can't submit
-            their own.
-
-      Events calendar page:
-            How this calendar works: weekly meetings show automatically every
-            Tuesday and Friday. Special events come from assets/events.json.
-            Click a day to view what's scheduled. To add a new event yourself,
-            edit assets/events.json directly in the repo and commit the change —
-            visitors can view the calendar but can't submit events.
-
-      Tournaments page:
-            How this page works: tournaments are listed in assets/tournaments.json.
-            To add a new one or mark one as complete, edit that file in the repo
-            and commit the change.
-
-      Banners on index.html
-            There are 2 styles of banners: info and urgent.  To add a banner, add json
-            to the banner.json file and the next banner should appear.  If the banner
-            doesn't appear, make sure the json is correct.  
 
 Description of extra pages
       - Robots.txt tells automated web crawlers and search engine bots which pages and files they can or cannot visit on a website.
