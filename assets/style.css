@@ -1765,14 +1765,17 @@ html:not([data-theme="light"]) .theme-option-light {
    ========================================================= */
 
 /*
- * Do not animate every gallery descendant when the theme changes.
- * The image transition below remains active for the lazy-load fade.
+ * Do not animate gallery descendants on theme change — but keep
+ * opacity/transform transitions for the scroll-reveal and image fade.
  */
 .gallery-grid,
 .gallery-grid .gallery-item,
 .gallery-grid .gallery-item * {
-  transition-property: none;
+  transition-property:
+    opacity,
+    transform;
 }
+
 
 .gallery-grid {
   content-visibility: auto;
