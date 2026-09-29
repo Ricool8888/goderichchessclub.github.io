@@ -600,10 +600,8 @@ a { color: var(--chess-green); }
 
 .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
 .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.theme-toggle .icon-sun { display: none; }
 .theme-toggle .icon-moon { display: block; }
 html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
-html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
 .muted-note { color: var(--slate-400); font-size: 14px; }
 
