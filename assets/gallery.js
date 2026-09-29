@@ -65,21 +65,22 @@
      * Keep gallery thumbnails lower priority than more
      * important page resources.
      */
-    try {
-      img.fetchPriority = "low";
-    } catch (e) {}
 
     /*
      * Once the image has completely loaded, fade it into view.
      */
-    img.addEventListener(
-      "load",
-      function () {
+img.addEventListener(
+  "load",
+  function () {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
         img.classList.remove("gallery-image-loading");
         img.classList.add("gallery-image-loaded");
-      },
-      { once: true }
-    );
+      });
+    });
+  },
+  { once: true }
+);
 
     /*
      * If the image fails, don't leave it permanently invisible.
@@ -230,7 +231,6 @@
      * Keep the native browser hint as an additional
      * optimization.
      */
-    img.loading = "lazy";
 
     img.decoding = "async";
 
@@ -311,11 +311,6 @@
      * Allows the browser to reduce rendering work for
      * sections that are far below the current viewport.
      */
-    grid.style.contentVisibility =
-      "auto";
-
-    grid.style.containIntrinsicSize =
-      "600px";
 
     wrap.appendChild(grid);
 
