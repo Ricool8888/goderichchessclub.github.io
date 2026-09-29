@@ -1765,21 +1765,13 @@ html:not([data-theme="light"]) .theme-option-light {
    ========================================================= */
 
 /*
- * Do not animate gallery descendants on theme change — but keep
+ * Prevent theme-change flicker on gallery elements, while keeping
  * opacity/transform transitions for the scroll-reveal and image fade.
  */
 .gallery-grid,
 .gallery-grid .gallery-item,
 .gallery-grid .gallery-item * {
-  transition-property:
-    opacity,
-    transform;
-}
-
-
-.gallery-grid {
-  content-visibility: auto;
-  contain-intrinsic-size: 600px;
+  transition-property: opacity, transform;
 }
 
 .gallery-item {
@@ -1840,6 +1832,21 @@ html:not([data-theme="light"]) .theme-option-light {
   }
 }
 
+   /* =========================================================
+   THEME TOGGLE — always show BOTH sun and moon icons
+   Overrides any rule that hides one icon per mode.
+   ========================================================= */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon,
+html[data-theme="light"] .theme-toggle .icon-sun,
+html[data-theme="light"] .theme-toggle .icon-moon,
+html[data-theme="dark"] .theme-toggle .icon-sun,
+html[data-theme="dark"] .theme-toggle .icon-moon {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 /* =========================================================
    REDUCED MOTION
    ========================================================= */
@@ -1856,20 +1863,5 @@ html:not([data-theme="light"]) .theme-option-light {
   .gallery-item img.gallery-image-loaded {
     opacity: 1;
   }
-
-   /* =========================================================
-   THEME TOGGLE — always show BOTH sun and moon icons
-   Overrides any rule that hides one icon per mode.
-   ========================================================= */
-.theme-toggle .icon-sun,
-.theme-toggle .icon-moon,
-html[data-theme="light"] .theme-toggle .icon-sun,
-html[data-theme="light"] .theme-toggle .icon-moon,
-html[data-theme="dark"] .theme-toggle .icon-sun,
-html[data-theme="dark"] .theme-toggle .icon-moon {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
 
 }
