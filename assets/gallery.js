@@ -11,7 +11,7 @@
    * - Loaded photos fade smoothly into view.
    */
 
-  var LAZY_LOAD_MARGIN = "400px";
+  var LAZY_LOAD_MARGIN = "800px";
   var BATCH_SIZE = 8;
   var imageObserver = null;
 
@@ -69,18 +69,14 @@
     /*
      * Once the image has completely loaded, fade it into view.
      */
-img.addEventListener(
-  "load",
-  function () {
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
+    img.addEventListener(
+      "load",
+      function () {
         img.classList.remove("gallery-image-loading");
         img.classList.add("gallery-image-loaded");
-      });
-    });
-  },
-  { once: true }
-);
+      },
+      { once: true }
+    );
 
     /*
      * If the image fails, don't leave it permanently invisible.
@@ -101,6 +97,24 @@ img.addEventListener(
     }
   }
 
+  var revealObserver = null;
+
+  function setupRevealAnimation() {
+    if ("IntersectionObserver" in window) {
+      revealObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("gallery-item-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -60px 0px", threshold: 0.05 }
+      );
+    }
+  }
+  
   /*
    * Set up IntersectionObserver for progressive loading.
    */
@@ -275,6 +289,15 @@ img.addEventListener(
      */
     observeImage(img);
 
+    /*
+     * Fade the card in when it scrolls into view.
+     */
+    if (revealObserver) {
+      revealObserver.observe(card);
+    } else {
+      card.classList.add("gallery-item-visible");
+    }
+    
     return card;
   }
 
@@ -390,6 +413,7 @@ img.addEventListener(
      * the gallery cards.
      */
     setupLazyLoading();
+    setupRevealAnimation();
 
     var sectionIndex = 0;
 
