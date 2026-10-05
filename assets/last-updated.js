@@ -15,7 +15,10 @@
   function currentFilePath() {
     var segment = window.location.pathname.split("/").pop();
     if (!segment) return "index.html"; // request for a trailing-slash directory URL
-    return decodeURIComponent(segment);
+    segment = decodeURIComponent(segment);
+    // Links omit the .html extension (GitHub Pages resolves /about to about.html)
+    if (segment.indexOf(".") === -1) segment += ".html";
+    return segment;
   }
 
   function init() {
