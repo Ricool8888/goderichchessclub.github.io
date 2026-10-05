@@ -1845,6 +1845,34 @@ html:not([data-theme="light"]) .theme-option-light {
 }
 
 
+/* Footer layout: slider dead-centre, "Theme" label to its left.
+   Three columns — 1fr | slider | 1fr — keep the slider centred
+   no matter how wide the label is; the empty right column balances it. */
+.theme-control {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 12px;
+  margin: 0 auto 20px;
+}
+
+.theme-control .theme-toggle {
+  grid-column: 2;
+  margin: 0;
+}
+
+.theme-label {
+  grid-column: 1;
+  justify-self: end;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--slate-400);
+}
+
+
 /* =========================================================
    GALLERY LAZY-LOAD / SMOOTH IMAGE TRANSITION FIX
    ========================================================= */
