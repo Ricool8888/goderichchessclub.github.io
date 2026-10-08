@@ -1126,6 +1126,96 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .content-card p { color: var(--slate-300); font-size: 16px; line-height: 1.7; margin-bottom: 14px; }
 .content-card p:last-child { margin-bottom: 0; }
 
+.lichess-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 860px) {
+  .lichess-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.puzzle-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.puzzle-title { font-size: 20px; font-weight: 700; color: var(--white); margin: 0 0 10px; }
+
+.puzzle-frame {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 10 / 11;
+  margin: auto auto 0;
+  border: 0;
+  border-radius: 8px;
+}
+
+.puzzle-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.content-card .puzzle-status {
+  min-height: 1.7em;
+  margin: 0;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.content-card .puzzle-status.is-good { color: var(--chess-green); }
+.content-card .puzzle-status.is-bad { color: var(--gold); }
+.content-card .puzzle-status.is-error { font-weight: 400; color: var(--slate-300); }
+
+.puzzle-board-wrap {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+}
+
+.puzzle-board { width: 100%; height: 100%; }
+
+/* Lichess's own brown board colours (chessground's brown.css is a paler approximation). */
+.puzzle-board cg-board {
+  background: repeating-conic-gradient(#b58863 0 25%, #f0d9b5 0 50%) 0 0 / 25% 25%;
+}
+
+/* Board coordinates: keep them readable on the brown squares. */
+.puzzle-board coords { font-size: 10px; }
+
+.puzzle-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  visibility: hidden;
+}
+
+.puzzle-widget.is-ready .puzzle-controls { visibility: visible; }
+
+.puzzle-btn {
+  background: var(--navy-900);
+  border: 1px solid var(--slate-800);
+  color: var(--slate-300);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.puzzle-btn:hover:not(:disabled) { border-color: var(--gold-30); color: var(--gold); }
+.puzzle-btn:disabled { opacity: 0.45; cursor: default; }
+
+.content-card .puzzle-meta { margin: 0; font-size: 13px; color: var(--slate-300); }
+
 .rules-list {
   list-style: none;
   display: flex;

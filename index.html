@@ -66,6 +66,9 @@
 </script>
 
 <link rel="preload" as="style" href="assets/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@9.2.1/assets/chessground.base.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@9.2.1/assets/chessground.brown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@9.2.1/assets/chessground.cburnett.css">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -200,6 +203,36 @@
     </section>
   </div>
 
+  <div class="container">
+    <section class="content-section" aria-labelledby="lichess-heading">
+      <div class="section-eyebrow">Sharpen Your Tactics</div>
+      <h2 class="section-heading" id="lichess-heading">Puzzles &amp; Live Games</h2>
+      <div class="lichess-grid">
+        <div class="content-card puzzle-card">
+          <h3 class="puzzle-title">Puzzle of the Day</h3>
+          <p>Try today&rsquo;s puzzle from <a href="https://lichess.org/training" target="_blank" rel="noopener noreferrer">Lichess</a>. Find the best move &mdash; a new puzzle appears every day.</p>
+          <div class="puzzle-widget" id="puzzleWidget">
+            <p class="puzzle-status" role="status" aria-live="polite">Loading today&rsquo;s puzzle&hellip;</p>
+            <div class="puzzle-board-wrap">
+              <div class="puzzle-board" aria-label="Chess puzzle board"></div>
+            </div>
+            <div class="puzzle-controls">
+              <button type="button" class="puzzle-btn" data-puzzle="hint">Hint</button>
+              <button type="button" class="puzzle-btn" data-puzzle="solution">Solution</button>
+              <button type="button" class="puzzle-btn" data-puzzle="retry">Retry</button>
+            </div>
+            <p class="puzzle-meta"></p>
+          </div>
+        </div>
+        <div class="content-card puzzle-card">
+          <h3 class="puzzle-title">Live Games</h3>
+          <p>Watch top-rated games being played right now on <a href="https://lichess.org/tv" target="_blank" rel="noopener noreferrer">Lichess TV</a>.</p>
+          <iframe class="puzzle-frame" data-lichess-frame="tv" title="Lichess TV live game" loading="lazy" src="https://lichess.org/tv/frame?theme=brown&amp;bg=dark" allowtransparency="true" frameborder="0"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <!-- Social media Container -->
   <div class="container">
     <div class="social-container">
@@ -236,7 +269,24 @@
   </div>
 </footer>
 
+<script type="module" src="assets/puzzle.js"></script>
 <script src="assets/theme.js"></script>
+<script>
+  // Match the Lichess TV embed's background to the site theme (light/dark toggle).
+  (function () {
+    var frames = document.querySelectorAll('[data-lichess-frame]');
+    if (!frames.length) return;
+    function syncLichessTheme() {
+      var bg = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      frames.forEach(function (frame) {
+        var src = 'https://lichess.org/' + frame.getAttribute('data-lichess-frame') + '/frame?theme=brown&bg=' + bg;
+        if (frame.src !== src) frame.src = src;
+      });
+    }
+    syncLichessTheme();
+    new MutationObserver(syncLichessTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  })();
+</script>
 <script src="assets/last-updated.js"></script>
 <script src="assets/banner.js"></script>
 <script>
