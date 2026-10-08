@@ -1216,6 +1216,34 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .content-card .puzzle-meta { margin: 0; font-size: 13px; color: var(--slate-300); }
 
+/* Side by side, the two cards share row heights (title, intro, status, board,
+   buttons, rating) so both boards start at the same height. The Lichess TV
+   embed has a 23px player bar above its board, so it's pulled up by that much
+   to line its squares up with the puzzle's. */
+@media (min-width: 860px) {
+  .lichess-grid .puzzle-card {
+    display: grid;
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+    row-gap: 12px;
+  }
+
+  .lichess-grid .puzzle-widget { display: contents; }
+
+  .lichess-grid .puzzle-title { margin: 0; }
+
+  .lichess-grid .puzzle-board-wrap,
+  .lichess-grid .puzzle-controls,
+  .lichess-grid .content-card .puzzle-status,
+  .lichess-grid .content-card .puzzle-meta { justify-self: center; }
+
+  .lichess-grid .puzzle-frame {
+    grid-row: 4 / span 3;
+    align-self: start;
+    margin: -23px auto 0;
+  }
+}
+
 .rules-list {
   list-style: none;
   display: flex;
