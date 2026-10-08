@@ -230,7 +230,13 @@
         <div class="content-card puzzle-card">
           <h3 class="puzzle-title">Live Games</h3>
           <p>Watch top-rated games being played right now on <a href="https://lichess.org/tv" target="_blank" rel="noopener noreferrer">Lichess TV</a>.</p>
-          <iframe class="puzzle-frame" data-lichess-frame="tv" title="Lichess TV live game" loading="lazy" src="https://lichess.org/tv/frame?theme=brown&amp;bg=dark" allowtransparency="true" frameborder="0"></iframe>
+          <div class="live-game">
+            <iframe class="puzzle-frame" data-lichess-frame="tv" title="Lichess TV live game" loading="lazy" src="https://lichess.org/tv/frame?theme=brown&amp;bg=dark" allowtransparency="true" frameborder="0"></iframe>
+            <div class="eval-bar" id="evalBar" role="img" aria-label="Engine evaluation loading">
+              <div class="eval-bar-white"></div>
+              <span class="eval-bar-label" aria-hidden="true"></span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -273,6 +279,7 @@
 </footer>
 
 <script type="module" src="assets/puzzle.js"></script>
+<script src="assets/live-eval.js"></script>
 <script src="assets/theme.js"></script>
 <script>
   // Match the Lichess TV embed's background to the site theme (light/dark toggle).
