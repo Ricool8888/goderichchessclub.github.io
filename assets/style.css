@@ -1400,6 +1400,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   display: none;
 }
 .book-preview.visible { display: block; }
+.price-table tbody tr.has-cover { cursor: pointer; }
 
 .books-note {
   font-size: 14px;

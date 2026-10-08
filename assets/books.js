@@ -1,29 +1,16 @@
 (function () {
   "use strict";
 
-  var DESCRIPTIONS_URL = "assets/books/descriptions.json";
-
-  // Match titles loosely so "Checkmate" finds "Checkmate!" and
-  // "How to Think in Chess" finds "How To Think In Chess".
-  function normalize(title) {
-    return title.toLowerCase().replace(/[^a-z0-9]/g, "");
-  }
-
-  function fillCell(cell, text) {
-    text.split(/\n+/).forEach(function (para) {
-      var p = document.createElement("p");
-      p.textContent = para;
-      cell.appendChild(p);
-    });
-  }
-
   // Cover images are named after the table title, e.g. "Checkmate.jpg".
   var IMAGES_DIR = "assets/books/images/";
   var CURSOR_OFFSET = 16;
 
-  function initCoverPreview() {
-    if (!window.matchMedia("(hover: hover)").matches) return;
+  function coverSrc(title) {
+    return IMAGES_DIR + encodeURIComponent(title) + ".jpg";
+  }
 
+  // Mouse users: the cover follows the cursor while hovering a row.
+  function initHoverPreview(rows) {
     var preview = document.createElement("img");
     preview.className = "book-preview";
     preview.alt = "";
@@ -40,8 +27,8 @@
       preview.style.top = Math.max(0, y) + "px";
     }
 
-    document.querySelectorAll(".price-table tbody tr").forEach(function (row) {
-      var src = IMAGES_DIR + encodeURIComponent(row.cells[0].textContent.trim()) + ".jpg";
+    rows.forEach(function (row) {
+      var src = coverSrc(row.cells[0].textContent.trim());
       var lastEvent;
       new Image().src = src; // preload so the cover appears instantly
 
@@ -64,28 +51,49 @@
     });
   }
 
-  function init() {
-    initCoverPreview();
-    fetch(DESCRIPTIONS_URL)
-      .then(function (res) {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
-      })
-      .then(function (raw) {
-        var descriptions = {};
-        Object.keys(raw).forEach(function (key) {
-          if (typeof raw[key] === "string") descriptions[normalize(key)] = raw[key].trim();
-        });
+  // Touch screens: tapping a row opens the cover in a lightbox.
+  function initTapLightbox(rows) {
+    var overlay = document.getElementById("lightboxOverlay");
+    var img = document.getElementById("lightboxImage");
+    var caption = document.getElementById("lightboxCaption");
+    if (!overlay) return;
 
-        document.querySelectorAll(".price-table tbody tr").forEach(function (row) {
-          var cell = row.querySelector(".desc-col");
-          var text = descriptions[normalize(row.cells[0].textContent)];
-          if (cell && text) fillCell(cell, text);
-        });
-      })
-      .catch(function (err) {
-        console.warn("Could not load book descriptions:", err);
+    function open(title) {
+      img.src = coverSrc(title);
+      img.alt = "Cover of " + title;
+      caption.textContent = title;
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+
+    function close() {
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    img.onerror = close;
+
+    rows.forEach(function (row) {
+      row.classList.add("has-cover");
+      row.addEventListener("click", function () {
+        open(row.cells[0].textContent.trim());
       });
+    });
+
+    // A tap anywhere on the overlay, including the close button, dismisses it.
+    overlay.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+  }
+
+  function init() {
+    var rows = Array.prototype.slice.call(document.querySelectorAll(".price-table tbody tr"));
+    if (window.matchMedia("(hover: hover)").matches) {
+      initHoverPreview(rows);
+    } else {
+      initTapLightbox(rows);
+    }
   }
 
   document.addEventListener("DOMContentLoaded", init);
