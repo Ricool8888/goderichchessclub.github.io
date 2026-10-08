@@ -1186,8 +1186,44 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   background: repeating-conic-gradient(#b58863 0 25%, #f0d9b5 0 50%) 0 0 / 25% 25%;
 }
 
-/* Board coordinates: keep them readable on the brown squares. */
-.puzzle-board coords { font-size: 10px; }
+/* Board coordinates. chessground's defaults use fixed pixel offsets tuned for
+   Lichess's board size, which drift out of their squares on smaller boards.
+   Pin them to the square corners instead, like Lichess: rank numbers top-left,
+   file letters bottom-right. */
+.puzzle-board coords { font-size: 10px; line-height: 1; }
+
+.puzzle-board coords.ranks {
+  top: 0;
+  left: 0;
+  width: auto;
+}
+
+.puzzle-board coords.ranks coord {
+  transform: none;
+  padding: 3px 0 0 3px;
+}
+
+.puzzle-board coords.files {
+  bottom: 0;
+  left: 0;
+  height: auto;
+}
+
+.puzzle-board coords.files coord {
+  text-align: right;
+  padding: 0 3px 2px 0;
+}
+
+/* Contrast with the square each label sits on (the brown theme's colours assume
+   the default positions). The bottom-left square is always dark, so with White
+   at the bottom odd ranks/files sit on dark squares; with Black, even ones do. */
+.puzzle-board.cg-wrap coords.ranks coord,
+.puzzle-board.cg-wrap coords.files coord { color: #946f51; }
+
+.puzzle-board.orientation-white coords.ranks coord:nth-child(odd),
+.puzzle-board.orientation-white coords.files coord:nth-child(odd),
+.puzzle-board.orientation-black coords.ranks coord:nth-child(even),
+.puzzle-board.orientation-black coords.files coord:nth-child(even) { color: #f0d9b5; }
 
 .puzzle-controls {
   display: flex;
