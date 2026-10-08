@@ -49,16 +49,61 @@
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">Tournaments</h1>
-      <p class="page-desc">CFC rated and casual tournaments hosted by Goderich Chess Club. Check upcoming events below, or browse results from past tournaments.</p>
+      <p class="page-desc">CFC rated and casual tournaments hosted by Goderich Chess Club. Check upcoming events below, browse results from past tournaments, or learn what your first tournament will look like.</p>
     </div>
 
     <div class="tab-row" role="tablist" aria-label="Tournament filter">
       <button type="button" class="tab-btn active" data-tab="upcoming" role="tab" aria-selected="true">Upcoming</button>
       <button type="button" class="tab-btn" data-tab="completed" role="tab" aria-selected="false">Past Results</button>
+      <button type="button" class="tab-btn" data-tab="first" role="tab" aria-selected="false">Your First Tournament</button>
     </div>
 
     <div class="tournament-grid" id="tournamentGrid">
       <div class="empty-state">Loading tournaments…</div>
+    </div>
+
+    <div class="merch-grid first-steps-grid" id="firstTournament" hidden>
+      <div class="merch-card first-step-card">
+        <div class="first-step-top">
+          <span class="first-step-num" aria-hidden="true">1.</span>
+          <img class="first-step-icon" src="assets/Goderich Chess Club smaller logo.png" alt="">
+        </div>
+        <h3 class="first-step-title">Visit the Goderich Chess Club</h3>
+        <ul class="first-step-list">
+          <li>Attend one of our club nights to learn the rules</li>
+          <li>Explore the club during one of our club nights</li>
+          <li>Observe serious tournament level games and discover the thrill of competitive play</li>
+        </ul>
+        <a class="first-step-link" href="https://goderichchessclub.com/tournaments">View Our Upcoming Events &rarr;</a>
+      </div>
+
+      <div class="merch-card first-step-card">
+        <div class="first-step-top">
+          <span class="first-step-num" aria-hidden="true">2.</span>
+          <img class="first-step-icon" src="assets/tournaments/cfc.png" alt="">
+        </div>
+        <h3 class="first-step-title">Join the CFC</h3>
+        <ul class="first-step-list">
+          <li>Obtain a Chess Federation of Canada (CFC) membership ID number</li>
+          <li>Participate in your first Rated Tournament</li>
+          <li>Start building your rating and track your progress</li>
+        </ul>
+        <a class="first-step-link" href="https://www.chess.ca/en/players/membership-join/" target="_blank" rel="noopener noreferrer">Get a CFC ID Number &rarr;</a>
+      </div>
+
+      <div class="merch-card first-step-card">
+        <div class="first-step-top">
+          <span class="first-step-num" aria-hidden="true">3.</span>
+          <img class="first-step-icon" src="assets/tournaments/google_form.png" alt="">
+        </div>
+        <h3 class="first-step-title">Register for your first tournament</h3>
+        <ul class="first-step-list">
+          <li>Register for your first tournament using our tournaments page</li>
+          <li>Ask questions to clarify rules and regulations</li>
+          <li>Contribute to the growth of the GCC by inviting friends to join</li>
+        </ul>
+        <a class="first-step-link" href="https://goderichchessclub.com/tournaments">Register for your first tournament &rarr;</a>
+      </div>
     </div>
 
     <!--

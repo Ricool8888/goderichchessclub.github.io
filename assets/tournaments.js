@@ -225,6 +225,12 @@
 
   function render() {
     var grid = document.getElementById("tournamentGrid");
+    var firstSteps = document.getElementById("firstTournament");
+    var showFirst = state.activeTab === "first";
+    grid.hidden = showFirst;
+    if (firstSteps) firstSteps.hidden = !showFirst;
+    if (showFirst) return;
+
     grid.innerHTML = "";
 
     var list = state.tournaments.filter(function (t) { return t.status === state.activeTab; });
@@ -247,8 +253,12 @@
     var tabs = document.querySelectorAll(".tab-btn");
     tabs.forEach(function (btn) {
       btn.addEventListener("click", function () {
-        tabs.forEach(function (b) { b.classList.remove("active"); });
+        tabs.forEach(function (b) {
+          b.classList.remove("active");
+          b.setAttribute("aria-selected", "false");
+        });
         btn.classList.add("active");
+        btn.setAttribute("aria-selected", "true");
         state.activeTab = btn.getAttribute("data-tab");
         render();
       });
