@@ -24,7 +24,7 @@
   <div class="container">
     <div class="navbar-flex">
       <a href="./" class="brand-logo">
-        <img src="assets/Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" width="32" height="32" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
+        <img src="assets/logos/Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" width="32" height="32" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
         <span class="gold-text">Goderich Chess Club</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
@@ -62,11 +62,12 @@
       <div class="empty-state">Loading tournaments…</div>
     </div>
 
-    <div class="merch-grid first-steps-grid" id="firstTournament" hidden>
+    <div class="first-tournament" id="firstTournament" hidden>
+    <div class="merch-grid first-steps-grid">
       <div class="merch-card first-step-card">
         <div class="first-step-top">
           <span class="first-step-num" aria-hidden="true">1.</span>
-          <img class="first-step-icon" src="assets/Goderich Chess Club smaller logo.png" alt="">
+          <img class="first-step-icon" src="assets/logos/Goderich Chess Club smaller logo rounded.png" alt="">
         </div>
         <h3 class="first-step-title">Visit the Goderich Chess Club</h3>
         <ul class="first-step-list">
@@ -104,6 +105,95 @@
         </ul>
         <a class="first-step-link" href="https://goderichchessclub.com/tournaments">Register for your first tournament &rarr;</a>
       </div>
+    </div>
+
+    <section class="first-rules" aria-labelledby="first-rules-heading">
+      <div class="section-eyebrow">Before You Play</div>
+      <h2 class="section-heading" id="first-rules-heading">Rules to Know</h2>
+
+      <div class="first-rules-grid">
+        <article class="content-card rule-card">
+          <div class="rule-card-head">
+            <span class="rule-card-icon" aria-hidden="true">&#10007;</span>
+            <h3 class="rule-card-title">Illegal Moves</h3>
+          </div>
+          <p>An illegal move is any action that violates the basic movement laws of chess. Common examples include:</p>
+          <ul class="rule-card-list">
+            <li><strong>Moving Incorrectly:</strong> Moving a piece in a way it can&rsquo;t move (e.g., moving a bishop off its diagonal).</li>
+            <li><strong>Jumping Pieces:</strong> Jumping over pieces with something other than a knight.</li>
+            <li><strong>Invalid Castling:</strong> Making an invalid castling attempt.</li>
+            <li><strong>Completing a Move:</strong> A move is only considered &ldquo;completed&rdquo; once you have released the piece and pressed the clock.</li>
+            <li><strong>Correcting a Move:</strong> If you realize you made an illegal move before pressing the clock, you can change it&mdash;though you are still bound by the Touch-Move rule.</li>
+          </ul>
+        </article>
+
+        <article class="content-card rule-card">
+          <div class="rule-card-head">
+            <span class="rule-card-icon" aria-hidden="true">&#9995;</span>
+            <h3 class="rule-card-title">Touch Move</h3>
+          </div>
+          <p>Once a round begins, you must be very deliberate with your physical actions:</p>
+          <ul class="rule-card-list">
+            <li><strong>Your Pieces:</strong> If you intentionally touch one of your own pieces, you must move it, provided it has a legal move. If it has no legal moves, you can make any other legal move without penalty.</li>
+            <li><strong>Opponent&rsquo;s Pieces:</strong> If you intentionally touch an opponent&rsquo;s piece, you must capture it if it is legally possible to do so.</li>
+            <li><strong>Adjusting Pieces:</strong> If a piece is off-centre on its square and you want to straighten it without being forced to move it, you must clearly announce &ldquo;I adjust&rdquo; or &ldquo;J&rsquo;adoube&rdquo; before touching it. You can only do this on your own turn.</li>
+            <li><strong>Castling:</strong> When castling, you must touch your King first, then your Rook. Touching the Rook first may legally obligate you to only move the Rook.</li>
+          </ul>
+        </article>
+
+        <article class="content-card rule-card">
+          <div class="rule-card-head">
+            <span class="rule-card-icon" aria-hidden="true">&#9201;</span>
+            <h3 class="rule-card-title">Ending Your Turn</h3>
+          </div>
+          <p>Managing the chess clock is a fundamental part of tournament play.</p>
+          <ul class="rule-card-list">
+            <li><strong>The One-Hand Rule:</strong> You must complete your move on the board and press your clock using the same hand. Moving a piece with your left hand and tapping the clock with your right hand is strictly forbidden.</li>
+            <li><strong>Finality:</strong> Once you take your hand off a piece after making a legal move, you cannot change your mind and move it to a different square. Your turn officially ends the moment you press the clock.</li>
+          </ul>
+        </article>
+
+        <article class="content-card rule-card">
+          <div class="rule-card-head">
+            <span class="rule-card-icon" aria-hidden="true">&frac12;</span>
+            <h3 class="rule-card-title">Claiming a Draw</h3>
+          </div>
+          <p>Apart from checkmate or running out of time, games can end in a tie (a draw), split equally at 0.5 points each. You can claim or offer a draw under specific conditions:</p>
+          <ul class="rule-card-list">
+            <li><strong>Stalemate &amp; Dead Position:</strong> Automatic draws. Stalemate occurs when a player has no legal moves and their King is not in check. A dead position occurs when neither player has enough material to legally force a checkmate (e.g., King vs. King).</li>
+            <li><strong>Threefold Repetition:</strong> You can claim a draw if the exact same board position occurs three times in a game.</li>
+            <li><strong>50-Move Rule:</strong> You can claim a draw if 50 consecutive moves have been played by both sides without a single pawn moving or any piece being captured.</li>
+            <li><strong>Mutual Agreement:</strong> You can verbally offer a draw to your opponent. Correct etiquette is to make your move, verbally state &ldquo;I offer a draw,&rdquo; and then press your clock. Do not repeatedly spam offers, as this is penalized as harassment.</li>
+          </ul>
+        </article>
+
+        <article class="content-card rule-card">
+          <div class="rule-card-head">
+            <span class="rule-card-icon" aria-hidden="true">&#9998;</span>
+            <h3 class="rule-card-title">Recording of Moves (Chess Notation)</h3>
+          </div>
+          <p>In standard tournament play, players are required to write down every move made during the game using Algebraic Notation (e.g., <code class="rule-notation">1. e4 e5 2. Nf3 Nc6</code>).</p>
+          <ul class="rule-card-list">
+            <li><strong>The Scoresheet:</strong> You must write down your move and your opponent&rsquo;s move on an official scoresheet after the move is played.</li>
+            <li><strong>Why it matters:</strong> Keeping an accurate scoresheet is the only way you can legally prove a claim to the Tournament Director, such as a draw by Threefold Repetition or the 50-Move Rule.</li>
+            <li><strong>Note:</strong> In CFC / FIDE rated Blitz or Rapid games the recording of moves is encouraged but not mandatory. The recording of moves is mandatory in CFC and FIDE classically rated games.</li>
+          </ul>
+        </article>
+
+        <article class="content-card rule-card">
+          <div class="rule-card-head">
+            <span class="rule-card-icon" aria-hidden="true">&#9873;</span>
+            <h3 class="rule-card-title">Penalties</h3>
+          </div>
+          <p class="rule-callout">If you violate a rule, do not argue with your opponent. Stop the chess clock immediately to pause the game time, raise your hand, and summon the arbiter or TD.</p>
+          <ul class="rule-card-list">
+            <li><strong>First Illegal Move:</strong> The arbiter will reset the board to the position before the illegal move. As a penalty, extra time (2 minutes in standard time controls, and 1 minute in rapid / blitz time controls) will be added to your opponent&rsquo;s clock.</li>
+            <li><strong>Second Illegal Move:</strong> Making a second illegal move in the exact same game results in an automatic forfeit and loss of the game.</li>
+            <li><strong>Conduct Penalties:</strong> Talking to your opponent during the game, distracting them, or bringing electronic devices (like cell phones) into the playing hall can result in time penalties, warnings, or immediate game forfeiture.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
     </div>
 
     <!--

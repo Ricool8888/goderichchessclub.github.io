@@ -1611,7 +1611,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .merch-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
 .merch-desc { font-size: 14px; color: var(--slate-300); line-height: 1.6; }
 
-.first-steps-grid[hidden],
+.first-tournament[hidden],
 .tournament-grid[hidden] { display: none; }
 
 /* "Your First Tournament" steps on the Tournaments page reuse the merch card. */
@@ -1672,6 +1672,78 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 }
 
 .first-step-link:hover { color: var(--gold-light); text-decoration: underline; }
+
+/* "Rules to Know" cards below the first-tournament steps. */
+.first-rules { margin: 16px 0 40px; }
+
+.first-rules-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 860px) {
+  .first-rules-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.rule-card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.rule-card-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gold-10);
+  border: 1px solid var(--gold-30);
+  color: var(--gold);
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rule-card-title { font-size: 20px; font-weight: 700; color: var(--white); margin: 0; }
+
+.rule-card p { font-size: 15px; }
+
+.rule-card-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--slate-300);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.rule-card-list strong { color: var(--white); }
+
+.rule-card-list li::marker { color: var(--gold); }
+
+.rule-notation {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--gold-10);
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.rule-card .rule-callout {
+  border-left: 3px solid var(--gold);
+  background: var(--gold-04);
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  color: var(--white);
+}
 
 /* =========================================================
    PHOTO GALLERY
