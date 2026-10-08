@@ -1611,6 +1611,68 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .merch-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
 .merch-desc { font-size: 14px; color: var(--slate-300); line-height: 1.6; }
 
+.first-steps-grid[hidden],
+.tournament-grid[hidden] { display: none; }
+
+/* "Your First Tournament" steps on the Tournaments page reuse the merch card. */
+.first-step-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 32px 28px;
+}
+
+.first-step-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.first-step-num {
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--white);
+}
+
+.first-step-icon {
+  max-height: 72px;
+  max-width: 120px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.first-step-title {
+  font-size: 22px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin: 0 0 16px;
+}
+
+.first-step-list {
+  margin: 0 0 24px;
+  padding-left: 20px;
+  font-size: 15px;
+  color: var(--slate-300);
+  line-height: 1.6;
+}
+
+.first-step-list li { margin-bottom: 10px; }
+
+.first-step-link {
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.first-step-link:hover { color: var(--gold-light); text-decoration: underline; }
+
 /* =========================================================
    PHOTO GALLERY
    ========================================================= */
