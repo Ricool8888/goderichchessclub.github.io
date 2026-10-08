@@ -1381,6 +1381,25 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .price-table tbody tr:last-child td { border-bottom: none; }
 .price-table tbody td.price-col { text-align: right; color: var(--gold); font-weight: 700; white-space: nowrap; }
 .price-table tbody tr:hover { background: var(--gold-04); }
+.price-table td { vertical-align: top; }
+.price-table tbody td.desc-col { font-size: 14px; line-height: 1.6; color: var(--slate-400); min-width: 320px; }
+.price-table tbody td.desc-col p { margin: 0 0 10px; }
+.price-table tbody td.desc-col p:last-child { margin-bottom: 0; }
+
+.book-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 160px;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--slate-800);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  display: none;
+}
+.book-preview.visible { display: block; }
 
 .books-note {
   font-size: 14px;
