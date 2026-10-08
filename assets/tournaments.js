@@ -5,6 +5,7 @@
 
   var state = {
     tournaments: [],
+    loaded: false,
     activeTab: "upcoming"
   };
 
@@ -229,7 +230,7 @@
     var showFirst = state.activeTab === "first";
     grid.hidden = showFirst;
     if (firstSteps) firstSteps.hidden = !showFirst;
-    if (showFirst) return;
+    if (showFirst || !state.loaded) return;
 
     grid.innerHTML = "";
 
@@ -249,23 +250,45 @@
     list.forEach(function (t) { grid.appendChild(buildCard(t)); });
   }
 
-  function init() {
+  // The active tab is kept in the URL hash (e.g. tournaments#first) so the
+  // browser's back button and shared links return to the same tab.
+  function selectTab(name) {
     var tabs = document.querySelectorAll(".tab-btn");
-    tabs.forEach(function (btn) {
+    var match = null;
+    tabs.forEach(function (b) { if (b.getAttribute("data-tab") === name) match = b; });
+    if (!match) match = tabs[0];
+
+    tabs.forEach(function (b) {
+      var isActive = b === match;
+      b.classList.toggle("active", isActive);
+      b.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    state.activeTab = match.getAttribute("data-tab");
+    render();
+  }
+
+  function tabFromHash() {
+    return window.location.hash.replace(/^#/, "") || "upcoming";
+  }
+
+  function init() {
+    document.querySelectorAll(".tab-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        tabs.forEach(function (b) {
-          b.classList.remove("active");
-          b.setAttribute("aria-selected", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-selected", "true");
-        state.activeTab = btn.getAttribute("data-tab");
-        render();
+        var name = btn.getAttribute("data-tab");
+        history.replaceState(null, "", name === "upcoming"
+          ? window.location.pathname + window.location.search
+          : "#" + name);
+        selectTab(name);
       });
     });
 
+    window.addEventListener("hashchange", function () { selectTab(tabFromHash()); });
+
+    selectTab(tabFromHash());
+
     fetchTournaments().then(function (data) {
       state.tournaments = data;
+      state.loaded = true;
       render();
     });
   }
