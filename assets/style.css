@@ -1682,6 +1682,30 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .sponsor-cta h2 { font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
 .sponsor-cta p { color: var(--slate-300); font-size: 15px; max-width: 560px; margin: 0 auto 20px; line-height: 1.6; }
 
+.merch-refund {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  padding: 16px 20px;
+  text-align: left;
+  background: var(--gold-04);
+  border: 1px solid var(--gold-20);
+  border-radius: 12px;
+}
+
+.merch-refund h3 { font-size: 16px; font-weight: 700; color: var(--white); margin: 0 0 8px; }
+
+.merch-refund ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--slate-300);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.merch-refund li + li { margin-top: 6px; }
+.merch-refund li::marker { color: var(--gold); }
+.merch-refund strong { color: var(--white); }
+
 @media (max-width: 480px) {
   .sponsor-cta { padding: 24px 18px; }
   .sponsor-cta .btn-primary { font-size: 16px; padding: 13px 20px; }
