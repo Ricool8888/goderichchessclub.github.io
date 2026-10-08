@@ -1154,6 +1154,79 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   border-radius: 8px;
 }
 
+/* Live game: the Lichess TV embed with an evaluation bar beside its board.
+   The embed is 10:11 and its board fills the height between a 23px player bar
+   above and a 25px one below, so the eval bar starts 23px down and is
+   (110% of the width - 48px) tall - the board's height at any size. */
+.live-game {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  max-width: 424px;
+  margin: auto auto 0;
+  padding-right: 24px;
+}
+
+.live-game .puzzle-frame { margin: 0; max-width: none; }
+
+.eval-bar {
+  position: absolute;
+  top: 23px;
+  right: 0;
+  width: 18px;
+  height: calc(110cqw - 48px);
+  overflow: hidden;
+  border-radius: 4px;
+  background: #403d39;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+}
+
+.eval-bar.is-ready { opacity: 1; }
+
+/* Midline marker at 0.0 */
+.eval-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: rgba(214, 79, 0, 0.6);
+  z-index: 2;
+}
+
+.eval-bar-white {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  background: #f0f0f0;
+  transition: height 0.6s ease;
+}
+
+.eval-bar.is-flipped .eval-bar-white { top: 0; bottom: auto; }
+
+.eval-bar-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3px;
+  z-index: 3;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  color: #f0f0f0;
+}
+
+/* The score sits at the end of whoever is ahead. */
+.eval-bar-label.is-white { top: auto; bottom: 3px; color: #403d39; }
+.eval-bar.is-flipped .eval-bar-label { top: auto; bottom: 3px; }
+.eval-bar.is-flipped .eval-bar-label.is-white { top: 3px; bottom: auto; }
+
 .puzzle-widget {
   display: flex;
   flex-direction: column;
@@ -1273,7 +1346,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   .lichess-grid .content-card .puzzle-status,
   .lichess-grid .content-card .puzzle-meta { justify-self: center; }
 
-  .lichess-grid .puzzle-frame {
+  .lichess-grid .live-game {
     grid-row: 4 / span 3;
     align-self: start;
     margin: -23px auto 0;
