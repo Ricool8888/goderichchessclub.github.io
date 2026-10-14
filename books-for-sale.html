@@ -52,7 +52,7 @@
   <div class="container">
     <div class="page-header">
       <h1 class="page-title">Books for <span class="gold-text">Sale</span></h1>
-      <p class="page-desc">Brand new chess books, sold to help fund club equipment / expenses. Email us to arrange pickup at a Tuesday or Friday meeting.  Hover over titles for a preview image.  Tap for a preview image if on mobile.</p>
+      <p class="page-desc">Brand new chess books, sold to help fund club equipment / expenses. Email us to arrange pickup at a Tuesday or Friday meeting.  Hover over a book for a preview of its cover, or select its title to view the cover larger.</p>
     </div>
 
     <div class="table-wrap" role="region" aria-label="Books for sale">
@@ -118,7 +118,7 @@
 </footer>
 
 <!-- Lightbox for viewing a book cover on touch screens -->
-<div class="lightbox-overlay" id="lightboxOverlay" aria-hidden="true">
+<div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Book cover" aria-hidden="true">
   <button type="button" class="lightbox-close" id="lightboxCloseBtn" aria-label="Close">&times;</button>
   <div class="lightbox-content">
     <img id="lightboxImage" src="" alt="">

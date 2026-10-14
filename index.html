@@ -124,7 +124,7 @@
       <aside class="meeting-card" aria-label="Weekly meeting details">
         <div class="card-header-flex">
           <span class="info-icon" aria-hidden="true">&#9812;</span>
-          <span class="card-title">Weekly Meetings</span>
+          <h2 class="card-title">Weekly Meetings</h2>
         </div>
 
         <div class="info-row">
@@ -236,6 +236,8 @@
               <div class="eval-bar-white"></div>
               <span class="eval-bar-label" aria-hidden="true"></span>
             </div>
+            <p class="live-game-paused-note" hidden>Live game paused</p>
+            <button type="button" class="puzzle-btn live-game-pause" id="liveGamePause">Pause live game</button>
           </div>
         </div>
       </div>
@@ -289,11 +291,30 @@
     function syncLichessTheme() {
       var bg = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
       frames.forEach(function (frame) {
+        if (frame.hasAttribute('data-paused')) return;
         var src = 'https://lichess.org/' + frame.getAttribute('data-lichess-frame') + '/frame?theme=brown&bg=' + bg;
         if (frame.src !== src) frame.src = src;
       });
     }
     syncLichessTheme();
+
+    // Lets visitors stop the moving board and evaluation bar.
+    var pauseBtn = document.getElementById('liveGamePause');
+    if (pauseBtn) {
+      var liveGame = pauseBtn.closest('.live-game');
+      var liveFrame = liveGame.querySelector('[data-lichess-frame]');
+      var pausedNote = liveGame.querySelector('.live-game-paused-note');
+      pauseBtn.addEventListener('click', function () {
+        var paused = !liveFrame.hasAttribute('data-paused');
+        liveFrame.toggleAttribute('data-paused', paused);
+        liveGame.classList.toggle('is-paused', paused);
+        pausedNote.hidden = !paused;
+        pauseBtn.textContent = paused ? 'Resume live game' : 'Pause live game';
+        if (paused) liveFrame.src = 'about:blank'; else syncLichessTheme();
+        if (window.GCCLiveEval) window.GCCLiveEval.setPaused(paused);
+      });
+    }
+
     new MutationObserver(syncLichessTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   })();
 </script>
