@@ -71,7 +71,7 @@
     years.forEach(function (y) {
       var yearWrap = document.createElement("div");
       yearWrap.className = "archive-year";
-      var yearLabel = document.createElement("div");
+      var yearLabel = document.createElement("h3");
       yearLabel.className = "archive-year-label";
       yearLabel.textContent = y;
       yearWrap.appendChild(yearLabel);
@@ -81,6 +81,7 @@
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className = "archive-month-btn";
+        btn.setAttribute("data-focus-key", "archive-" + y + "-" + m);
         if (state.filterYear === y && state.filterMonth === m) btn.classList.add("active");
         var label = document.createElement("span");
         label.textContent = MONTH_NAMES[m];
@@ -95,7 +96,7 @@
           } else {
             state.filterYear = y; state.filterMonth = m;
           }
-          renderAll();
+          keepFocus(renderAll);
         });
         yearWrap.appendChild(btn);
       });
@@ -112,11 +113,12 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "category-pill";
+      btn.setAttribute("data-focus-key", "category-" + c);
       if (state.filterCategory === c) btn.classList.add("active");
       btn.textContent = c;
       btn.addEventListener("click", function () {
         state.filterCategory = (state.filterCategory === c) ? null : c;
-        renderAll();
+        keepFocus(renderAll);
       });
       container.appendChild(btn);
     });
@@ -168,14 +170,15 @@
       full.className = "post-full";
       full.textContent = p.content || p.excerpt;
 
-      var readMore = document.createElement("a");
-      readMore.href = "#" + p.id;
+      var readMore = document.createElement("button");
+      readMore.type = "button";
       readMore.className = "post-readmore";
+      readMore.setAttribute("data-focus-key", "readmore-" + p.id);
+      readMore.setAttribute("aria-expanded", state.expandedId === p.id ? "true" : "false");
       readMore.textContent = state.expandedId === p.id ? "Show less \u2191" : "Read more \u2192";
-      readMore.addEventListener("click", function (e) {
-        e.preventDefault();
+      readMore.addEventListener("click", function () {
         state.expandedId = (state.expandedId === p.id) ? null : p.id;
-        renderList();
+        keepFocus(renderList);
       });
 
       card.appendChild(meta);
@@ -185,6 +188,19 @@
       card.appendChild(readMore);
       listEl.appendChild(card);
     });
+  }
+
+  // Rendering rebuilds the buttons, which would drop keyboard focus back to the
+  // top of the page. Put it back on the rebuilt copy of the focused control.
+  function keepFocus(renderFn) {
+    var active = document.activeElement;
+    var key = active && active.getAttribute ? active.getAttribute("data-focus-key") : null;
+    renderFn();
+    if (!key) return;
+    var controls = document.querySelectorAll("[data-focus-key]");
+    for (var i = 0; i < controls.length; i++) {
+      if (controls[i].getAttribute("data-focus-key") === key) { controls[i].focus(); return; }
+    }
   }
 
   function renderAll() {
@@ -216,6 +232,8 @@
         state.searchTerm = "";
         if (searchInput) searchInput.value = "";
         renderAll();
+        // The reset button hides itself once the filters are cleared.
+        if (searchInput) searchInput.focus();
       });
     }
 

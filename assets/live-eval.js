@@ -20,6 +20,7 @@
   var currentFen = null;
   var pendingFen = null;    // newest position waiting for the engine
   var retryDelay = 5000;
+  var paused = false;       // the visitor paused the live game
 
   document.addEventListener("DOMContentLoaded", function () {
     bar = document.getElementById("evalBar");
@@ -55,11 +56,25 @@
     send("isready");
 
     document.addEventListener("visibilitychange", function () {
-      if (!document.hidden && pendingFen && !searching) analyse(pendingFen);
+      if (!document.hidden && !paused && pendingFen && !searching) analyse(pendingFen);
     });
 
     connectFeed();
   }
+
+  // Called by the "Pause live game" button on the home page.
+  window.GCCLiveEval = {
+    setPaused: function (value) {
+      paused = !!value;
+      if (!bar) return;
+      if (paused) {
+        if (searching) send("stop");
+        bar.classList.remove("is-ready");
+      } else if (pendingFen && !searching) {
+        analyse(pendingFen);
+      }
+    }
+  };
 
   function send(cmd) { if (worker) worker.postMessage(cmd); }
 
@@ -108,7 +123,7 @@
   // ---- Engine ----
 
   function analyse(fen) {
-    if (document.hidden || searching) {
+    if (paused || document.hidden || searching) {
       pendingFen = fen;
       if (searching && !document.hidden) send("stop");
       return;
@@ -123,11 +138,11 @@
   function onEngineLine(line) {
     if (line.indexOf("bestmove") === 0) {
       searching = false;
-      if (pendingFen && !document.hidden) analyse(pendingFen);
+      if (pendingFen && !document.hidden && !paused) analyse(pendingFen);
       return;
     }
     // Skip results for a position that has already been replaced.
-    if (line.indexOf("info ") !== 0 || pendingFen || !currentFen) return;
+    if (line.indexOf("info ") !== 0 || paused || pendingFen || !currentFen) return;
     var depth = line.match(/ depth (\d+)/);
     var score = line.match(/ score (cp|mate) (-?\d+)/);
     if (!depth || !score || +depth[1] < MIN_DEPTH) return;

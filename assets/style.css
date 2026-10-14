@@ -49,6 +49,7 @@
   --modal-overlay-bg: rgba(18, 8, 40, 0.78);
   --lightbox-overlay-bg: rgba(18, 8, 40, 0.92);
   --lightbox-caption: #F9F6EE;
+  --control-border: #9482C4; /* outlines of inputs and buttons: 3:1+ on every surface */
 }
 
 /* Reset & Base */
@@ -136,6 +137,7 @@ html[data-theme="light"] {
   --modal-overlay-bg: rgba(2, 6, 23, 0.75);
   --lightbox-overlay-bg: rgba(2, 6, 23, 0.9);
   --lightbox-caption: #E2E8F0;
+  --control-border: #74859C;
 }
 
 html[data-theme="light"] body {
@@ -251,8 +253,10 @@ a { color: var(--chess-green); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  min-height: 80px;
   flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 8px 0;
 }
 
 .brand-logo {
@@ -270,7 +274,8 @@ a { color: var(--chess-green); }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  flex-wrap: wrap;
+  gap: 8px 28px;
 }
 
 .nav-item {
@@ -304,7 +309,7 @@ a { color: var(--chess-green); }
 .nav-toggle {
   display: none;
   background: none;
-  border: 1px solid var(--slate-600);
+  border: 1px solid var(--control-border);
   color: var(--white);
   border-radius: 8px;
   padding: 8px 12px;
@@ -318,7 +323,7 @@ a { color: var(--chess-green); }
   .nav-links {
     display: none;
     position: absolute;
-    top: 80px;
+    top: 100%;
     left: 0;
     right: 0;
     background-color: var(--navy-950);
@@ -414,7 +419,7 @@ a { color: var(--chess-green); }
 
 .btn-secondary {
   display: inline-block;
-  border: 2px solid var(--slate-600);
+  border: 2px solid var(--control-border);
   color: var(--slate-100);
   font-weight: 600;
   font-size: 18px;
@@ -545,7 +550,7 @@ a { color: var(--chess-green); }
   height: 46px;
   border-radius: 50%;
   background-color: var(--navy-900);
-  border: 2px solid var(--slate-800);
+  border: 2px solid var(--control-border);
   color: var(--slate-300);
   text-decoration: none;
   transition: all 0.2s ease-in-out;
@@ -676,7 +681,7 @@ a { color: var(--chess-green); }
   height: 42px;
   border-radius: 50%;
   background-color: var(--navy-900);
-  border: 2px solid var(--slate-800);
+  border: 2px solid var(--control-border);
   color: var(--slate-300);
   cursor: pointer;
   margin-bottom: 16px;
@@ -732,7 +737,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .calendar-nav-btn {
   background: var(--navy-900);
-  border: 1px solid var(--slate-800);
+  border: 1px solid var(--control-border);
   color: var(--slate-100);
   width: 40px;
   height: 40px;
@@ -755,9 +760,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
     min-width: 0;
     flex: 1 1 auto;
     font-size: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
   }
   .calendar-nav-btn {
     width: 34px;
@@ -834,15 +837,23 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   .calendar-day { min-height: 56px; padding: 6px; }
   .calendar-weekday { font-size: 10px; }
   .day-event-dot { display: none; }
-  .calendar-day.has-event::after {
-    content: "";
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--gold);
-    position: absolute; bottom: 6px; right: 6px;
-  }
-  .calendar-day.day-tuesday-meeting::after { background: var(--chess-green); }
-  .calendar-day.day-friday-meeting::after { background: var(--friday-accent); }
-  .calendar-day.day-special-event::after { background: var(--gold); }
+}
+
+/* Each kind of day has its own marker shape as well as colour, matching the
+   legend, so the calendar can be read without relying on colour: a circle for
+   Tuesday meetings, a square for Friday meetings, a diamond for special events. */
+.calendar-day.has-event::after {
+  content: "";
+  width: 8px; height: 8px;
+  background: var(--gold);
+  position: absolute; top: 12px; right: 10px;
+}
+.calendar-day.day-tuesday-meeting::after { background: var(--chess-green); border-radius: 50%; }
+.calendar-day.day-friday-meeting::after { background: var(--friday-accent); }
+.calendar-day.day-special-event::after { background: var(--gold); transform: rotate(45deg); }
+
+@media (max-width: 640px) {
+  .calendar-day.has-event::after { top: 9px; right: 7px; }
 }
 
 /* Modal (day detail / add event / add post) */
@@ -898,7 +909,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid var(--slate-800);
+  border: 1px solid var(--control-border);
   background-color: var(--navy-900);
   color: var(--white);
   font-size: 15px;
@@ -941,10 +952,10 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; font-size: 13px; color: var(--slate-300); }
 .legend-item { display: flex; align-items: center; gap: 8px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-.legend-dot-tuesday { background: var(--chess-green); }
+.legend-dot { width: 10px; height: 10px; flex-shrink: 0; }
+.legend-dot-tuesday { background: var(--chess-green); border-radius: 50%; }
 .legend-dot-friday { background: var(--friday-accent); }
-.legend-dot-special { background: var(--gold); }
+.legend-dot-special { background: var(--gold); transform: rotate(45deg); }
 
 .add-to-calendar-row {
   display: flex;
@@ -959,7 +970,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   align-items: center;
   gap: 8px;
   background: var(--navy-900);
-  border: 1px solid var(--slate-800);
+  border: 1px solid var(--control-border);
   color: var(--slate-100);
   font-weight: 600;
   font-size: 14px;
@@ -1016,7 +1027,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .post-title a { color: inherit; text-decoration: none; }
 .post-title a:hover { color: var(--gold); }
 .post-excerpt { color: var(--slate-300); font-size: 15px; margin-bottom: 12px; line-height: 1.6; }
-.post-readmore { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; }
+.post-readmore { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; }
 .post-readmore:hover { color: var(--gold); }
 
 .post-full { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--slate-800); color: var(--slate-200); line-height: 1.7; white-space: pre-wrap; }
@@ -1076,7 +1087,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   font-weight: 600;
   color: var(--slate-300);
   background: var(--navy-900);
-  border: 1px solid var(--slate-800);
+  border: 1px solid var(--control-border);
   padding: 5px 12px;
   border-radius: 20px;
   cursor: pointer;
@@ -1168,6 +1179,20 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 }
 
 .live-game .puzzle-frame { margin: 0; max-width: none; }
+
+.live-game-pause { margin-top: 10px; }
+
+/* Paused: the embed is unloaded and a note sits where its board was. */
+.live-game.is-paused .puzzle-frame { visibility: hidden; }
+.live-game.is-paused .eval-bar { visibility: hidden; }
+.content-card .live-game-paused-note {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 24px;
+  margin: 0;
+  color: var(--slate-300);
+}
 
 .eval-bar {
   position: absolute;
@@ -1287,16 +1312,10 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   padding: 0 3px 2px 0;
 }
 
-/* Contrast with the square each label sits on (the brown theme's colours assume
-   the default positions). The bottom-left square is always dark, so with White
-   at the bottom odd ranks/files sit on dark squares; with Black, even ones do. */
+/* One dark brown for every label: it keeps at least 4.5:1 contrast on both the
+   light (#f0d9b5) and dark (#b58863) squares, which no lighter colour does. */
 .puzzle-board.cg-wrap coords.ranks coord,
-.puzzle-board.cg-wrap coords.files coord { color: #946f51; }
-
-.puzzle-board.orientation-white coords.ranks coord:nth-child(odd),
-.puzzle-board.orientation-white coords.files coord:nth-child(odd),
-.puzzle-board.orientation-black coords.ranks coord:nth-child(even),
-.puzzle-board.orientation-black coords.files coord:nth-child(even) { color: #f0d9b5; }
+.puzzle-board.cg-wrap coords.files coord { color: #2e1c0e; font-weight: 700; }
 
 .puzzle-controls {
   display: flex;
@@ -1310,7 +1329,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .puzzle-btn {
   background: var(--navy-900);
-  border: 1px solid var(--slate-800);
+  border: 1px solid var(--control-border);
   color: var(--slate-300);
   font-weight: 600;
   font-size: 14px;
@@ -1464,6 +1483,22 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 }
 .site-banner-link:hover { text-decoration: underline; }
 
+.site-banner-pause {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--control-border);
+  border-radius: 50%;
+  color: var(--slate-100);
+  cursor: pointer;
+}
+.site-banner-pause svg { width: 14px; height: 14px; fill: currentColor; }
+.site-banner-pause:hover { border-color: var(--gold); color: var(--gold); }
+
 .offer-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1560,7 +1595,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 1px solid var(--slate-600);
+  border: 1px solid var(--control-border);
   color: var(--slate-300);
   display: flex;
   align-items: center;
@@ -1571,17 +1606,26 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .faq-item.open .faq-icon { transform: rotate(45deg); border-color: var(--gold); color: var(--gold); }
 
+/* Closed answers collapse to a zero-height grid row (so an open one can be any
+   height) and are hidden from the keyboard and screen readers. */
 .faq-answer {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   overflow: hidden;
-  transition: max-height 0.25s ease;
+  visibility: hidden;
+  transition: grid-template-rows 0.25s ease, visibility 0s linear 0.25s;
   color: var(--slate-300);
   font-size: 15px;
   line-height: 1.65;
 }
 
-.faq-answer-inner { padding: 0 22px 20px; }
-.faq-item.open .faq-answer { max-height: 400px; }
+.faq-answer-inner { min-height: 0; overflow: hidden; padding: 0 22px; }
+.faq-answer-inner::after { content: ""; display: block; height: 20px; }
+.faq-item.open .faq-answer {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 0.25s ease, visibility 0s;
+}
 
 /* Books for sale */
 .table-wrap {
@@ -1623,10 +1667,25 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   border-radius: 6px;
   border: 1px solid var(--slate-800);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-  pointer-events: none;
   display: none;
 }
 .book-preview.visible { display: block; }
+
+.book-title-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: var(--control-border);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.book-title-btn:hover { color: var(--gold); text-decoration-color: currentColor; }
 .price-table tbody tr.has-cover { cursor: pointer; }
 
 .books-note {
@@ -1646,7 +1705,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .tab-btn {
   background: var(--navy-900);
-  border: 1px solid var(--slate-800);
+  border: 1px solid var(--control-border);
   color: var(--slate-300);
   font-weight: 600;
   font-size: 14px;
@@ -1810,6 +1869,8 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   font-size: 14px;
   line-height: 1.6;
 }
+
+.supporter-list { list-style: none; }
 
 .merch-refund li + li { margin-top: 6px; }
 .merch-refund li::marker { color: var(--gold); }
@@ -2125,7 +2186,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   height: 36px;
 
   padding: 0;
-  border: 2px solid var(--slate-800);
+  border: 2px solid var(--control-border);
   border-radius: 999px;
 
   background-color: var(--navy-900);
