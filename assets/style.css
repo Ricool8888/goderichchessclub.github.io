@@ -556,7 +556,18 @@ a { color: var(--chess-green); }
   transition: all 0.2s ease-in-out;
 }
 
-.social-btn svg { width: 22px; height: 22px; fill: currentColor; }
+/* Icons live in assets/icons and are drawn as masks over currentColor, so
+   they follow the theme and hover colours like the text around them. */
+.social-icon {
+  width: 22px; height: 22px;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.social-btn.facebook { --icon: url("icons/facebook.svg"); }
+.social-btn.instagram { --icon: url("icons/instagram.svg"); }
+.social-btn.chess { --icon: url("icons/chess-com.svg"); }
+.social-btn.worldchess { --icon: url("icons/worldchess.png"); }
 
 .social-btn:hover {
   color: var(--gold);
@@ -852,8 +863,10 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .calendar-day.day-friday-meeting::after { background: var(--friday-accent); }
 .calendar-day.day-special-event::after { background: var(--gold); transform: rotate(45deg); }
 
+/* Narrow cells have no room beside a two-digit number, so the marker sits
+   below it instead, where it can never cover the digits. */
 @media (max-width: 640px) {
-  .calendar-day.has-event::after { top: 9px; right: 7px; }
+  .calendar-day.has-event::after { top: auto; right: auto; bottom: 9px; left: 7px; }
 }
 
 /* Modal (day detail / add event / add post) */
