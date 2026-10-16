@@ -568,6 +568,7 @@ a { color: var(--chess-green); }
 .social-btn.instagram { --icon: url("icons/instagram.svg"); }
 .social-btn.chess { --icon: url("icons/chess-com.svg"); }
 .social-btn.worldchess { --icon: url("icons/worldchess.png"); }
+.social-btn.lichess { --icon: url("icons/lichess.svg"); }
 
 .social-btn:hover {
   color: var(--gold);
