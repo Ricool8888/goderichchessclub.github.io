@@ -25,11 +25,29 @@
     }
   ];
 
+  var VIEW_KEY = "gcc-calendar-view";
+
   var state = {
     viewYear: new Date().getFullYear(),
     viewMonth: new Date().getMonth(),
+    view: initialView(),
     publishedEvents: []
   };
+
+  // A visitor's last choice wins; otherwise small screens start in list
+  // view, where the month grid gets cramped.
+  function initialView() {
+    var saved = null;
+    try { saved = window.localStorage.getItem(VIEW_KEY); } catch (e) { /* storage unavailable */ }
+    if (saved === "month" || saved === "list") return saved;
+    return window.matchMedia && window.matchMedia("(max-width: 640px)").matches ? "list" : "month";
+  }
+
+  function setView(view) {
+    state.view = view;
+    try { window.localStorage.setItem(VIEW_KEY, view); } catch (e) { /* storage unavailable */ }
+    render();
+  }
 
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
@@ -56,10 +74,20 @@
   }
 
   function render() {
-    var grid = document.getElementById("calendarGrid");
     var label = document.getElementById("calendarMonthLabel");
     label.textContent = MONTH_NAMES[state.viewMonth] + " " + state.viewYear;
 
+    var isList = state.view === "list";
+    document.getElementById("calendarGrid").hidden = isList;
+    document.getElementById("calendarList").hidden = !isList;
+    document.getElementById("monthViewBtn").setAttribute("aria-pressed", isList ? "false" : "true");
+    document.getElementById("listViewBtn").setAttribute("aria-pressed", isList ? "true" : "false");
+
+    if (isList) renderList(); else renderGrid();
+  }
+
+  function renderGrid() {
+    var grid = document.getElementById("calendarGrid");
     grid.innerHTML = "";
     WEEKDAYS.forEach(function (w) {
       var el = document.createElement("div");
@@ -133,6 +161,68 @@
     }
   }
 
+  // List view: every day in the shown month that has something on, starting
+  // from today when the shown month is the current one.
+  function renderList() {
+    var list = document.getElementById("calendarList");
+    list.innerHTML = "";
+
+    var daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
+    var today = new Date();
+    var todayISO = toISODate(today.getFullYear(), today.getMonth(), today.getDate());
+
+    for (var d = 1; d <= daysInMonth; d++) {
+      var iso = toISODate(state.viewYear, state.viewMonth, d);
+      if (iso < todayISO) continue;
+      var dateObj = new Date(state.viewYear, state.viewMonth, d);
+      var recurring = recurringEventsForDate(iso, dateObj.getDay());
+      var dayEvents = eventsForDate(iso);
+      if (!recurring.length && !dayEvents.length) continue;
+
+      var day = document.createElement("section");
+      day.className = "calendar-list-day";
+      if (iso === todayISO) day.classList.add("today");
+
+      var heading = document.createElement("h3");
+      heading.className = "calendar-list-date";
+      heading.textContent = dateObj.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+      if (iso === todayISO) {
+        var badge = document.createElement("span");
+        badge.className = "calendar-list-today";
+        badge.textContent = "Today";
+        heading.appendChild(badge);
+      }
+      day.appendChild(heading);
+
+      recurring.forEach(function (r) {
+        day.appendChild(buildListItem(r, r.cssClass === "recurring" ? "tuesday" : "friday"));
+      });
+      dayEvents.forEach(function (ev) { day.appendChild(buildListItem(ev, "special")); });
+
+      list.appendChild(day);
+    }
+
+    if (!list.children.length) {
+      var p = document.createElement("p");
+      p.className = "muted-note";
+      var monthStart = toISODate(state.viewYear, state.viewMonth, 1);
+      p.textContent = monthStart > todayISO || state.viewMonth === today.getMonth() && state.viewYear === today.getFullYear()
+        ? "No upcoming events this month."
+        : "This month has passed — use the arrows or Today to see upcoming events.";
+      list.appendChild(p);
+    }
+  }
+
+  function buildListItem(ev, kind) {
+    var item = buildEventItem(ev);
+    item.classList.add("calendar-list-item", "calendar-list-" + kind);
+    var marker = document.createElement("span");
+    marker.className = "legend-dot legend-dot-" + kind;
+    marker.setAttribute("aria-hidden", "true");
+    item.insertBefore(marker, item.firstChild);
+    return item;
+  }
+
   function openDayModal(iso, dayOfWeek) {
     var overlay = document.getElementById("dayModalOverlay");
     var titleEl = document.getElementById("dayModalTitle");
@@ -198,6 +288,8 @@
       state.viewMonth = now.getMonth();
       render();
     });
+    document.getElementById("monthViewBtn").addEventListener("click", function () { setView("month"); });
+    document.getElementById("listViewBtn").addEventListener("click", function () { setView("list"); });
     document.getElementById("modalCloseBtn").addEventListener("click", closeDayModal);
     document.getElementById("dayModalOverlay").addEventListener("click", function (e) {
       if (e.target === this) closeDayModal();
