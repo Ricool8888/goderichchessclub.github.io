@@ -569,12 +569,54 @@ a { color: var(--chess-green); }
 .social-btn.chess { --icon: url("icons/chess-com.svg"); }
 .social-btn.worldchess { --icon: url("icons/worldchess.png"); }
 .social-btn.lichess { --icon: url("icons/lichess.svg"); }
+.social-btn.share { --icon: url("icons/share.svg"); cursor: pointer; font: inherit; padding: 0; }
+/* share.svg is padded on the right so its visual weight sits centred;
+   enlarge it to match the other icons */
+.social-btn.share .social-icon { width: 25px; height: 25px; }
 
 .social-btn:hover {
   color: var(--gold);
   border-color: var(--gold);
   transform: translateY(-3px);
   box-shadow: 0 4px 12px var(--gold-15);
+}
+
+/* Fallback menu for the share button when the browser has no share sheet */
+.share-wrap { position: relative; display: inline-flex; }
+.share-menu {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  padding: 6px;
+  background-color: var(--navy-800);
+  border: 1px solid var(--control-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.share-menu[hidden] { display: none; }
+.share-menu a,
+.share-menu button {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--slate-300);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.share-menu a:hover,
+.share-menu button:hover,
+.share-menu a:focus-visible,
+.share-menu button:focus-visible {
+  background-color: var(--gold-10);
+  color: var(--gold);
 }
 
 
@@ -761,7 +803,34 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .calendar-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-.calendar-toolbar-actions { display: flex; gap: 10px; }
+.calendar-toolbar-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Month / List switch */
+.calendar-view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--control-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.calendar-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 12px;
+  border: 0;
+  background: var(--navy-900);
+  color: var(--slate-100);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.calendar-view-btn + .calendar-view-btn { border-left: 1px solid var(--control-border); }
+.calendar-view-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.calendar-view-btn:hover { color: var(--gold); }
+.calendar-view-btn[aria-pressed="true"] { background: var(--gold); color: var(--navy-950); }
 
 @media (max-width: 480px) {
   .calendar-toolbar {
@@ -788,6 +857,11 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
     padding: 7px 10px !important;
     font-size: 12px !important;
   }
+  /* The view switch drops to its own full-width row under the arrows. */
+  .calendar-toolbar { flex-wrap: wrap; }
+  .calendar-toolbar-actions { display: contents; }
+  .calendar-view-toggle { order: 10; flex: 1 0 100%; }
+  .calendar-view-btn { flex: 1; justify-content: center; height: 36px; }
 }
 
 .calendar-grid {
@@ -869,6 +943,43 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 @media (max-width: 640px) {
   .calendar-day.has-event::after { top: auto; right: auto; bottom: 9px; left: 7px; }
 }
+
+/* List view: upcoming days with events, one card per day */
+.calendar-list { display: flex; flex-direction: column; gap: 18px; }
+.calendar-grid[hidden],
+.calendar-list[hidden] { display: none; }
+.calendar-list-day { display: flex; flex-direction: column; gap: 8px; }
+.calendar-list-date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+.calendar-list-today {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--navy-950);
+}
+.calendar-list-item {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  column-gap: 12px;
+  border-left-width: 3px;
+}
+.calendar-list-item .legend-dot { grid-row: 1 / span 3; margin-top: 4px; }
+.calendar-list-item > :not(.legend-dot) { grid-column: 2; }
+.calendar-list-tuesday { border-left-color: var(--chess-green); }
+.calendar-list-friday { border-left-color: var(--friday-accent); }
+.calendar-list-special { border-left-color: var(--gold); }
+.calendar-list-tuesday .ev-time { color: var(--chess-green); }
+.calendar-list-friday .ev-time { color: var(--friday-accent); }
 
 /* Modal (day detail / add event / add post) */
 .modal-overlay {
@@ -2457,4 +2568,133 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
     opacity: 1;
   }
 
+}
+/* =========================================================
+   PRINT
+   Paper copies of rules, calendars and tournament details:
+   black on white whichever theme is active, no site chrome
+   or buttons, and cards kept whole across page breaks.
+   ========================================================= */
+@media print {
+  @page { margin: 1.5cm; }
+
+  :root,
+  html[data-theme="light"] {
+    --navy-950: #FFFFFF;
+    --navy-900: #FFFFFF;
+    --navy-800: #FFFFFF;
+    --slate-800: #BBBBBB;
+    --slate-600: #999999;
+    --slate-500: #555555;
+    --slate-400: #444444;
+    --slate-300: #222222;
+    --slate-200: #111111;
+    --slate-100: #000000;
+    --white: #000000;
+    --body-text: #000000;
+    --gold: #000000;
+    --gold-light: #000000;
+    --gold-10: transparent;
+    --gold-15: #BBBBBB;
+    --gold-20: #BBBBBB;
+    --gold-30: #999999;
+    --gold-60: #999999;
+    --chess-green: #000000;
+    --friday-accent: #000000;
+    --control-border: #999999;
+  }
+
+  html body {
+    background: #FFFFFF !important;
+    color: #000000;
+    font-size: 12pt;
+  }
+
+  *, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Site chrome and anything only useful on screen */
+  .site-header,
+  .site-footer,
+  .site-banner-bar,
+  #siteBanner,
+  .social-container,
+  .share-menu,
+  .newsletter-section,
+  .modal-overlay,
+  .tab-row,
+  .btn-calendar,
+  .add-to-calendar-row,
+  .calendar-nav-btn,
+  .calendar-toolbar-actions,
+  .first-step-link,
+  .faq-icon {
+    display: none !important;
+  }
+
+  /* Club name and address in place of the hidden header */
+  main::before {
+    content: "Goderich Chess Club \00B7  goderichchessclub.com";
+    display: block;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #999999;
+    font-size: 10pt;
+    color: #444444;
+  }
+
+  .container { max-width: none; padding: 0; }
+  .page-header { padding: 0 0 12px; }
+  .calendar-wrap { padding: 0; border: 0; }
+  .calendar-toolbar { justify-content: flex-start; }
+  .calendar-month-label { text-align: left; min-width: 0; }
+
+  /* Reveal-on-scroll and hover-only content would otherwise print blank */
+  .gallery-item,
+  .gallery-item img,
+  .gallery-item-caption { opacity: 1 !important; transform: none !important; }
+
+  /* Collapsed FAQ answers print expanded */
+  .faq-answer { grid-template-rows: 1fr; visibility: visible; }
+
+  /* Printers drop backgrounds by default; keep the calendar markers */
+  .legend-dot,
+  .calendar-day.has-event::after,
+  .status-pill,
+  .calendar-list-today {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .legend-dot-tuesday,
+  .calendar-day.day-tuesday-meeting::after { background: #000000 !important; }
+  .legend-dot-friday,
+  .calendar-day.day-friday-meeting::after { background: #777777 !important; }
+  .legend-dot-special,
+  .calendar-day.day-special-event::after { background: #FFFFFF !important; border: 2px solid #000000; }
+
+  /* Show where links go */
+  main a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    font-weight: normal;
+    word-break: break-all;
+  }
+
+  /* Keep short cards and headings together across pages (tournament and
+     post cards can run longer than a page, so they're left to split) */
+  .content-card,
+  .rule-card,
+  .merch-card,
+  .faq-item,
+  .existing-event-item,
+  .calendar-list-day,
+  .calendar-day,
+  img {
+    break-inside: avoid;
+  }
+  h1, h2, h3, h4 { break-after: avoid; }
 }
