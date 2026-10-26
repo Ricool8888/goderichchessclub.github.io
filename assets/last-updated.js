@@ -22,6 +22,10 @@
   }
 
   function init() {
+    // Keep the footer copyright year current.
+    var yearEl = document.getElementById("copyrightYear");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
     var el = document.getElementById("lastUpdatedText");
     if (!el) return;
 

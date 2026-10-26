@@ -1,0 +1,15 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Goderich Chess Club//goderichchessclub.com//EN
+N:;;;;
+FN:Goderich Chess Club
+ORG:Goderich Chess Club
+X-ABShowAs:COMPANY
+EMAIL;TYPE=INTERNET,WORK:goderichchessclub@gmail.com
+URL:https://goderichchessclub.com/
+item1.ADR;TYPE=WORK:;;52 Montreal St (Goderich Library);Goderich;ON;;Canada
+item1.X-ABLabel:Tuesdays 6-8 PM
+item2.ADR;TYPE=WORK:;;56 Kingston St (Goderich Legion);Goderich;ON;;Canada
+item2.X-ABLabel:Fridays 6-9 PM
+NOTE:Weekly meetings:\nTuesdays 6-8 PM at Goderich Library\, 52 Montreal St\, Goderich ON\nFridays 6-9 PM at Goderich Legion\, 56 Kingston St\, Goderich ON\nAdmission / membership is free. All skill levels welcome.
+END:VCARD

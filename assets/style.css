@@ -398,6 +398,19 @@ a { color: var(--chess-green); }
   .btn-group { flex-direction: row; }
 }
 
+.contact-save { margin-top: 20px; }
+
+.contact-save-btn {
+  font-size: 15px;
+  padding: 9px 18px;
+}
+
+.contact-save-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--slate-300);
+}
+
 .btn-primary {
   display: inline-block;
   background-color: var(--gold);
@@ -2178,6 +2191,13 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .rule-card-list strong { color: var(--white); }
 
 .rule-card-list li::marker { color: var(--gold); }
+
+.rule-card-actions { margin-top: 20px; }
+
+.rule-card-btn {
+  font-size: 15px;
+  padding: 10px 20px;
+}
 
 .rule-notation {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
