@@ -14,6 +14,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events Calendar - Goderich Chess Club</title>
 <meta name="description" content="See upcoming Goderich Chess Club meetings and special events.">
+
+<!-- Structured data: upcoming tournaments, so Google can show them in local event results.
+     Keep in sync with assets/tournaments.json; remove or update each event once it has passed. -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Goderich Winter Rapid",
+    "description": "CFC-rated 5-round Swiss rapid chess tournament (15+10). Open and U1500 sections. Free lunch for all players. Run by FIDE Arbiter Riley Khan.",
+    "startDate": "2027-01-16T09:00:00-05:00",
+    "endDate": "2027-01-16T16:00:00-05:00",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": "Goderich, ON (venue to be announced)",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Goderich",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      }
+    },
+    "image": ["https://goderichchessclub.com/assets/logos/GCC%20large%20logo.png"],
+    "url": "https://goderichchessclub.com/tournaments",
+    "offers": {
+      "@type": "Offer",
+      "price": "30",
+      "priceCurrency": "CAD",
+      "availability": "https://schema.org/InStock",
+      "url": "https://forms.gle/b3T5std5kdPZVY6L6",
+      "description": "Entry fee; CFC membership also required."
+    },
+    "organizer": {
+      "@type": "Organization",
+      "name": "Goderich Chess Club Inc.",
+      "url": "https://goderichchessclub.com/",
+      "email": "goderichchessclub@gmail.com"
+    },
+    "performer": {
+      "@type": "PerformingGroup",
+      "name": "Goderich Chess Club"
+    }
+  }
+]
+</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/logos/favicon-192.png">
 <link rel="apple-touch-icon" href="/assets/logos/apple-touch-icon.png">
@@ -140,7 +187,7 @@
         <span class="theme-thumb" aria-hidden="true"></span>
       </button>
     </div>
-    <p>&copy; 2026 Goderich Chess Club Inc. All rights reserved.  Incorporated in Ontario, Canada.<br>
+    <p>&copy; <span id="copyrightYear">2026</span> Goderich Chess Club Inc. All rights reserved.  Incorporated in Ontario, Canada.<br>
     Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a> <br> <a href="privacy">Privacy Policy</a> </p>
     <p class="last-updated">Last updated: <span id="lastUpdatedText">July 28, 2026</span></p>
   </div>
