@@ -1856,6 +1856,29 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
    ========================================================= */
 .tab-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
 
+/* Tabs plus page-wide actions (e.g. the scoresheet download) on one row. */
+.tab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.tab-toolbar .tab-row { margin-bottom: 0; }
+
+.tab-toolbar-btn {
+  font-size: 14px;
+  line-height: normal; /* match the <button> tabs beside it */
+  padding: 10px 18px;
+  border-radius: 10px;
+  border-width: 1px;
+  border-color: var(--gold-60);
+  color: var(--gold);
+}
+
+.tab-toolbar-btn:hover { border-color: var(--gold); }
+
 .tab-btn {
   background: var(--navy-900);
   border: 1px solid var(--control-border);
@@ -2076,6 +2099,132 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .merch-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
 .merch-desc { font-size: 14px; color: var(--slate-300); line-height: 1.6; }
 
+/* Merch page product cards: photo on top, colours revealed on hover/focus.
+   Five cards sit 2-up then 3-up, with the last row centred. */
+@media (min-width: 640px) {
+  .merch-products { grid-template-columns: repeat(4, 1fr); }
+  .merch-products > .merch-product { grid-column: span 2; }
+  .merch-products > .merch-product:last-child:nth-child(odd) { grid-column: 2 / 4; }
+}
+
+@media (min-width: 960px) {
+  .merch-products { grid-template-columns: repeat(6, 1fr); }
+  .merch-products > .merch-product:last-child:nth-child(odd) { grid-column: span 2; }
+  .merch-products > .merch-product:nth-child(4) { grid-column: 2 / 4; }
+  .merch-products > .merch-product:nth-child(5) { grid-column: 4 / 6; }
+}
+
+.merch-product { padding: 16px 16px 24px; }
+.merch-product:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+.merch-photo {
+  position: relative;
+  aspect-ratio: 5 / 6;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FFFFFF;
+  margin-bottom: 18px;
+}
+
+.merch-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.merch-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold-04);
+  border: 1px dashed var(--slate-800);
+  color: var(--slate-400);
+  font-size: 14px;
+}
+
+.merch-photo-placeholder .merch-icon { margin-bottom: 12px; }
+
+/* Without hover (touch screens, print) the colour list always shows over the photo. */
+.merch-colours {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 16px 16px;
+  background: color-mix(in srgb, var(--navy-950) 92%, transparent);
+  border-top: 1px solid var(--gold-30);
+  text-align: left;
+}
+
+.merch-colours-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 8px;
+}
+
+.merch-colours-note { font-size: 13px; color: var(--slate-300); margin: 0; }
+
+.merch-swatches {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.merch-swatches li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--slate-200);
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 1px var(--slate-600);
+  flex-shrink: 0;
+}
+
+@media (hover: hover) {
+  .merch-colours {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .merch-product:hover .merch-colours,
+  .merch-product:focus-within .merch-colours {
+    opacity: 1;
+    transform: none;
+  }
+
+  .merch-product:hover .merch-photo img,
+  .merch-product:focus-within .merch-photo img { transform: scale(1.04); }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: reduce) {
+  .merch-colours,
+  .merch-photo img { transition: none; }
+  .merch-product:hover .merch-photo img,
+  .merch-product:focus-within .merch-photo img { transform: none; }
+}
+
+@media print {
+  .merch-colours { opacity: 1; transform: none; }
+}
+
 .first-tournament[hidden],
 .tournament-grid[hidden] { display: none; }
 
@@ -2191,13 +2340,6 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .rule-card-list strong { color: var(--white); }
 
 .rule-card-list li::marker { color: var(--gold); }
-
-.rule-card-actions { margin-top: 20px; }
-
-.rule-card-btn {
-  font-size: 15px;
-  padding: 10px 20px;
-}
 
 .rule-notation {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -2662,6 +2804,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   .newsletter-section,
   .modal-overlay,
   .tab-row,
+  .tab-toolbar-btn,
   .btn-calendar,
   .add-to-calendar-row,
   .calendar-nav-btn,
