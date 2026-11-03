@@ -2117,9 +2117,10 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .merch-product { padding: 16px 16px 24px; }
 .merch-product:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
+/* The frame wraps the picture and the colour list. The picture (or the
+   placeholder) holds the 5:6 shape so the list can sit below it. */
 .merch-photo {
   position: relative;
-  aspect-ratio: 5 / 6;
   border-radius: 12px;
   overflow: hidden;
   background: #FFFFFF;
@@ -2129,32 +2130,36 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .merch-photo img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 5 / 6;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
 .merch-photo-placeholder {
+  background: var(--gold-04);
+  border: 1px dashed var(--slate-800);
+}
+
+.merch-placeholder {
+  aspect-ratio: 5 / 6;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--gold-04);
-  border: 1px dashed var(--slate-800);
   color: var(--slate-400);
   font-size: 14px;
 }
 
-.merch-photo-placeholder .merch-icon { margin-bottom: 12px; }
+.merch-placeholder .merch-icon { margin-bottom: 12px; }
 
-/* Without hover (touch screens, print) the colour list always shows over the photo. */
+/* Without hover (touch screens, print) the colour list sits below the
+   picture; with a mouse it slides up over the picture on hover. */
 .merch-colours {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
+  z-index: 1;
   padding: 14px 16px 16px;
-  background: color-mix(in srgb, var(--navy-950) 92%, transparent);
+  background: var(--navy-950);
   border-top: 1px solid var(--gold-30);
   text-align: left;
 }
@@ -2199,6 +2204,11 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 @media (hover: hover) {
   .merch-colours {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: color-mix(in srgb, var(--navy-950) 92%, transparent);
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.25s ease, transform 0.25s ease;
@@ -2222,7 +2232,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 }
 
 @media print {
-  .merch-colours { opacity: 1; transform: none; }
+  .merch-colours { position: relative; opacity: 1; transform: none; }
 }
 
 .first-tournament[hidden],
