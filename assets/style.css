@@ -1636,22 +1636,6 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 }
 .site-banner-link:hover { text-decoration: underline; }
 
-.site-banner-pause {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  background: none;
-  border: 1px solid var(--control-border);
-  border-radius: 50%;
-  color: var(--slate-100);
-  cursor: pointer;
-}
-.site-banner-pause svg { width: 14px; height: 14px; fill: currentColor; }
-.site-banner-pause:hover { border-color: var(--gold); color: var(--gold); }
-
 .offer-grid {
   display: grid;
   grid-template-columns: 1fr;

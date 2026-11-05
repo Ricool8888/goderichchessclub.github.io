@@ -1,35 +1,7 @@
 (function () {
   "use strict";
 
-  var PAUSE_KEY = "gcc-countdown-paused";
-  var PAUSE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
-  var PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
-
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
-
-  // The visitor's pause choice is remembered across pages. With no stored
-  // choice, the countdown starts paused for visitors who ask for reduced motion.
-  function isPaused() {
-    var stored = null;
-    try { stored = window.localStorage.getItem(PAUSE_KEY); } catch (e) { /* storage unavailable */ }
-    if (stored !== null) return stored === "true";
-    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }
-
-  function storePaused(paused) {
-    try { window.localStorage.setItem(PAUSE_KEY, paused ? "true" : "false"); } catch (e) { /* storage unavailable */ }
-  }
-
-  function plural(n, unit) { return n + " " + unit + (n === 1 ? "" : "s"); }
-
-  // What a paused countdown shows: the time left, rounded down, with no seconds
-  // so it doesn't look like a clock that has stopped.
-  function formatStatic(msRemaining) {
-    var totalMinutes = Math.max(0, Math.floor(msRemaining / 60000));
-    if (totalMinutes >= 1440) return plural(Math.floor(totalMinutes / 1440), "day");
-    if (totalMinutes >= 60) return plural(Math.floor(totalMinutes / 60), "hour");
-    return plural(totalMinutes, "minute");
-  }
 
   function formatCountdown(msRemaining) {
     var totalSeconds = Math.max(0, Math.floor(msRemaining / 1000));
@@ -52,7 +24,6 @@
     if (!data.id || !data.message) return;
 
     var deadline = null;
-    var pauseBtn = null;
     if (data.countdown && data.countdown.enabled && data.countdown.deadlineUTC) {
       deadline = new Date(data.countdown.deadlineUTC);
       // Auto-expire: once the deadline has passed, don't show this banner
@@ -78,11 +49,6 @@
       countdownEl.setAttribute("aria-live", "off");
       bar.appendChild(countdownEl);
 
-      pauseBtn = document.createElement("button");
-      pauseBtn.type = "button";
-      pauseBtn.className = "site-banner-pause";
-
-      var paused = isPaused();
       var update = function () {
         var remaining = deadline.getTime() - Date.now();
         if (remaining <= 0) {
@@ -90,22 +56,9 @@
           bar.remove();
           return;
         }
-        // Paused: the text only changes when the page is next loaded.
-        if (!paused) countdownEl.textContent = formatCountdown(remaining);
+        countdownEl.textContent = formatCountdown(remaining);
       };
-      var showState = function () {
-        var remaining = deadline.getTime() - Date.now();
-        countdownEl.textContent = paused ? formatStatic(remaining) : formatCountdown(remaining);
-        pauseBtn.innerHTML = paused ? PLAY_ICON : PAUSE_ICON;
-        pauseBtn.setAttribute("aria-label", paused ? "Resume countdown" : "Pause countdown");
-        pauseBtn.title = paused ? "Resume countdown" : "Pause countdown";
-      };
-      pauseBtn.addEventListener("click", function () {
-        paused = !paused;
-        storePaused(paused);
-        showState();
-      });
-      showState();
+      update();
       var localInterval = setInterval(update, 1000);
     }
 
@@ -116,8 +69,6 @@
       link.textContent = data.linkText + " \u2192";
       bar.appendChild(link);
     }
-
-    if (pauseBtn) bar.appendChild(pauseBtn);
 
     mount.appendChild(bar);
   }
