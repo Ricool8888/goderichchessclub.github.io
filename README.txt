@@ -39,6 +39,22 @@ Gallery page:
 
 How pages work:
 
+      Shared header and footer (every page):
+            The menu bar and footer are kept identical on all pages from
+            partials/header.html and partials/footer.html. Change those files,
+            then run "node scripts/sync-shared-blocks.mjs" in the repo root and
+            commit the pages it updates — it also marks the active menu link for
+            each page. The deploy workflow runs the same script with --check and
+            fails if a page has drifted, so don't hand-edit a page's header or
+            footer. The mobile menu behaviour (Escape and click-outside to close)
+            lives once in assets/nav.js.
+
+      FAQ page:
+            Questions and answers are written directly in faq.html. The FAQPage
+            structured data in that page's <head> is generated from them by
+            scripts/generate-faq-schema.mjs during deploy, so editing an answer
+            needs no extra step — just don't edit the generated block.
+
       Posts and news page:
             How this blog works: posts come from assets/posts.json. To publish
             a new post, add it directly to that file in the repo and commit —

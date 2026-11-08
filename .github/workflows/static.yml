@@ -37,10 +37,14 @@ jobs:
           fetch-depth: 0
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Check shared header and footer
+        run: node scripts/sync-shared-blocks.mjs --check
       - name: Stamp last-updated dates
         run: node scripts/stamp-last-updated.mjs
       - name: Generate event structured data
         run: node scripts/generate-event-schema.mjs
+      - name: Generate FAQ structured data
+        run: node scripts/generate-faq-schema.mjs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
