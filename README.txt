@@ -341,8 +341,8 @@ day you changed the file. Keep the dates sorted - it is easier to scan.
 -------------------------------------------------------------------------------
 4.5 assets/tournaments.json - tournaments
 -------------------------------------------------------------------------------
-Drives both the Tournaments page tabs and the web addresses search engines
-read. One object per tournament:
+Drives the Tournaments page tabs, and - together with events.json - the event
+information search engines read. One object per tournament:
 
       id, status, date, endDate, title, format, location, entryFee,
       description, resultsUrl, extraLinks
