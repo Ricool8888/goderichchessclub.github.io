@@ -1,15 +1,20 @@
 (function () {
   "use strict";
 
-  // Update these if the repo ever moves to a different owner/name.
-  var REPO_OWNER = "Ricool8888";
-  var REPO_NAME = "goderichchessclub.github.io";
+  // Page dates are written by scripts/stamp-last-updated.mjs during the deploy
+  // workflow, so the footer needs no third-party request (the old GitHub API
+  // lookup was rate-limited per visitor IP and fell back to a stale date).
+  var DATA_URL = "assets/last-updated.json";
 
   var MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
 
-  function formatDate(d) {
-    return MONTH_NAMES[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  function formatDate(iso) {
+    var parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    if (!parts) return "";
+    var month = MONTH_NAMES[parseInt(parts[2], 10) - 1];
+    if (!month) return "";
+    return month + " " + parseInt(parts[3], 10) + ", " + parts[1];
   }
 
   function currentFilePath() {
@@ -29,27 +34,26 @@
     var el = document.getElementById("lastUpdatedText");
     if (!el) return;
 
+    var wrapper = el.closest ? el.closest(".last-updated") : el.parentNode;
     var path = currentFilePath();
-    var apiUrl = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME +
-      "/commits?path=" + encodeURIComponent(path) + "&per_page=1";
 
-    fetch(apiUrl, { headers: { "Accept": "application/vnd.github+json" } })
+    fetch(DATA_URL, { cache: "no-cache" })
       .then(function (res) {
-        if (!res.ok) throw new Error("GitHub API request failed");
+        if (!res.ok) throw new Error("Missing last-updated data");
         return res.json();
       })
-      .then(function (commits) {
-        if (!commits || !commits.length) throw new Error("No commit history found");
-        var dateStr = commits[0].commit && commits[0].commit.committer && commits[0].commit.committer.date;
-        if (!dateStr) throw new Error("No commit date in response");
-        var date = new Date(dateStr);
-        if (isNaN(date.getTime())) throw new Error("Unparseable date");
-        el.textContent = formatDate(date);
+      .then(function (data) {
+        var dates = (data && data.pages) || {};
+        var text = formatDate(dates[path]);
+        if (!text) throw new Error("No date for " + path);
+        el.textContent = text;
+        // The paragraph ships hidden so visitors never see an empty or stale
+        // date; it only appears once a real one is available.
+        if (wrapper) wrapper.hidden = false;
       })
       .catch(function () {
-        // If the API is unreachable, rate-limited, or the repo/path lookup
-        // fails for any reason, silently keep whatever fallback text is
-        // already in the HTML rather than showing an error to visitors.
+        // Leave the footer date hidden rather than showing a hardcoded date
+        // that goes stale whenever the page is edited.
       });
   }
 

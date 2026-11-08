@@ -34,7 +34,9 @@
   // opts: { uid, title, description, location, startDate ("YYYY-MM-DD"),
   //         startTime ("HH:MM" 24hr), endTime ("HH:MM" 24hr),
   //         endDate (optional "YYYY-MM-DD" - for multi-day events; defaults
-  //         to startDate when omitted), rrule (optional, e.g. "FREQ=WEEKLY;BYDAY=TU") }
+  //         to startDate when omitted), rrule (optional, e.g. "FREQ=WEEKLY;BYDAY=TU"),
+  //         exdates (optional array of "YYYY-MM-DD" dates the recurring
+  //         event skips, e.g. club closures) }
   function buildICS(opts) {
     var endDate = opts.endDate || opts.startDate;
     var dtStart = opts.startDate.replace(/-/g, "") + "T" + opts.startTime.replace(":", "") + "00";
@@ -53,6 +55,14 @@
     ];
 
     if (opts.rrule) lines.push("RRULE:" + opts.rrule);
+
+    // Skipped dates (club closures) travel with the recurring event so the
+    // imported calendar matches what the website shows.
+    if (opts.exdates && opts.exdates.length) {
+      lines.push("EXDATE:" + opts.exdates.map(function (date) {
+        return date.replace(/-/g, "") + "T" + opts.startTime.replace(":", "") + "00";
+      }).join(","));
+    }
 
     lines.push("SUMMARY:" + escapeICS(opts.title));
     if (opts.location) lines.push("LOCATION:" + escapeICS(opts.location));
