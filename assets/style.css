@@ -931,6 +931,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .calendar-day.day-tuesday-meeting .day-number { color: var(--chess-green); }
 .calendar-day.day-friday-meeting .day-number { color: var(--friday-accent); }
 .calendar-day.day-special-event .day-number { color: var(--gold); }
+.calendar-day.day-closed .day-number { color: var(--slate-400); text-decoration: line-through; }
 
 .day-event-dot {
   font-size: 11px;
@@ -946,6 +947,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .day-event-dot.recurring { background: var(--tuesday-10); border-color: var(--tuesday-35); color: var(--chess-green); }
 .day-event-dot.recurring-alt { background: var(--friday-10); border-color: var(--friday-35); color: var(--friday-accent); }
+.day-event-dot.closed { background: transparent; border-color: var(--slate-600); color: var(--slate-400); }
 
 @media (max-width: 640px) {
   .calendar-day { min-height: 56px; padding: 6px; }
@@ -965,6 +967,13 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .calendar-day.day-tuesday-meeting::after { background: var(--chess-green); border-radius: 50%; }
 .calendar-day.day-friday-meeting::after { background: var(--friday-accent); }
 .calendar-day.day-special-event::after { background: var(--gold); transform: rotate(45deg); }
+/* Closures get a hollow ring, so "closed" reads differently from any meeting */
+.calendar-day.day-closed::after {
+  background: transparent;
+  border: 2px solid var(--slate-400);
+  border-radius: 50%;
+  box-sizing: border-box;
+}
 
 /* Narrow cells have no room beside a two-digit number, so the marker sits
    below it instead, where it can never cover the digits. */
@@ -1109,6 +1118,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .legend-dot-tuesday { background: var(--chess-green); border-radius: 50%; }
 .legend-dot-friday { background: var(--friday-accent); }
 .legend-dot-special { background: var(--gold); transform: rotate(45deg); }
+.legend-dot-closed { background: transparent; border: 2px solid var(--slate-400); border-radius: 50%; box-sizing: border-box; }
 
 .add-to-calendar-row {
   display: flex;
@@ -2847,6 +2857,9 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   .calendar-day.day-friday-meeting::after { background: #777777 !important; }
   .legend-dot-special,
   .calendar-day.day-special-event::after { background: #FFFFFF !important; border: 2px solid #000000; }
+  .legend-dot-closed,
+  .calendar-day.day-closed::after,
+  .calendar-day.day-closed .day-number { background: transparent !important; border-color: #777777 !important; color: #777777 !important; }
 
   /* Show where links go */
   main a[href^="http"]::after {

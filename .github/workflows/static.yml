@@ -31,8 +31,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history so each page's footer date can come from the commit
+          # that last touched that page.
+          fetch-depth: 0
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Stamp last-updated dates
+        run: node scripts/stamp-last-updated.mjs
+      - name: Generate event structured data
+        run: node scripts/generate-event-schema.mjs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

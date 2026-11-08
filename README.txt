@@ -51,6 +51,8 @@ How pages work:
             Click a day to view what's scheduled. To add a new event yourself,
             edit assets/events.json directly in the repo and commit the change —
             visitors can view the calendar but can't submit events.
+            Holiday closures come from assets/closures.json: add a date there
+            and that day's weekly meeting is hidden and shown as "Club closed".
 
       Tournaments page:
             How this page works: tournaments are listed in assets/tournaments.json.

@@ -31,7 +31,9 @@
     viewYear: new Date().getFullYear(),
     viewMonth: new Date().getMonth(),
     view: initialView(),
-    publishedEvents: []
+    publishedEvents: [],
+    // "YYYY-MM-DD" -> closure reason, from assets/closures.json
+    closures: {}
   };
 
   // A visitor's last choice wins; otherwise small screens start in list
@@ -61,11 +63,31 @@
       .catch(function () { return []; });
   }
 
+  function fetchClosures() {
+    return fetch("assets/closures.json")
+      .then(function (res) { if (!res.ok) throw new Error("no closures file"); return res.json(); })
+      .then(function (data) {
+        var map = {};
+        ((data && data.closures) || []).forEach(function (c) {
+          if (c && c.date) map[c.date] = c.reason || "Club closed";
+        });
+        return map;
+      })
+      .catch(function () { return {}; });
+  }
+
   function eventsForDate(iso) {
     return state.publishedEvents.filter(function (e) { return e.date === iso; });
   }
 
+  function closureForDate(iso) {
+    return state.closures[iso] || null;
+  }
+
   function recurringEventsForDate(iso, dayOfWeek) {
+    // A closure overrides the weekly meeting, so the calendar never
+    // advertises a club night on a day the club is closed.
+    if (state.closures[iso]) return [];
     return RECURRING_EVENTS.filter(function (r) {
       if (r.dayOfWeek !== dayOfWeek) return false;
       if (r.startDate && iso < r.startDate) return false;
@@ -117,11 +139,14 @@
 
       var dayEvents = eventsForDate(iso);
       var recurring = recurringEventsForDate(iso, dayOfWeek);
-      if (dayEvents.length || recurring.length) btn.classList.add("has-event");
+      var closure = closureForDate(iso);
+      if (dayEvents.length || recurring.length || closure) btn.classList.add("has-event");
 
       // Special events (from events.json) take visual priority over a
       // recurring weekly meeting if a day happens to have both.
-      if (dayEvents.length) {
+      if (closure) {
+        btn.classList.add("day-closed");
+      } else if (dayEvents.length) {
         btn.classList.add("day-special-event");
       } else if (recurring.some(function (r) { return r.cssClass === "recurring"; })) {
         btn.classList.add("day-tuesday-meeting");
@@ -148,7 +173,15 @@
         btn.appendChild(dot);
       });
 
+      if (closure) {
+        var closedDot = document.createElement("span");
+        closedDot.className = "day-event-dot closed";
+        closedDot.textContent = "No meeting — " + closure.toLowerCase();
+        btn.appendChild(closedDot);
+      }
+
       var ariaLabel = MONTH_NAMES[state.viewMonth] + " " + d;
+      if (closure) ariaLabel += ", no meeting, " + closure.toLowerCase();
       if (recurring.length) ariaLabel += ", " + recurring.map(function (r) { return r.title; }).join(", ");
       if (dayEvents.length) ariaLabel += ", " + dayEvents.length + " event(s)";
       btn.setAttribute("aria-label", ariaLabel);
@@ -177,7 +210,8 @@
       var dateObj = new Date(state.viewYear, state.viewMonth, d);
       var recurring = recurringEventsForDate(iso, dateObj.getDay());
       var dayEvents = eventsForDate(iso);
-      if (!recurring.length && !dayEvents.length) continue;
+      var closure = closureForDate(iso);
+      if (!recurring.length && !dayEvents.length && !closure) continue;
 
       var day = document.createElement("section");
       day.className = "calendar-list-day";
@@ -198,6 +232,13 @@
         day.appendChild(buildListItem(r, r.cssClass === "recurring" ? "tuesday" : "friday"));
       });
       dayEvents.forEach(function (ev) { day.appendChild(buildListItem(ev, "special")); });
+      if (closure) {
+        day.appendChild(buildListItem({
+          time: "",
+          title: "No meeting",
+          description: closure.charAt(0) + closure.slice(1).toLowerCase() + " — the club is not meeting this day."
+        }, "closed"));
+      }
 
       list.appendChild(day);
     }
@@ -233,10 +274,16 @@
 
     listEl.innerHTML = "";
     var recurring = recurringEventsForDate(iso, dayOfWeek);
+    var closure = closureForDate(iso);
     recurring.forEach(function (r) { listEl.appendChild(buildEventItem(r)); });
     eventsForDate(iso).forEach(function (ev) { listEl.appendChild(buildEventItem(ev)); });
 
-    if (!recurring.length && eventsForDate(iso).length === 0) {
+    if (closure) {
+      var closedNote = document.createElement("p");
+      closedNote.className = "muted-note";
+      closedNote.textContent = closure + " — no meeting on this day.";
+      listEl.appendChild(closedNote);
+    } else if (!recurring.length && eventsForDate(iso).length === 0) {
       var p = document.createElement("p");
       p.className = "muted-note";
       p.textContent = "No events scheduled for this day.";
@@ -295,8 +342,9 @@
       if (e.target === this) closeDayModal();
     });
 
-    fetchPublishedEvents().then(function (events) {
-      state.publishedEvents = events;
+    Promise.all([fetchPublishedEvents(), fetchClosures()]).then(function (results) {
+      state.publishedEvents = results[0];
+      state.closures = results[1];
       render();
     });
   }
