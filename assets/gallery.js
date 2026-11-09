@@ -162,9 +162,17 @@
   }
 
   /*
+   * The card that opened the lightbox, so focus can go
+   * back there when it closes.
+   */
+  var returnFocusTo = null;
+
+  /*
    * Open the full-size photo lightbox.
    */
-  function openLightbox(photo) {
+  function openLightbox(photo, trigger) {
+    returnFocusTo =
+      trigger || document.activeElement;
     var overlay =
       document.getElementById("lightboxOverlay");
 
@@ -193,6 +201,19 @@
       "aria-hidden",
       "false"
     );
+
+    /*
+     * Move focus into the overlay. The close button is
+     * its only control, so keyboard users stay there.
+     */
+    var closeBtn =
+      document.getElementById(
+        "lightboxCloseBtn"
+      );
+
+    if (closeBtn) {
+      closeBtn.focus();
+    }
   }
 
   /*
@@ -202,12 +223,25 @@
     var overlay =
       document.getElementById("lightboxOverlay");
 
+    if (!overlay.classList.contains("open")) {
+      return;
+    }
+
     overlay.classList.remove("open");
 
     overlay.setAttribute(
       "aria-hidden",
       "true"
     );
+
+    /*
+     * Send focus back to the card the visitor came from.
+     */
+    if (returnFocusTo && returnFocusTo.isConnected) {
+      returnFocusTo.focus();
+    }
+
+    returnFocusTo = null;
   }
 
   /*
@@ -279,7 +313,7 @@
     card.addEventListener(
       "click",
       function () {
-        openLightbox(photo);
+        openLightbox(photo, card);
       }
     );
 
@@ -539,13 +573,21 @@
     }
 
     /*
-     * Allow Escape to close the lightbox.
+     * Escape closes the lightbox, and Tab stays inside it:
+     * the close button is the only control in the overlay.
      */
     document.addEventListener(
       "keydown",
       function (e) {
+        if (!lightboxOverlay || !lightboxOverlay.classList.contains("open")) {
+          return;
+        }
+
         if (e.key === "Escape") {
           closeLightbox();
+        } else if (e.key === "Tab" && lightboxCloseBtn) {
+          e.preventDefault();
+          lightboxCloseBtn.focus();
         }
       }
     );

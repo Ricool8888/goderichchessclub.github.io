@@ -27,10 +27,10 @@
   <div class="container">
     <div class="navbar-flex">
       <a href="./" class="brand-logo">
-        <img src="assets/logos/Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" width="32" height="32" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
+        <img src="assets/logos/gcc-header-logo.webp" alt="" aria-hidden="true" width="32" height="48" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
         <span class="gold-text">Goderich Chess Club</span>
       </a>
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
       <nav class="nav-links" id="primaryNav" aria-label="Main Navigation">
         <a href="./" class="nav-item">Home</a>
         <a href="about" class="nav-item">About Us</a>
@@ -55,7 +55,7 @@
       <p class="page-desc">Brand new chess books, sold to help fund club equipment / expenses. Email us to arrange pickup at a Tuesday or Friday meeting.  Hover over a book for a preview of its cover, or select its title to view the cover larger.</p>
     </div>
 
-    <div class="table-wrap" role="region" aria-label="Books for sale">
+    <section class="table-wrap" aria-label="Books for sale">
       <table class="price-table">
         <thead>
           <tr>
@@ -80,7 +80,7 @@
           <tr><td>The Art of Sacrifice in Chess</td><td>Rudolf Spielmann</td><td class="desc-col"><p>"The beauty of a game of chess is usually appraised, and with good reason, according to the sacrifices it contains. On principle we incline to rate a sacrificial game more highly than a positional game. Instinctively we place the moral value above the scientific. We honor Capablanca, but our hearts beat higher when Morphy’s name is mentioned."</p></td><td class="price-col">$30</td></tr>
         </tbody>
       </table>
-    </div>
+    </section>
     <p class="books-note">Interested in a title? Email <a href="mailto:goderichchessclub@gmail.com">goderichchessclub@gmail.com</a> and we'll set it aside for you at the next meeting.</p>
 
     <div class="social-container">
@@ -127,10 +127,12 @@
 </footer>
 
 <!-- Lightbox for viewing a book cover on touch screens -->
-<div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Book cover" aria-hidden="true">
+<div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Book cover">
   <button type="button" class="lightbox-close" id="lightboxCloseBtn" aria-label="Close">&times;</button>
   <div class="lightbox-content">
-    <img id="lightboxImage" src="" alt="">
+    <!-- Filled in by script when a photo is opened; the source below is a
+         transparent pixel so the element is valid before anything loads. -->
+    <img id="lightboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
     <p class="lightbox-caption" id="lightboxCaption"></p>
   </div>
 </div>

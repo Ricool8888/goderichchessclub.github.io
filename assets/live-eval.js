@@ -4,8 +4,9 @@
 // Instead we follow the same featured game through the public Lichess TV feed
 // (https://lichess.org/api/tv/feed - every move arrives as a FEN) and evaluate
 // each position with Stockfish 10, running in a Web Worker so the page stays
-// responsive. Nothing loads until the section is scrolled into view, and
-// analysis pauses while the tab is in the background.
+// responsive. The engine is ~1.6 MB, so nothing loads until the visitor asks
+// for the evaluation with the "Show evaluation" button. Analysis pauses while
+// the tab is in the background.
 (function () {
   "use strict";
 
@@ -21,6 +22,9 @@
   var pendingFen = null;    // newest position waiting for the engine
   var retryDelay = 5000;
   var paused = false;       // the visitor paused the live game
+  var enabled = false;      // the visitor asked for the evaluation
+  var started = false;      // the engine has been requested once
+  var feedAbort = null;     // lets us stop the TV feed when switched off
 
   document.addEventListener("DOMContentLoaded", function () {
     bar = document.getElementById("evalBar");
@@ -30,15 +34,53 @@
 
     if (!window.Worker || !window.Blob || !window.fetch || !window.TextDecoder) return unavailable();
 
-    if (!("IntersectionObserver" in window)) return start();
+    var toggle = document.getElementById("liveEvalToggle");
+    if (toggle) {
+      toggle.addEventListener("click", function () { setEnabled(!enabled); });
+      return;
+    }
+
+    // Without the button (older cached markup) fall back to the previous
+    // behaviour and start when the bar scrolls into view.
+    if (!("IntersectionObserver" in window)) return setEnabled(true);
     var observer = new IntersectionObserver(function (entries) {
       if (entries.some(function (e) { return e.isIntersecting; })) {
         observer.disconnect();
-        start();
+        setEnabled(true);
       }
     }, { rootMargin: "200px" });
     observer.observe(bar);
   });
+
+  // Called by the "Show evaluation" / "Hide evaluation" button.
+  function setEnabled(value) {
+    enabled = !!value;
+    var toggle = document.getElementById("liveEvalToggle");
+
+    if (toggle) {
+      toggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+      toggle.textContent = enabled ? "Hide evaluation" : "Show evaluation";
+    }
+
+    bar.classList.toggle("is-off", !enabled);
+    bar.setAttribute("aria-hidden", enabled ? "false" : "true");
+
+    if (!enabled) {
+      if (searching) send("stop");
+      searching = false;
+      pendingFen = null;
+      if (feedAbort) { feedAbort.abort(); feedAbort = null; }
+      return;
+    }
+
+    if (!started) {
+      started = true;
+      bar.setAttribute("aria-label", "Engine evaluation loading");
+      start();
+    } else if (pendingFen && !searching && !paused) {
+      analyse(pendingFen);
+    }
+  }
 
   function start() {
     try {
@@ -81,7 +123,9 @@
   // ---- Lichess TV feed (newline-delimited JSON stream) ----
 
   function connectFeed() {
-    fetch(FEED_URL, { headers: { Accept: "application/x-ndjson" } })
+    if (!enabled) return;
+    feedAbort = new AbortController();
+    fetch(FEED_URL, { headers: { Accept: "application/x-ndjson" }, signal: feedAbort.signal })
       .then(function (res) {
         if (!res.ok || !res.body) throw new Error("HTTP " + res.status);
         retryDelay = 5000;
@@ -101,7 +145,9 @@
       })
       .catch(function () { /* fall through to reconnect */ })
       .then(function () {
-        // The stream can end (network change, server restart) - reconnect.
+        // The stream can end (network change, server restart) - reconnect,
+        // unless the visitor has switched the evaluation off.
+        if (!enabled) return;
         setTimeout(connectFeed, retryDelay);
         retryDelay = Math.min(retryDelay * 2, 60000);
       });
@@ -123,6 +169,7 @@
   // ---- Engine ----
 
   function analyse(fen) {
+    if (!enabled) { pendingFen = null; return; }
     if (paused || document.hidden || searching) {
       pendingFen = fen;
       if (searching && !document.hidden) send("stop");
@@ -185,5 +232,7 @@
   function unavailable() {
     if (worker) { worker.terminate(); worker = null; }
     if (bar) bar.hidden = true;
+    var toggle = document.getElementById("liveEvalToggle");
+    if (toggle) toggle.hidden = true;
   }
 })();

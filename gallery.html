@@ -27,10 +27,10 @@
   <div class="container">
     <div class="navbar-flex">
       <a href="./" class="brand-logo">
-        <img src="assets/logos/Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" width="32" height="32" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
+        <img src="assets/logos/gcc-header-logo.webp" alt="" aria-hidden="true" width="32" height="48" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
         <span class="gold-text">Goderich Chess Club</span>
       </a>
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
       <nav class="nav-links" id="primaryNav" aria-label="Main Navigation">
         <a href="./" class="nav-item">Home</a>
         <a href="about" class="nav-item">About Us</a>
@@ -179,10 +179,12 @@
 </footer>
 
 <!-- Lightbox for viewing a photo enlarged -->
-<div class="lightbox-overlay" id="lightboxOverlay" aria-hidden="true">
+<div class="lightbox-overlay" id="lightboxOverlay">
   <button type="button" class="lightbox-close" id="lightboxCloseBtn" aria-label="Close">&times;</button>
   <div class="lightbox-content">
-    <img id="lightboxImage" src="" alt="">
+    <!-- Filled in by script when a photo is opened; the source below is a
+         transparent pixel so the element is valid before anything loads. -->
+    <img id="lightboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
     <p class="lightbox-caption" id="lightboxCaption"></p>
   </div>
 </div>

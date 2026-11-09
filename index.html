@@ -85,10 +85,10 @@
   <div class="container">
     <div class="navbar-flex">
       <a href="./" class="brand-logo">
-        <img src="assets/logos/Goderich Chess Club smaller logo.png" alt="" aria-hidden="true" width="32" height="32" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
+        <img src="assets/logos/gcc-header-logo.webp" alt="" aria-hidden="true" width="32" height="48" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
         <span class="gold-text">Goderich Chess Club</span>
       </a>
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
       <nav class="nav-links" id="primaryNav" aria-label="Main Navigation">
         <a href="./" class="nav-item active" aria-current="page">Home</a>
         <a href="about" class="nav-item">About Us</a>
@@ -151,7 +151,10 @@
               Goderich Library
               <span class="address-sub">52 Montreal St, Goderich, ON N7A 2G4</span>
             </address>
-            <iframe class="meeting-map" loading="lazy" title="Map to Goderich Library" src="https://www.google.com/maps?q=Goderich+Public+Library,+52+Montreal+St,+Goderich,+ON+N7A+2G4&output=embed"></iframe>
+            <button type="button" class="map-facade" data-map-facade data-map-title="Map to Goderich Library" data-map-src="https://www.google.com/maps?q=Goderich+Public+Library,+52+Montreal+St,+Goderich,+ON+N7A+2G4&amp;output=embed">
+              <span class="map-facade-icon" aria-hidden="true">&#128506;</span>
+              <span>Show map</span>
+            </button>
           </div>
         </div>
 
@@ -172,7 +175,10 @@
               Goderich Legion
               <span class="address-sub">56 Kingston St, Goderich, ON N7A 3K5</span>
             </address>
-            <iframe class="meeting-map" loading="lazy" title="Map to Goderich Legion" src="https://www.google.com/maps?q=Goderich+Legion,+56+Kingston+St,+Goderich,+ON+N7A+3K5&output=embed"></iframe>
+            <button type="button" class="map-facade" data-map-facade data-map-title="Map to Goderich Legion" data-map-src="https://www.google.com/maps?q=Goderich+Legion,+56+Kingston+St,+Goderich,+ON+N7A+3K5&amp;output=embed">
+              <span class="map-facade-icon" aria-hidden="true">&#128506;</span>
+              <span>Show map</span>
+            </button>
           </div>
         </div>
 
@@ -226,7 +232,7 @@
           <div class="puzzle-widget" id="puzzleWidget">
             <p class="puzzle-status" role="status" aria-live="polite">Loading today&rsquo;s puzzle&hellip;</p>
             <div class="puzzle-board-wrap">
-              <div class="puzzle-board" aria-label="Chess puzzle board"></div>
+              <div class="puzzle-board" role="group" aria-label="Chess puzzle board"></div>
             </div>
             <div class="puzzle-controls">
               <button type="button" class="puzzle-btn" data-puzzle="hint">Hint</button>
@@ -240,13 +246,16 @@
           <h3 class="puzzle-title">Live Games</h3>
           <p>Watch top-rated games being played right now on <a href="https://lichess.org/tv" target="_blank" rel="noopener noreferrer">Lichess TV</a>.</p>
           <div class="live-game">
-            <iframe class="puzzle-frame" data-lichess-frame="tv" title="Lichess TV live game" loading="lazy" src="https://lichess.org/tv/frame?theme=brown&amp;bg=dark" allowtransparency="true" frameborder="0"></iframe>
-            <div class="eval-bar" id="evalBar" role="img" aria-label="Engine evaluation loading">
+            <iframe class="puzzle-frame" data-lichess-frame="tv" title="Lichess TV live game" loading="lazy" src="https://lichess.org/tv/frame?theme=brown&amp;bg=dark"></iframe>
+            <div class="eval-bar is-off" id="evalBar" role="img" aria-label="Engine evaluation loading" aria-hidden="true">
               <div class="eval-bar-white"></div>
               <span class="eval-bar-label" aria-hidden="true"></span>
             </div>
             <p class="live-game-paused-note" hidden>Live game paused</p>
-            <button type="button" class="puzzle-btn live-game-pause" id="liveGamePause">Pause live game</button>
+            <div class="live-game-actions">
+              <button type="button" class="puzzle-btn live-game-pause" id="liveGamePause">Pause live game</button>
+              <button type="button" class="puzzle-btn live-game-eval" id="liveEvalToggle" aria-pressed="false">Show evaluation</button>
+            </div>
           </div>
         </div>
       </div>
@@ -300,6 +309,7 @@
 
 <script type="module" src="assets/puzzle.js"></script>
 <script src="assets/live-eval.js"></script>
+<script src="assets/map-facade.js"></script>
 <script src="assets/theme.js"></script>
 <script src="assets/share.js"></script>
 <script>
