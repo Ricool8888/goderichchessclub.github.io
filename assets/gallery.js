@@ -15,6 +15,20 @@
   var BATCH_SIZE = 8;
   var imageObserver = null;
 
+  /*
+   * The grid shows a 640px thumbnail from assets/gallery/thumbs/ and the
+   * lightbox loads the full-size photo from assets/gallery/. Thumbnails are
+   * built by scripts/optimize-gallery.py. If a photo does not have one yet,
+   * the grid falls back to the full-size file.
+   */
+  function fullPath(filename) {
+    return "assets/gallery/" + filename;
+  }
+
+  function thumbPath(filename) {
+    return "assets/gallery/thumbs/" + filename;
+  }
+
   function fetchSections() {
     return fetch("assets/gallery.json", {
       cache: "default"
@@ -84,9 +98,18 @@
     img.addEventListener(
       "error",
       function () {
+        /*
+         * No thumbnail for this photo yet: use the full-size file
+         * instead of leaving a gap in the grid.
+         */
+        if (img.dataset.fallbackSrc && img.src.indexOf(img.dataset.fallbackSrc) === -1) {
+          img.src = img.dataset.fallbackSrc;
+          img.removeAttribute("data-fallback-src");
+          return;
+        }
+
         img.classList.remove("gallery-image-loading");
-      },
-      { once: true }
+      }
     );
 
     /*
@@ -179,7 +202,7 @@
      * when the visitor clicks the gallery card.
      */
     img.src =
-      "assets/gallery/" + photo.filename;
+      fullPath(photo.filename);
 
     img.alt =
       photo.alt || photo.caption || "";
@@ -236,7 +259,10 @@
      * photo gets close to the viewport.
      */
     img.dataset.src =
-      "assets/gallery/" + photo.filename;
+      thumbPath(photo.filename);
+
+    img.dataset.fallbackSrc =
+      fullPath(photo.filename);
 
     img.alt =
       photo.alt || photo.caption || "";

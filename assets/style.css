@@ -238,6 +238,28 @@ html:not([data-theme="light"]) .meeting-card {
   border: 0;
 }
 
+/* The "skip to main content" link is hidden until it is focused. Without a
+   visible focused state it is focusable but invisible, which strands keyboard
+   users at the top of the page. */
+a.sr-only:focus,
+a.sr-only:focus-visible {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 10px 18px;
+  overflow: visible;
+  clip: auto;
+  background: var(--gold);
+  color: var(--navy-950);
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
 a { color: var(--chess-green); }
 
 /* HEADER & Navigation */
@@ -1711,6 +1733,15 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 /* FAQ accordion */
 .faq-list { display: flex; flex-direction: column; gap: 12px; }
+
+/* Each FAQ question is a real heading so screen-reader users can jump between
+   questions; the wrapper is unstyled so the button keeps its appearance. */
+.faq-question-heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
 
 .faq-item {
   background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);

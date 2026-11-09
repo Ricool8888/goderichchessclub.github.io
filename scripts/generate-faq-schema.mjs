@@ -40,10 +40,14 @@ function toText(html) {
 
 const html = readFileSync(PAGE, "utf8");
 
-// <div class="faq-item"> <button class="faq-question">Q<span class="faq-icon">+</span></button>
-//   <div class="faq-answer"><div class="faq-answer-inner">A</div></div>
+// <div class="faq-item">
+//   <h3 class="faq-question-heading">
+//     <button class="faq-question" id="faq-question-1" aria-controls="faq-answer-1">
+//       Q<span class="faq-icon">+</span></button>
+//   </h3>
+//   <div class="faq-answer" id="faq-answer-1"><div class="faq-answer-inner">A</div></div>
 // </div>
-const ITEM = /<div class="faq-item">\s*<button class="faq-question"[^>]*>([\s\S]*?)<span class="faq-icon"[\s\S]*?<div class="faq-answer"><div class="faq-answer-inner">([\s\S]*?)<\/div><\/div>/g;
+const ITEM = /<div class="faq-item">\s*(?:<h3[^>]*>\s*)?<button class="faq-question"[^>]*>([\s\S]*?)<span class="faq-icon"[\s\S]*?<div class="faq-answer"[^>]*><div class="faq-answer-inner">([\s\S]*?)<\/div><\/div>/g;
 
 const questions = [];
 for (const match of html.matchAll(ITEM)) {
