@@ -504,6 +504,29 @@ The third block - the "SportsActivityLocation" one in index.html's <head> -
 is hand-written, so its meeting days, times, addresses and social links have to
 be updated by hand (see section 9).
 
+CHECKS THAT RUN ON PULL REQUESTS
+
+.github/workflows/validate.yml runs on every pull request and on main. It
+catches the mistakes that a browser quietly forgives:
+
+      1. The shared header/footer check listed above.
+      2. Validate HTML
+             npx --yes html-validate@9.7.1 '*.html'
+         Reports malformed markup such as a list nested inside a <p>, a button
+         with no type, or an aria attribute on an element that cannot take it.
+         Rules live in .htmlvalidate.json.
+      3. Check internal links
+             lychee --config .lychee.toml '*.html'
+         Reports a link to a page or #anchor that does not exist. Settings live
+         in .lychee.toml; external sites are deliberately not checked, because
+         a sponsor's website being down is not the club's problem.
+
+Both tools are downloaded by the workflow, so the repository still has no
+package.json and nothing to install. To run them before pushing:
+
+      npx --yes html-validate@9.7.1 '*.html'
+      lychee --config .lychee.toml '*.html'
+
 RUNNING THE SITE LOCALLY
 
       Any static server works; serve from the repository root, because every

@@ -1,0 +1,38 @@
+# Checks that keep typos and malformed markup out of the published site.
+#
+# The deploy workflow (static.yml) only runs on main, so these checks also run
+# on pull requests, before anything reaches the live site.
+name: Validate pages
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check shared header and footer
+        run: node scripts/sync-shared-blocks.mjs --check
+
+      # Rules live in .htmlvalidate.json.
+      - name: Validate HTML
+        run: npx --yes html-validate@9.7.1 '*.html'
+
+      # Settings live in .lychee.toml: internal links and #anchors only.
+      - name: Check internal links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config .lychee.toml '*.html'

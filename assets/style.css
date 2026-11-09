@@ -523,6 +523,31 @@ a { color: var(--chess-green); }
   display: block;
 }
 
+/* The map button that becomes an iframe when clicked (see map-facade.js). */
+.map-facade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 160px;
+  margin-top: 12px;
+  padding: 0;
+  border: 1px dashed var(--gold-30);
+  border-radius: 10px;
+  background: var(--gold-10);
+  color: var(--slate-300);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.map-facade:hover { background: var(--gold-20); color: var(--white); }
+.map-facade-icon { font-size: 18px; }
+@media (prefers-reduced-motion: reduce) { .map-facade { transition: none; } }
+
 .btn-rsvp {
   display: block;
   width: 100%;
@@ -1343,7 +1368,17 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .live-game .puzzle-frame { margin: 0; max-width: none; }
 
-.live-game-pause { margin-top: 10px; }
+.live-game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.live-game-actions .puzzle-btn { margin-top: 0; }
+
+/* The evaluation bar only appears once the visitor asks for it. */
+.eval-bar.is-off { display: none; }
 
 /* Paused: the embed is unloaded and a note sits where its board was. */
 .live-game.is-paused .puzzle-frame { visibility: hidden; }

@@ -1,0 +1,14 @@
+# Link checking for the site's own files.
+#
+# Only local targets are checked. External sites (Facebook, Lichess,
+# sponsors) are outside the club's control, and one of them being down
+# should not stop the site from being updated.
+offline = true
+# Resolve "/favicon.ico" and friends against the repository root.
+root_dir = "."
+# GitHub Pages serves "about" from about.html, so resolve extensionless links
+# the same way.
+fallback_extensions = ["html"]
+# A link to "page#section" is broken if the id is missing, too.
+include_fragments = "full"
+no_progress = true
