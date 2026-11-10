@@ -16,12 +16,14 @@ small JavaScript files. There is no database, no login and no server-side
 code. A page either holds its text in the HTML file itself, or builds a list
 (events, posts, tournaments, photos) from a JSON file in assets/.
 
-GitHub Pages publishes what the deploy produces, not the repository as a
-whole. scripts/build-site.mjs copies the pages, assets/ and the few root files
-into dist/, and dist/ is what gets uploaded, so scripts, partials and the
-camera originals stay private. Anything merged or pushed to the "main" branch
-is live about a minute later. There is no staging area, so treat every push to
-main as publishing.
+GitHub Pages builds this site from the "main" branch itself, so every file
+committed to the repository is a public URL - including README.txt, partials/
+and scripts/. Nothing goes in the repository that members should not be able to
+read. scripts/build-site.mjs still builds dist/ and the deploy workflow uploads
+it; that is what the site would serve once the repository's Pages setting is
+switched to "GitHub Actions". Until then, committing a file is what publishes
+it. Anything merged or pushed to the "main" branch is live about a minute
+later. There is no staging area, so treat every push to main as publishing.
 
 Because of that, "editing the site" is always one of three things:
 
@@ -78,7 +80,7 @@ DATA (the files you edit to change what the site shows)
       assets/posts.json           blog posts
       assets/tournaments.json     tournaments (upcoming and completed)
       assets/gallery.json         photo sections and captions
-      assets/last-updated.json    GENERATED - never edit by hand
+      assets/last-updated.json    GENERATED - run the script, never by hand
 
 SHARED
 
@@ -283,8 +285,12 @@ things worth knowing before you do:
             footer, so the HTML only holds a fallback.
 
       Footer "Last updated" date
-            Automatic, from git history, written by a deploy script. Never set
-            it by hand - editing the page is what changes it.
+            From git history: one date per page, from the commit that last
+            touched that page. scripts/stamp-last-updated.mjs writes it into
+            assets/last-updated.json, and that file is committed, so run the
+            script before committing a page edit (the checks fail if you
+            forget). Never set the date by hand - editing the page is what
+            changes it.
 
 
 ==============================================================================
@@ -491,10 +497,22 @@ The deploy workflow runs the script, and the validate workflow runs it with
 silently drifting. Never edit the generated cells by hand.
 
 -------------------------------------------------------------------------------
-4.8 assets/last-updated.json - generated, do not edit
+4.8 assets/last-updated.json - generated, committed, do not edit
 -------------------------------------------------------------------------------
-Written by a deploy script from git history and git-ignored, so it only exists
-in the deployed copy. Hand edits are pointless: the next push overwrites it.
+One date per page, from the commit that last touched that page, plus
+sitemap.xml with the same dates. scripts/stamp-last-updated.mjs writes both
+from git history. They are committed because the site is published from the
+main branch: a file that exists only inside the deploy never reaches a
+visitor, and the footer date then fetches nothing and stays hidden.
+
+Run it after editing any page, before committing:
+
+      node scripts/stamp-last-updated.mjs
+
+A page with uncommitted changes is dated today, so the date that ships with
+the page is the date of that change. node scripts/check-all.mjs runs the same
+script with --check and fails when a page was edited without refreshing its
+date. Never edit either file by hand.
 
 
 ==============================================================================
@@ -620,9 +638,10 @@ checks pass it does this in order:
          differ from what partials/ and the page's own title say.
       3. Stamp the footer dates and rebuild the sitemap
              node scripts/stamp-last-updated.mjs
-         Writes assets/last-updated.json from the commit that last touched each
-         page, and rebuilds sitemap.xml from the pages in the repository with
-         the same dates.
+         Rewrites assets/last-updated.json from the commit that last touched
+         each page, and sitemap.xml from the pages in the repository with the
+         same dates. The committed copies are what the live site serves; this
+         step keeps the copy the workflow uploads identical to them.
       4. Generate event structured data
              node scripts/generate-event-schema.mjs
          Rebuilds the Event block in events-calendar.html's <head> from
@@ -865,21 +884,25 @@ freebuff-sites-build/
 
 .gitignore
       Lists what git should not track: local server folders, that build
-      output, dist/, and assets/last-updated.json (generated at deploy time).
+      output and dist/.
 
 dist/
-      Made by node scripts/build-site.mjs and uploaded to GitHub Pages. It is
-      rebuilt from scratch on every deploy and is never committed. To see
-      exactly what the public gets, run that script and look in dist/.
+      Made by node scripts/build-site.mjs and uploaded by the deploy workflow.
+      It is rebuilt from scratch on every deploy and is never committed. It is
+      what the site would serve with the Pages source set to "GitHub Actions";
+      today the source is the main branch, so dist/ is a rehearsal of that
+      move, not a copy of what is live.
 
-WHAT IS NOT PUBLISHED
-      README.txt, scripts/, partials/, .github/, artifacts/, the
-      freebuff-sites-build/ output, the note inside assets/gallery/, and the
-      camera originals in assets/gallery/ (39 MB - the grid, the lightbox and
-      the pages all use the WebP copies in assets/gallery/thumbs/). They stay
-      in the repository; they are simply not part of the site. build-site.mjs
-      fails if one of them ends up in dist/, or if a page or asset it expects
-      is missing.
+WHAT IS PUBLISHED
+      Everything committed to the repository, because GitHub Pages builds from
+      the main branch: the pages, assets/, partials/, scripts/, .github/ and
+      README.txt. What stays off the site is what .gitignore keeps out - dist/,
+      freebuff-sites-build/, node_modules/, artifacts/ - plus the 39 MB of
+      camera originals in assets/gallery/, which are committed (so they are
+      public addresses) even though no page links to them: the grid, the
+      lightbox and the pages all use the WebP copies in assets/gallery/thumbs/.
+      build-site.mjs describes the smaller site that would be published from a
+      dist/ upload and fails if a page or asset it expects is missing.
 
 
 ==============================================================================
@@ -1107,18 +1130,16 @@ The checks fail with "does not mention the Tuesday ... meeting"
       changing them. node scripts/check-meetings.mjs shows both sides.
 
 A page or file 404s after a deploy, but it is in the repository
-      The deploy now uploads dist/, built by node scripts/build-site.mjs. If a
-      file was added in a new top-level folder or with a new extension, or a
-      new page was added, run that script and check the file appears in dist/.
-      The script already fails on a missing page, a missing asset or something
-      that must not be published, so a 404 usually means the browser is asking
-      for a file the site never had.
+      The live site is built from the main branch, so the file has to be
+      committed and pushed - a git-ignored file such as dist/ never reaches a
+      visitor. Check the filename character for character, then give the deploy
+      a minute.
 
 The footer date is missing on a page
-      The date comes from git history and only appears on the deployed site.
-      It also stays hidden if assets/last-updated.json has no entry for that
-      page - which happens when the page was never committed with that exact
-      filename. Commit the page and it will appear after the next deploy.
+      The line stays hidden when assets/last-updated.json has no entry for that
+      page, which happens when a page was added or renamed without re-running
+      node scripts/stamp-last-updated.mjs. Run it, commit the page and the file
+      together, and the date appears after the next deploy.
 
 A change is not live yet
       Deploys take about a minute. Check the Actions tab for the run; a failed

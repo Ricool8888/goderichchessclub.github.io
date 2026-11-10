@@ -2,25 +2,40 @@
 /**
  * Writes assets/last-updated.json from git history, so the footer date on
  * every page comes from the last commit that touched that page instead of a
- * GitHub API request made by each visitor.
+ * GitHub API request made by each visitor. The file is committed: the site is
+ * published from the main branch, so a file that only exists inside a deploy
+ * never reaches a visitor - the footer date fetches it and stays hidden when
+ * it is missing.
  *
  * It also rebuilds sitemap.xml: one entry per page in the repository, with the
  * same date (search engines ignore changefreq and priority, but they do use
- * lastmod).
+ * lastmod). That file is committed for the same reason.
  *
- * Run from the repository root. Used by .github/workflows/static.yml before
- * the site is uploaded; running it locally is harmless.
+ * Run from the repository root, and commit the result whenever a page changes:
+ *
+ *   node scripts/stamp-last-updated.mjs
+ *
+ * Run with --check (the checks do) to fail instead of writing, so a page that
+ * was edited without refreshing its date is caught before it ships.
  */
 import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+
+const CHECK = process.argv.includes("--check");
+const DATA_FILE = "assets/last-updated.json";
+const SITEMAP = "sitemap.xml";
+const SITE_URL = "https://goderichchessclub.com";
+
+// Error pages answer bad addresses; they are not pages anyone should land on.
+const NOT_A_PAGE = new Set(["400.html", "403.html", "404.html", "500.html", "503.html"]);
 
 const pages = readdirSync(".")
   .filter((name) => name.endsWith(".html"))
   .sort();
 
-function lastCommitDate(file) {
+function git(args) {
   try {
-    return execFileSync("git", ["log", "-1", "--format=%cs", "--", file], {
+    return execFileSync("git", args, {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     }).trim();
@@ -29,11 +44,24 @@ function lastCommitDate(file) {
   }
 }
 
+function lastCommitDate(file) {
+  return git(["log", "-1", "--format=%cs", "--", file]);
+}
+
+// A page being edited right now is dated today, so the date that gets
+// committed with the page is the date of the change itself.
+const dirty = new Set(
+  git(["status", "--porcelain", "--", ...pages])
+    .split("\n")
+    .map((line) => line.slice(3).trim())
+    .filter(Boolean)
+);
+
 const today = new Date().toISOString().slice(0, 10);
 const dates = {};
 
 for (const page of pages) {
-  dates[page] = lastCommitDate(page) || today;
+  dates[page] = dirty.has(page) ? today : lastCommitDate(page) || today;
 }
 
 const out = {
@@ -41,21 +69,9 @@ const out = {
   pages: dates,
 };
 
-writeFileSync("assets/last-updated.json", JSON.stringify(out, null, 2) + "\n");
-console.log(`stamp-last-updated: wrote ${pages.length} page dates`);
-
-// --- sitemap -----------------------------------------------------------------
-//
 // The list of pages is built from the files in the repository rather than kept
 // by hand, so adding a page is enough: it appears in sitemap.xml on the next
-// deploy with the date of the last commit that touched it.
-
-const SITEMAP = "sitemap.xml";
-const SITE_URL = "https://goderichchessclub.com";
-
-// Error pages answer bad addresses; they are not pages anyone should land on.
-const NOT_A_PAGE = new Set(["400.html", "403.html", "404.html", "500.html", "503.html"]);
-
+// run with the date of the last commit that touched it.
 const entries = pages
   .filter((page) => !NOT_A_PAGE.has(page))
   .map((page) => ({
@@ -77,5 +93,42 @@ const sitemap = [
   "",
 ].join("\n");
 
-writeFileSync(SITEMAP, sitemap);
-console.log(`stamp-last-updated: wrote ${entries.length} sitemap entries`);
+if (CHECK) {
+  const problems = [];
+
+  let committed = {};
+  try {
+    committed = JSON.parse(readFileSync(DATA_FILE, "utf8")).pages || {};
+  } catch (err) {
+    problems.push(`${DATA_FILE} is missing or not valid JSON`);
+  }
+  for (const page of pages) {
+    if (committed[page] === dates[page]) continue;
+    problems.push(`${page}: ${DATA_FILE} says ${committed[page] || "nothing"}, git says ${dates[page]}`);
+  }
+
+  let committedSitemap = "";
+  try {
+    committedSitemap = readFileSync(SITEMAP, "utf8");
+  } catch (err) {
+    problems.push(`${SITEMAP} is missing`);
+  }
+  if (committedSitemap && committedSitemap !== sitemap) {
+    problems.push(`${SITEMAP} does not match the pages in the repository`);
+  }
+
+  if (problems.length) {
+    console.error(
+      `stamp-last-updated: the committed footer dates are out of date\n  ` +
+        problems.join("\n  ") +
+        "\nRun `node scripts/stamp-last-updated.mjs` and commit the result."
+    );
+    process.exit(1);
+  }
+  console.log(`stamp-last-updated: ${pages.length} page dates and ${entries.length} sitemap entries are current`);
+} else {
+  writeFileSync(DATA_FILE, JSON.stringify(out, null, 2) + "\n");
+  console.log(`stamp-last-updated: wrote ${pages.length} page dates`);
+  writeFileSync(SITEMAP, sitemap);
+  console.log(`stamp-last-updated: wrote ${entries.length} sitemap entries`);
+}

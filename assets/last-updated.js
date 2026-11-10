@@ -1,10 +1,12 @@
 (function () {
   "use strict";
 
-  // Page dates are written by scripts/stamp-last-updated.mjs during the deploy
-  // workflow, so the footer needs no third-party request (the old GitHub API
+  // Page dates are written by scripts/stamp-last-updated.mjs and committed with
+  // the site, so the footer needs no third-party request (the old GitHub API
   // lookup was rate-limited per visitor IP and fell back to a stale date).
-  var DATA_URL = "assets/last-updated.json";
+  // Root-absolute: an error page is served at whatever address the visitor
+  // mistyped, and a relative path would look for the file beside that address.
+  var DATA_URL = "/assets/last-updated.json";
 
   var MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
