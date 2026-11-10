@@ -264,6 +264,9 @@
     return item;
   }
 
+  // The day button that opened the modal, so focus can go back to it on close.
+  var dayModalReturnFocus = null;
+
   function openDayModal(iso, dayOfWeek) {
     var overlay = document.getElementById("dayModalOverlay");
     var titleEl = document.getElementById("dayModalTitle");
@@ -290,8 +293,15 @@
       listEl.appendChild(p);
     }
 
+    dayModalReturnFocus = document.activeElement;
+
     overlay.classList.add("open");
     overlay.setAttribute("aria-hidden", "false");
+
+    // Move focus into the dialog, otherwise a keyboard visitor is still
+    // "inside" the day button behind the overlay and cannot reach Close.
+    var closeBtn = document.getElementById("modalCloseBtn");
+    if (closeBtn) closeBtn.focus();
   }
 
   function buildEventItem(ev) {
@@ -314,8 +324,16 @@
 
   function closeDayModal() {
     var overlay = document.getElementById("dayModalOverlay");
+    if (!overlay.classList.contains("open")) return;
     overlay.classList.remove("open");
     overlay.setAttribute("aria-hidden", "true");
+
+    // Put focus back on the day that was opened, so keyboard users keep
+    // their place in the month instead of starting over at the top.
+    if (dayModalReturnFocus && dayModalReturnFocus.isConnected) {
+      dayModalReturnFocus.focus();
+    }
+    dayModalReturnFocus = null;
   }
 
   function init() {
@@ -340,6 +358,20 @@
     document.getElementById("modalCloseBtn").addEventListener("click", closeDayModal);
     document.getElementById("dayModalOverlay").addEventListener("click", function (e) {
       if (e.target === this) closeDayModal();
+    });
+
+    // Escape closes the day dialog and Tab stays inside it: Close is its
+    // only control, so focus must not wander off behind the overlay.
+    document.addEventListener("keydown", function (e) {
+      if (!document.getElementById("dayModalOverlay").classList.contains("open")) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeDayModal();
+      } else if (e.key === "Tab") {
+        e.preventDefault();
+        var closeBtn = document.getElementById("modalCloseBtn");
+        if (closeBtn) closeBtn.focus();
+      }
     });
 
     Promise.all([fetchPublishedEvents(), fetchClosures()]).then(function (results) {

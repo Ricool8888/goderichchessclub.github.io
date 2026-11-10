@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="assets/clean-urls.js"></script>
 <script>
   (function () {
     try {
@@ -12,6 +13,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#221246">
 <title>Tournaments - Goderich Chess Club</title>
 <meta name="description" content="Upcoming and past Goderich Chess Club tournaments, including results, formats, and entry details.">
 <link rel="canonical" href="https://goderichchessclub.com/tournaments">
@@ -57,18 +59,22 @@
 
     <div class="tab-toolbar">
       <div class="tab-row" role="tablist" aria-label="Tournament filter">
-        <button type="button" class="tab-btn active" data-tab="upcoming" role="tab" aria-selected="true">Upcoming</button>
-        <button type="button" class="tab-btn" data-tab="completed" role="tab" aria-selected="false">Past Results</button>
-        <button type="button" class="tab-btn" data-tab="first" role="tab" aria-selected="false">Your First Tournament</button>
+        <button type="button" class="tab-btn active" id="tabUpcoming" data-tab="upcoming" role="tab" aria-selected="true" aria-controls="tournamentGrid" tabindex="0">Upcoming</button>
+        <button type="button" class="tab-btn" id="tabCompleted" data-tab="completed" role="tab" aria-selected="false" aria-controls="tournamentGrid" tabindex="-1">Past Results</button>
+        <button type="button" class="tab-btn" id="tabFirst" data-tab="first" role="tab" aria-selected="false" aria-controls="firstTournament" tabindex="-1">Your First Tournament</button>
       </div>
       <a href="assets/downloads/goderich-chess-club-scoresheet.pdf" class="btn-secondary tab-toolbar-btn" download="Goderich Chess Club scoresheet.pdf" target="_blank" rel="noopener"><span aria-hidden="true">&#8595;</span> Download Printable Scoresheet (PDF)</a>
     </div>
 
-    <div class="tournament-grid" id="tournamentGrid">
+    <div class="tournament-grid" id="tournamentGrid" role="tabpanel" aria-labelledby="tabUpcoming">
       <div class="empty-state">Loading tournaments…</div>
     </div>
 
-    <div class="first-tournament" id="firstTournament" hidden>
+    <noscript>
+      <p class="empty-state">The tournament list is loaded with JavaScript. Turn it on to see upcoming tournaments and past results. Registration links and questions are also answered by email at <a href="mailto:goderichchessclub@gmail.com">goderichchessclub@gmail.com</a>.</p>
+    </noscript>
+
+    <div class="first-tournament" id="firstTournament" role="tabpanel" aria-labelledby="tabFirst" hidden>
     <div class="merch-grid first-steps-grid">
       <div class="merch-card first-step-card">
         <div class="first-step-top">

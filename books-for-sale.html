@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="assets/clean-urls.js"></script>
 <script>
   (function () {
     try {
@@ -12,6 +13,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#221246">
 <title>Books for Sale - Goderich Chess Club</title>
 <meta name="description" content="Chess books for sale from Goderich Chess Club, including Dvoretsky's Endgame Manual, The Exchange Sacrifice, and more.">
 <link rel="canonical" href="https://goderichchessclub.com/books-for-sale">
@@ -56,6 +58,9 @@
     </div>
 
     <section class="table-wrap" aria-label="Books for sale">
+      <!-- The description column is generated from assets/books/descriptions.json
+           by scripts/generate-books-table.mjs. Edit the JSON and re-run the
+           script instead of editing these cells by hand. -->
       <table class="price-table">
         <thead>
           <tr>

@@ -318,7 +318,13 @@ a { color: var(--chess-green); }
   line-height: 1;
 }
 
-@media (max-width: 767px) {
+/*
+ * The menu needs one line for eleven links. Below 992px that cannot fit, so
+ * the hamburger takes over there - previously the links stayed visible and
+ * wrapped, leaving "Books for sale" and "Contact Us" alone on their own
+ * rows on tablets and small laptops.
+ */
+@media (max-width: 991px) {
   .nav-toggle { display: inline-flex; }
   .nav-links {
     display: none;
@@ -337,6 +343,16 @@ a { color: var(--chess-green); }
   .nav-links .nav-item { width: 100%; padding: 12px 0; border-bottom: 1px solid var(--slate-800); }
   .nav-links .nav-item.active { border-bottom: 1px solid var(--gold); }
   .nav-links .btn-join { margin-top: 12px; text-align: center; }
+}
+
+/*
+ * Tablet / small-laptop widths: tighten the row (slightly smaller links and
+ * gaps) so all eleven links still fit on one line instead of wrapping.
+ */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .nav-links { gap: 8px 10px; }
+  .nav-item { font-size: 15px; }
+  .btn-join { padding: 9px 14px; font-size: 15px; }
 }
 
 /* HERO / grid layout */
@@ -2531,6 +2547,46 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   cursor: pointer;
 }
 .lightbox-close:hover { color: var(--gold); }
+
+/* Prev / next arrows, and the "3 / 24" counter, in the photo lightbox. */
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--control-border);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lightbox-nav:hover { color: var(--gold); border-color: var(--gold); }
+.lightbox-nav-prev { left: 12px; }
+.lightbox-nav-next { right: 12px; }
+
+.lightbox-counter {
+  color: var(--lightbox-caption);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+/*
+ * Touch screens have no hover, so the caption on each tile is shown
+ * permanently there instead of waiting for a mouse that never comes.
+ * The caption is also repeated inside the lightbox.
+ */
+@media (hover: none) {
+  .gallery-item-caption { opacity: 1; }
+}
 
 /* =========================================================
    THEME TOGGLE — TRUE 50/50 SLIDER FIX

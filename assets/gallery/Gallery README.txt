@@ -10,3 +10,13 @@ After adding a photo file here, you also need to add one entry for it
 in assets/gallery.json so it actually shows up on the gallery page.
 See the comments inside gallery.json's neighbouring gallery.html file
 for the exact format to copy/paste.
+
+Then build its thumbnails:
+
+  npm install --no-save sharp        (first time only)
+  node scripts/generate-gallery-thumbs.mjs
+
+That writes two small WebP copies into assets/gallery/thumbs/ - one
+480px and one 960px wide. The gallery grid shows those instead of the
+full photo, while clicking one still opens the original. Commit the
+thumbs folder along with the photo.
