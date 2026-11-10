@@ -4,10 +4,14 @@
  * markup on that page, so structured data can never drift from the answers
  * visitors actually read.
  *
- * Run from the repository root:  node scripts/generate-faq-schema.mjs
+ * Run from the repository root:  node scripts/generate-faq-schema.mjs [--check]
+ *
+ * --check writes nothing and exits non-zero if the page's block has fallen
+ * behind its own question/answer markup.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 
+const CHECK = process.argv.includes("--check");
 const PAGE = "faq.html";
 const START = "<!-- faq-schema:start";
 const END = "<!-- faq-schema:end -->";
@@ -92,5 +96,20 @@ const block = [
   END,
 ].join("\n");
 
-writeFileSync(PAGE, html.slice(0, startIndex) + block + html.slice(endIndex + END.length));
+const updated = html.slice(0, startIndex) + block + html.slice(endIndex + END.length);
+
+if (updated === html) {
+  console.log(`generate-faq-schema: ${PAGE} is up to date (${questions.length} questions)`);
+  process.exit(0);
+}
+
+if (CHECK) {
+  console.error(
+    `generate-faq-schema: the FAQPage block in ${PAGE} does not match the answers on the page\n` +
+      "  Run `node scripts/generate-faq-schema.mjs` and commit the result."
+  );
+  process.exit(1);
+}
+
+writeFileSync(PAGE, updated);
 console.log(`generate-faq-schema: wrote ${questions.length} question(s) to ${PAGE}`);

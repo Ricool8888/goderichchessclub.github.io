@@ -1300,6 +1300,9 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 }
 
 .btn-calendar:hover { border-color: var(--gold); color: var(--gold); }
+/* The two weekly-meeting buttons stay hidden until assets/meetings.json has
+   loaded, so a visitor never sees a button that does nothing. */
+.btn-calendar[hidden] { display: none; }
 .btn-calendar svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 /* =========================================================

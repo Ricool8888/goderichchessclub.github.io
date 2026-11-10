@@ -1,10 +1,11 @@
 // Delays the Puzzle of the Day until it is close to the screen, and makes sure
 // the widget can never sit on "Loading" for ever.
 //
-// The puzzle needs chessground and chess.js from jsDelivr plus three
-// chessground stylesheets, and a puzzle API call. It sits well below the fold
-// on the home page, so none of that is needed by someone reading the top of the
-// page: this starts it when the widget comes within 600px of the viewport.
+// The puzzle needs chessground and chess.js plus three chessground
+// stylesheets - all now served from assets/vendor/, not from a CDN - and a
+// puzzle API call. It sits well below the fold on the home page, so none of
+// that is needed by someone reading the top of the page: this starts it when
+// the widget comes within 600px of the viewport.
 // puzzle.js itself is unchanged apart from announcing when it is ready.
 //
 // Three things used to leave the widget saying "Loading today's puzzle…" with
@@ -13,12 +14,11 @@
 //   1. Starting depended only on an IntersectionObserver callback. A plain
 //      scroll/resize check runs alongside it, so the load starts either way.
 //   2. The board module was imported only after all three stylesheets had
-//      fired their load event. The CSS comes from the same CDN as the board
-//      code, so that wait bought nothing that the import was not already
-//      waiting for, and a load event that never fired stopped the puzzle from
-//      loading at all. The styles are now requested alongside the import.
-//   3. Nothing ever gave up. If the CDN stalls, this now says so and points at
-//      Lichess instead of spinning indefinitely.
+//      fired their load event, so a load event that never fired stopped the
+//      puzzle from loading at all. The styles are now requested alongside the
+//      import.
+//   3. Nothing ever gave up. If the fetch stalls, this now says so and points
+//      at Lichess instead of spinning indefinitely.
 (function () {
   "use strict";
 
@@ -26,11 +26,13 @@
   if (!root) return;
 
   var status = root.querySelector(".puzzle-status");
-  var VERSION = "9.2.1";
+  // chessground's stylesheets live with the site (assets/vendor/) so the board
+  // does not depend on a third-party network being reachable. Update them
+  // together with assets/vendor/chessground.js - same version, 9.2.1.
   var STYLES = [
-    "https://cdn.jsdelivr.net/npm/chessground@" + VERSION + "/assets/chessground.base.css",
-    "https://cdn.jsdelivr.net/npm/chessground@" + VERSION + "/assets/chessground.brown.css",
-    "https://cdn.jsdelivr.net/npm/chessground@" + VERSION + "/assets/chessground.cburnett.css"
+    "assets/vendor/chessground.base.css",
+    "assets/vendor/chessground.brown.css",
+    "assets/vendor/chessground.cburnett.css"
   ];
   var NEAR_PX = 600;    // how close to the viewport counts as "about to be read"
   var GIVE_UP_MS = 12000;
@@ -79,7 +81,7 @@
 
     import("./puzzle.js").catch(function () {
       // puzzle.js reports its own fetch failures; reaching here means the
-      // module itself never loaded (blocked CDN, offline, bad MIME type).
+      // module itself never loaded (offline, bad MIME type, missing file).
       clearTimeout(giveUpTimer);
       giveUp();
     });

@@ -25,6 +25,44 @@
     return out;
   }
 
+  /*
+   * Goderich, Ontario is in the Eastern time zone. A calendar file should
+   * name the zone and carry its daylight-saving rules: a time with no zone
+   * at all ("floating") is read as the reader's own local time, so a meeting
+   * imported onto a phone set to another time zone would land at the wrong
+   * hour. The VTIMEZONE below is the standard America/Toronto definition -
+   * second Sunday in March to first Sunday in November.
+   */
+  var TIMEZONE = "America/Toronto";
+
+  var VTIMEZONE = [
+    "BEGIN:VTIMEZONE",
+    "TZID:" + TIMEZONE,
+    "X-LIC-LOCATION:" + TIMEZONE,
+    "BEGIN:DAYLIGHT",
+    "TZOFFSETFROM:-0500",
+    "TZOFFSETTO:-0400",
+    "TZNAME:EDT",
+    "DTSTART:19700308T020000",
+    "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU",
+    "END:DAYLIGHT",
+    "BEGIN:STANDARD",
+    "TZOFFSETFROM:-0400",
+    "TZOFFSETTO:-0500",
+    "TZNAME:EST",
+    "DTSTART:19701101T020000",
+    "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU",
+    "END:STANDARD",
+    "END:VTIMEZONE"
+  ];
+
+  // "2027-01-16" + "09:00" -> "TZID=America/Toronto:20270116T090000", the
+  // local wall-clock time in Goderich with the zone attached.
+  function localDateTime(dateISO, time) {
+    return "TZID=" + TIMEZONE + ":" +
+      dateISO.replace(/-/g, "") + "T" + time.replace(/:/g, "") + "00";
+  }
+
   function nowStamp() {
     var d = new Date();
     return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + "T" +
@@ -39,28 +77,24 @@
   //         event skips, e.g. club closures) }
   function buildICS(opts) {
     var endDate = opts.endDate || opts.startDate;
-    var dtStart = opts.startDate.replace(/-/g, "") + "T" + opts.startTime.replace(":", "") + "00";
-    var dtEnd = endDate.replace(/-/g, "") + "T" + opts.endTime.replace(":", "") + "00";
 
-    var lines = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//Goderich Chess Club//Events//EN",
-      "CALSCALE:GREGORIAN",
-      "BEGIN:VEVENT",
-      "UID:" + opts.uid + "@goderichchessclub.github.io",
-      "DTSTAMP:" + nowStamp(),
-      "DTSTART:" + dtStart,
-      "DTEND:" + dtEnd
-    ];
+    var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Goderich Chess Club//Events//EN", "CALSCALE:GREGORIAN"]
+      .concat(VTIMEZONE)
+      .concat([
+        "BEGIN:VEVENT",
+        "UID:" + opts.uid + "@goderichchessclub.github.io",
+        "DTSTAMP:" + nowStamp(),
+        "DTSTART;" + localDateTime(opts.startDate, opts.startTime),
+        "DTEND;" + localDateTime(endDate, opts.endTime)
+      ]);
 
     if (opts.rrule) lines.push("RRULE:" + opts.rrule);
 
     // Skipped dates (club closures) travel with the recurring event so the
     // imported calendar matches what the website shows.
     if (opts.exdates && opts.exdates.length) {
-      lines.push("EXDATE:" + opts.exdates.map(function (date) {
-        return date.replace(/-/g, "") + "T" + opts.startTime.replace(":", "") + "00";
+      lines.push("EXDATE;TZID=" + TIMEZONE + ":" + opts.exdates.map(function (date) {
+        return date.replace(/-/g, "") + "T" + opts.startTime.replace(/:/g, "") + "00";
       }).join(","));
     }
 

@@ -50,6 +50,8 @@ jobs:
         run: node scripts/generate-event-schema.mjs
       - name: Generate FAQ structured data
         run: node scripts/generate-faq-schema.mjs
+      - name: Generate recurring-meeting structured data
+        run: node scripts/generate-meeting-schema.mjs
       - name: Rebuild the book descriptions
         run: node scripts/generate-books-table.mjs
       - name: Rebuild the tournament cards
@@ -62,11 +64,18 @@ jobs:
         run: node scripts/render-banner.mjs
       - name: Check the data files
         run: node scripts/check-data.mjs
+      # Copies the site - the pages, assets/, and the root files a browser
+      # needs - into dist/. The handbook, the build scripts, the partials and
+      # the 39 MB of camera originals in assets/gallery/ stay in the repository
+      # but are not published. The script fails rather than uploading a site
+      # with a missing file.
+      - name: Build the published site
+        run: node scripts/build-site.mjs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Only what this site serves, not the whole repository
+          path: 'dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

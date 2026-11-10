@@ -2,10 +2,12 @@
 //
 // The puzzle comes from the public Lichess API (no account or key needed) and
 // is played on chessground, the same board Lichess uses. chess.js checks that
-// moves are legal. Both libraries are loaded from the jsDelivr CDN, pinned to
-// exact versions so an upstream release can't change the page.
-import { Chessground } from "https://cdn.jsdelivr.net/npm/chessground@9.2.1/+esm";
-import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js@1.4.0/+esm";
+// moves are legal. Both libraries are served from assets/vendor/ (chessground
+// 9.2.1, chess.js 1.4.0), so the board does not depend on a third-party CDN
+// being reachable. To update one, replace the file in assets/vendor/ and the
+// version in this comment; the chessground stylesheets live there too.
+import { Chessground } from "./vendor/chessground.js";
+import { Chess } from "./vendor/chess.js";
 
 var API_URL = "https://lichess.org/api/puzzle/daily";
 var REPLY_DELAY = 500;   // pause before the opponent's reply (ms)
