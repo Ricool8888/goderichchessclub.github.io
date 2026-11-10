@@ -214,7 +214,9 @@ books-for-sale.html - Books for sale
       exactly (see section 11).
 
 privacy.html - Privacy policy
-      Policy text with its own version line near the top:      "Last updated: November 10, 2026 - Version #6". That line is written by hand and is separate from the generated footer date. Bump it whenever the
+      Policy text with its own version line near the top:
+      "Last updated: November 10, 2026 - Version #6". That line is written by
+      hand and is separate from the generated footer date. Bump it whenever the
       policy text changes. The policy is protected wording (section 10), so
       any edit to it needs the exec's approval first.
 
