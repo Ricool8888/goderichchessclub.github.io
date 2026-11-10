@@ -1,10 +1,20 @@
 (function () {
   "use strict";
 
+  /*
+   * The posts themselves are written into posts-and-news.html from
+   * assets/posts.json by scripts/render-posts.mjs, so each one has a real
+   * address (#post-id), is readable without JavaScript, and can be indexed.
+   *
+   * This script adds the extras on top: the search box, the year and category
+   * filters, and the "Read more" buttons. It works on the cards already in the
+   * page instead of building them, so nothing here is required to read a post.
+   */
+
   var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   var state = {
-    publishedPosts: [], // loaded from assets/posts.json - the only source of posts
+    posts: [],        // one entry per card in the page
     filterYear: null,
     filterMonth: null, // 0-indexed
     filterCategory: null,
@@ -12,214 +22,215 @@
     expandedId: null
   };
 
-  function fetchPublishedPosts() {
-    return fetch("assets/posts.json")
-      .then(function (res) { if (!res.ok) throw new Error("no posts file"); return res.json(); })
-      .catch(function () { return []; });
-  }
+  function readPosts() {
+    return Array.prototype.slice.call(document.querySelectorAll("#blogList .post-card")).map(function (card) {
+      var date = new Date(card.getAttribute("data-date") + "T00:00:00");
 
-  function allPosts() {
-    return state.publishedPosts.slice().sort(function (a, b) {
-      return new Date(b.date) - new Date(a.date);
+      return {
+        card: card,
+        id: card.id,
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        category: card.getAttribute("data-category") || "",
+        // Everything the visitor can read in the card, lower-cased once, so
+        // search does not have to walk the DOM on every keystroke.
+        haystack: (card.textContent || "").toLowerCase().replace(/\s+/g, " "),
+        button: card.querySelector(".post-readmore")
+      };
     });
   }
 
-  function formatDate(iso) {
-    var d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  function hasFilter() {
+    return state.filterYear !== null || state.filterCategory !== null || state.searchTerm !== "";
   }
 
-  function filteredPosts() {
-    return allPosts().filter(function (p) {
-      var d = new Date(p.date + "T00:00:00");
-      if (state.filterYear !== null && d.getFullYear() !== state.filterYear) return false;
-      if (state.filterMonth !== null && d.getMonth() !== state.filterMonth) return false;
-      if (state.filterCategory && p.category !== state.filterCategory) return false;
-      if (state.searchTerm) {
-        var haystack = (p.title + " " + p.excerpt + " " + (p.content || "")).toLowerCase();
-        if (haystack.indexOf(state.searchTerm.toLowerCase()) === -1) return false;
-      }
-      return true;
-    });
+  /* ---------------------------------------------------------------- filters */
+
+  function matches(post) {
+    if (state.filterYear !== null && post.year !== state.filterYear) return false;
+    if (state.filterMonth !== null && post.month !== state.filterMonth) return false;
+    if (state.filterCategory && post.category !== state.filterCategory) return false;
+    if (state.searchTerm && post.haystack.indexOf(state.searchTerm.toLowerCase()) === -1) return false;
+    return true;
   }
+
+  function renderList() {
+    var visible = 0;
+
+    state.posts.forEach(function (post) {
+      var show = matches(post);
+      post.card.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    var empty = document.getElementById("blogEmpty");
+    if (empty) empty.hidden = visible > 0;
+
+    syncArchive();
+    syncCategories();
+
+    var resetBtn = document.getElementById("resetFiltersBtn");
+    if (resetBtn) resetBtn.style.display = hasFilter() ? "inline" : "none";
+  }
+
+  /* ---------------------------------------------------------------- archive */
 
   function buildArchive() {
-    var byYear = {};
-    allPosts().forEach(function (p) {
-      var d = new Date(p.date + "T00:00:00");
-      var y = d.getFullYear(), m = d.getMonth();
-      byYear[y] = byYear[y] || {};
-      byYear[y][m] = (byYear[y][m] || 0) + 1;
-    });
-    return byYear;
-  }
-
-  function renderArchive() {
     var container = document.getElementById("archiveList");
+    if (!container) return;
+
     container.innerHTML = "";
-    var byYear = buildArchive();
+
+    var byYear = {};
+    state.posts.forEach(function (post) {
+      byYear[post.year] = byYear[post.year] || {};
+      byYear[post.year][post.month] = (byYear[post.year][post.month] || 0) + 1;
+    });
+
     var years = Object.keys(byYear).map(Number).sort(function (a, b) { return b - a; });
 
     if (!years.length) {
-      var p = document.createElement("p");
-      p.className = "muted-note";
-      p.textContent = "No posts yet.";
-      container.appendChild(p);
+      var none = document.createElement("p");
+      none.className = "muted-note";
+      none.textContent = "No posts yet.";
+      container.appendChild(none);
       return;
     }
 
-    years.forEach(function (y) {
-      var yearWrap = document.createElement("div");
-      yearWrap.className = "archive-year";
-      var yearLabel = document.createElement("h3");
-      yearLabel.className = "archive-year-label";
-      yearLabel.textContent = y;
-      yearWrap.appendChild(yearLabel);
+    years.forEach(function (year) {
+      var wrap = document.createElement("div");
+      wrap.className = "archive-year";
 
-      var months = Object.keys(byYear[y]).map(Number).sort(function (a, b) { return b - a; });
-      months.forEach(function (m) {
+      var label = document.createElement("h3");
+      label.className = "archive-year-label";
+      label.textContent = year;
+      wrap.appendChild(label);
+
+      Object.keys(byYear[year]).map(Number).sort(function (a, b) { return b - a; }).forEach(function (month) {
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className = "archive-month-btn";
-        btn.setAttribute("data-focus-key", "archive-" + y + "-" + m);
-        if (state.filterYear === y && state.filterMonth === m) btn.classList.add("active");
-        var label = document.createElement("span");
-        label.textContent = MONTH_NAMES[m];
+        btn.setAttribute("data-year", year);
+        btn.setAttribute("data-month", month);
+
+        var name = document.createElement("span");
+        name.textContent = MONTH_NAMES[month];
+
         var count = document.createElement("span");
         count.className = "archive-count";
-        count.textContent = byYear[y][m];
-        btn.appendChild(label);
+        count.textContent = byYear[year][month];
+
+        btn.appendChild(name);
         btn.appendChild(count);
+
         btn.addEventListener("click", function () {
-          if (state.filterYear === y && state.filterMonth === m) {
-            state.filterYear = null; state.filterMonth = null;
+          if (state.filterYear === year && state.filterMonth === month) {
+            state.filterYear = null;
+            state.filterMonth = null;
           } else {
-            state.filterYear = y; state.filterMonth = m;
+            state.filterYear = year;
+            state.filterMonth = month;
           }
-          keepFocus(renderAll);
+          renderList();
         });
-        yearWrap.appendChild(btn);
+
+        wrap.appendChild(btn);
       });
-      container.appendChild(yearWrap);
+
+      container.appendChild(wrap);
     });
   }
 
-  function renderCategories() {
+  function syncArchive() {
+    Array.prototype.slice.call(document.querySelectorAll(".archive-month-btn")).forEach(function (btn) {
+      var active = Number(btn.getAttribute("data-year")) === state.filterYear &&
+        Number(btn.getAttribute("data-month")) === state.filterMonth;
+      btn.classList.toggle("active", active);
+    });
+  }
+
+  /* ------------------------------------------------------------- categories */
+
+  function buildCategories() {
     var container = document.getElementById("categoryList");
+    if (!container) return;
+
     container.innerHTML = "";
-    var cats = {};
-    allPosts().forEach(function (p) { if (p.category) cats[p.category] = true; });
-    Object.keys(cats).sort().forEach(function (c) {
+
+    var seen = {};
+    state.posts.forEach(function (post) { if (post.category) seen[post.category] = true; });
+
+    Object.keys(seen).sort().forEach(function (category) {
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "category-pill";
-      btn.setAttribute("data-focus-key", "category-" + c);
-      if (state.filterCategory === c) btn.classList.add("active");
-      btn.textContent = c;
+      btn.setAttribute("data-category", category);
+      btn.textContent = category;
+
       btn.addEventListener("click", function () {
-        state.filterCategory = (state.filterCategory === c) ? null : c;
-        keepFocus(renderAll);
+        state.filterCategory = state.filterCategory === category ? null : category;
+        renderList();
       });
+
       container.appendChild(btn);
     });
   }
 
-  function renderList() {
-    var listEl = document.getElementById("blogList");
-    var posts = filteredPosts();
-    listEl.innerHTML = "";
-
-    if (!posts.length) {
-      var empty = document.createElement("div");
-      empty.className = "empty-state";
-      empty.textContent = "No posts match your filters yet.";
-      listEl.appendChild(empty);
-      return;
-    }
-
-    posts.forEach(function (p) {
-      var card = document.createElement("article");
-      card.className = "post-card";
-      if (state.expandedId === p.id) card.classList.add("expanded");
-
-      var meta = document.createElement("div");
-      meta.className = "post-meta";
-      var date = document.createElement("span");
-      date.className = "post-date";
-      date.textContent = formatDate(p.date);
-      meta.appendChild(date);
-      if (p.category) {
-        var cat = document.createElement("span");
-        cat.className = "post-category";
-        cat.textContent = p.category;
-        meta.appendChild(cat);
-      }
-
-      var title = document.createElement("h2");
-      title.className = "post-title";
-      var titleLink = document.createElement("a");
-      titleLink.href = "#" + p.id;
-      titleLink.textContent = p.title;
-      title.appendChild(titleLink);
-
-      var excerpt = document.createElement("p");
-      excerpt.className = "post-excerpt";
-      excerpt.textContent = p.excerpt;
-
-      var full = document.createElement("div");
-      full.className = "post-full";
-      full.textContent = p.content || p.excerpt;
-
-      var readMore = document.createElement("button");
-      readMore.type = "button";
-      readMore.className = "post-readmore";
-      readMore.setAttribute("data-focus-key", "readmore-" + p.id);
-      readMore.setAttribute("aria-expanded", state.expandedId === p.id ? "true" : "false");
-      readMore.textContent = state.expandedId === p.id ? "Show less \u2191" : "Read more \u2192";
-      readMore.addEventListener("click", function () {
-        state.expandedId = (state.expandedId === p.id) ? null : p.id;
-        keepFocus(renderList);
-      });
-
-      card.appendChild(meta);
-      card.appendChild(title);
-      card.appendChild(excerpt);
-      card.appendChild(full);
-      card.appendChild(readMore);
-      listEl.appendChild(card);
+  function syncCategories() {
+    Array.prototype.slice.call(document.querySelectorAll(".category-pill")).forEach(function (btn) {
+      btn.classList.toggle("active", btn.getAttribute("data-category") === state.filterCategory);
     });
   }
 
-  // Rendering rebuilds the buttons, which would drop keyboard focus back to the
-  // top of the page. Put it back on the rebuilt copy of the focused control.
-  function keepFocus(renderFn) {
-    var active = document.activeElement;
-    var key = active && active.getAttribute ? active.getAttribute("data-focus-key") : null;
-    renderFn();
-    if (!key) return;
-    var controls = document.querySelectorAll("[data-focus-key]");
-    for (var i = 0; i < controls.length; i++) {
-      if (controls[i].getAttribute("data-focus-key") === key) { controls[i].focus(); return; }
-    }
-  }
+  /* ------------------------------------------------------- Read more / less */
 
-  function renderAll() {
-    renderArchive();
-    renderCategories();
-    renderList();
-    var resetBtn = document.getElementById("resetFiltersBtn");
-    if (resetBtn) {
-      var hasFilter = state.filterYear !== null || state.filterCategory || state.searchTerm;
-      resetBtn.style.display = hasFilter ? "inline" : "none";
-    }
+  function setExpanded(id) {
+    state.expandedId = id;
+
+    state.posts.forEach(function (post) {
+      var open = post.id === id;
+
+      post.card.classList.toggle("expanded", open);
+      // Collapsed is the default once the script is running: without it the
+      // full text stays visible, which is what a visitor without JavaScript
+      // should get.
+      post.card.classList.toggle("collapsed", !open);
+
+      if (post.button) {
+        post.button.setAttribute("aria-expanded", open ? "true" : "false");
+        post.button.textContent = open ? "Show less \u2191" : "Read more \u2192";
+      }
+    });
   }
 
   function init() {
+    state.posts = readPosts();
+
+    state.posts.forEach(function (post) {
+      if (!post.button) return;
+      post.button.addEventListener("click", function () {
+        setExpanded(state.expandedId === post.id ? null : post.id);
+      });
+    });
+
+    // A link such as /posts-and-news#post-2026-11-09-winter-rapid opens that
+    // post, whichever way the visitor arrived.
+    function expandFromHash() {
+      var id = window.location.hash.replace(/^#/, "");
+      if (!id) return;
+      if (state.posts.some(function (post) { return post.id === id; })) setExpanded(id);
+    }
+
+    window.addEventListener("hashchange", expandFromHash);
+
+    buildArchive();
+    buildCategories();
+
     var searchInput = document.getElementById("searchInput");
     if (searchInput) {
       searchInput.addEventListener("input", function (e) {
         state.searchTerm = e.target.value;
-        renderAll();
+        renderList();
       });
     }
 
@@ -230,29 +241,26 @@
         state.filterMonth = null;
         state.filterCategory = null;
         state.searchTerm = "";
-        if (searchInput) searchInput.value = "";
-        renderAll();
-        // The reset button hides itself once the filters are cleared.
-        if (searchInput) searchInput.focus();
+        if (searchInput) {
+          searchInput.value = "";
+          searchInput.focus();
+        }
+        renderList();
       });
     }
 
-    fetchPublishedPosts().then(function (posts) {
-      state.publishedPosts = posts;
-      renderAll();
-    });
+    renderList();
+
+    // Start with every post as an excerpt plus "Read more", like the list has
+    // always looked. The full text is only in the HTML so a visitor without
+    // JavaScript can still read it.
+    setExpanded(null);
+    expandFromHash();
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    try {
-      init();
-    } catch (err) {
-      console.error("blog.js failed to initialize:", err);
-      // Still try to load and show posts even if a sidebar control is missing
-      fetchPublishedPosts().then(function (posts) {
-        state.publishedPosts = posts;
-        renderAll();
-      });
-    }
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();

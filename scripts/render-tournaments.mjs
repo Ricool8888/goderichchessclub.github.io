@@ -219,11 +219,11 @@ function list(status, heading, emptyText) {
     ? items.map(card).join("\n")
     : `          <div class="empty-state">${emptyText}</div>`;
 
-  // The second list starts hidden so the page does not flash both lists
-  // before the script picks the tab; the tab buttons unhide it.
-  const hidden = status === "completed" ? " hidden" : "";
-
-  return `        <div class="tournament-grid" id="${status}List" data-status="${status}"${hidden}>
+  // Both lists ship visible, so past results are readable without the tab
+  // script - and if tournaments.js never loads. The script hides the list
+  // that is not selected as soon as it starts, which is before the first
+  // paint because it sits at the end of the page.
+  return `        <div class="tournament-grid" id="${status}List" data-status="${status}">
           <h2 class="sr-only">${heading}</h2>
 ${body}
         </div>`;
