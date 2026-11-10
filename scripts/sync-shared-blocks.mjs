@@ -18,6 +18,15 @@ const BLOCKS = {
   footer: { start: '<footer class="site-footer">', end: "</footer>", partial: "partials/footer.html" },
 };
 
+/*
+ * Error pages are served at whatever address the visitor mistyped -
+ * /nope/deep/path shows 404.html - so a relative link in their header or
+ * footer would point at /nope/deep/about instead of /about. Their copies of
+ * the shared blocks are therefore rewritten to root-absolute paths. The
+ * pages keep the same canonical markup; only the links differ.
+ */
+const ROOT_ABSOLUTE_PAGES = new Set(["400.html", "403.html", "404.html", "500.html", "503.html"]);
+
 // Which nav link is "current" on each page. Error pages highlight nothing.
 const NAV_HREF = {
   "index.html": "./",
@@ -49,6 +58,14 @@ function activeHeader(headerHtml, href) {
   return headerHtml.replace(link, `<a href="${href}" class="nav-item active" aria-current="page">`);
 }
 
+function rootAbsolute(html) {
+  return html.replace(/\b(href|src)="([^"]*)"/g, (match, attr, url) => {
+    // Leave alone anything already absolute, a fragment, or another scheme.
+    if (!url || /^(?:[a-z][a-z0-9+.-]*:|\/|#)/i.test(url)) return match;
+    return `${attr}="/${url.replace(/^\.\//, "")}"`;
+  });
+}
+
 function replaceBlock(html, block, replacement, file, name) {
   // Match from the opening tag to the first matching closing tag.
   const pattern = new RegExp(
@@ -68,8 +85,16 @@ for (const page of pages) {
   const original = readFileSync(page, "utf8");
   let updated = original;
 
-  updated = replaceBlock(updated, BLOCKS.header, activeHeader(canonical.header, NAV_HREF[page]), page, "header");
-  updated = replaceBlock(updated, BLOCKS.footer, canonical.footer, page, "footer");
+  let header = activeHeader(canonical.header, NAV_HREF[page]);
+  let footer = canonical.footer;
+
+  if (ROOT_ABSOLUTE_PAGES.has(page)) {
+    header = rootAbsolute(header);
+    footer = rootAbsolute(footer);
+  }
+
+  updated = replaceBlock(updated, BLOCKS.header, header, page, "header");
+  updated = replaceBlock(updated, BLOCKS.footer, footer, page, "footer");
 
   if (updated === original) continue;
 

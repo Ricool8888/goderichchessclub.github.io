@@ -65,6 +65,37 @@
       .catch(function () { return []; });
   }
 
+  /*
+   * Tournaments are read from assets/tournaments.json - the same file that
+   * writes the tournament cards - so a date, venue or title is only ever
+   * typed once. events.json is left for events that are not tournaments
+   * (a simul, a guest speaker, a club social).
+   */
+  function fetchTournaments() {
+    return fetch("assets/tournaments.json")
+      .then(function (res) { if (!res.ok) throw new Error("no tournaments file"); return res.json(); })
+      .catch(function () { return []; });
+  }
+
+  function tournamentsAsEvents(list) {
+    return (list || []).map(function (t) {
+      if (!t || !t.date || !t.title) return null;
+
+      var details = String(t.description || "").replace(/\*\*/g, "").trim();
+      var lines = [];
+      if (t.location) lines.push("Location: " + t.location);
+      if (details) lines.push(details);
+
+      return {
+        id: t.id,
+        date: t.date,
+        time: t.time || "",
+        title: t.title,
+        description: lines.join("\n\n")
+      };
+    }).filter(Boolean);
+  }
+
   function fetchClosures() {
     return fetch("assets/closures.json")
       .then(function (res) { if (!res.ok) throw new Error("no closures file"); return res.json(); })
@@ -460,9 +491,19 @@
       }
     });
 
-    Promise.all([fetchPublishedEvents(), fetchClosures()]).then(function (results) {
-      state.publishedEvents = results[0];
-      state.closures = results[1];
+    Promise.all([fetchTournaments(), fetchPublishedEvents(), fetchClosures()]).then(function (results) {
+      var tournaments = tournamentsAsEvents(results[0]);
+      var specials = results[1] || [];
+
+      // A tournament that still appears in events.json must not be drawn
+      // twice; the tournament file wins.
+      var seen = {};
+      tournaments.forEach(function (ev) { seen[ev.date + "|" + ev.title] = true; });
+
+      state.publishedEvents = tournaments.concat(specials.filter(function (ev) {
+        return ev && !seen[ev.date + "|" + ev.title];
+      }));
+      state.closures = results[2];
       render();
     });
   }

@@ -22,8 +22,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
+  # The same checks a pull request runs. The deploy job waits for them, so a
+  # page that fails validation never reaches the live site.
+  checks:
+    uses: ./.github/workflows/validate.yml
+
   deploy:
+    needs: checks
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -51,6 +56,8 @@ jobs:
         run: node scripts/render-tournaments.mjs
       - name: Rebuild the photo gallery
         run: node scripts/render-gallery.mjs
+      - name: Rebuild the posts
+        run: node scripts/render-posts.mjs
       - name: Check the data files
         run: node scripts/check-data.mjs
       - name: Upload artifact

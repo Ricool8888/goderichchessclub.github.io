@@ -2,9 +2,11 @@
 /**
  * Writes assets/last-updated.json from git history, so the footer date on
  * every page comes from the last commit that touched that page instead of a
- * GitHub API request made by each visitor. Also refreshes the <lastmod> of each
- * sitemap entry from the same dates (search engines ignore changefreq and
- * priority, but they do use lastmod).
+ * GitHub API request made by each visitor.
+ *
+ * It also rebuilds sitemap.xml: one entry per page in the repository, with the
+ * same date (search engines ignore changefreq and priority, but they do use
+ * lastmod).
  *
  * Run from the repository root. Used by .github/workflows/static.yml before
  * the site is uploaded; running it locally is harmless.
@@ -42,26 +44,38 @@ const out = {
 writeFileSync("assets/last-updated.json", JSON.stringify(out, null, 2) + "\n");
 console.log(`stamp-last-updated: wrote ${pages.length} page dates`);
 
-// --- sitemap <lastmod> -----------------------------------------------------
+// --- sitemap -----------------------------------------------------------------
+//
+// The list of pages is built from the files in the repository rather than kept
+// by hand, so adding a page is enough: it appears in sitemap.xml on the next
+// deploy with the date of the last commit that touched it.
 
 const SITEMAP = "sitemap.xml";
+const SITE_URL = "https://goderichchessclub.com";
 
-function pageForUrl(url) {
-  const path = url.replace(/^https?:\/\/[^/]+/, "").replace(/^\//, "").replace(/\/$/, "");
-  return path === "" ? "index.html" : `${path}.html`;
-}
+// Error pages answer bad addresses; they are not pages anyone should land on.
+const NOT_A_PAGE = new Set(["400.html", "403.html", "404.html", "500.html", "503.html"]);
 
-const sitemap = readFileSync(SITEMAP, "utf8");
-let stamped = 0;
+const entries = pages
+  .filter((page) => !NOT_A_PAGE.has(page))
+  .map((page) => ({
+    loc: page === "index.html" ? `${SITE_URL}/` : `${SITE_URL}/${page.replace(/\.html$/, "")}`,
+    date: dates[page] || today,
+  }))
+  .sort((a, b) => {
+    const home = `${SITE_URL}/`;
+    if (a.loc === home) return -1;
+    if (b.loc === home) return 1;
+    return a.loc.localeCompare(b.loc);
+  });
 
-const updatedSitemap = sitemap.replace(/[ \t]*<url>[\s\S]*?<\/url>/g, (entry) => {
-  const loc = (entry.match(/<loc>([^<]+)<\/loc>/) || [])[1];
-  if (!loc) return entry;
-  const date = dates[pageForUrl(loc.trim())] || today;
-  stamped++;
-  // changefreq and priority are ignored by Google, so only loc and lastmod ship.
-  return `  <url>\n    <loc>${loc.trim()}</loc>\n    <lastmod>${date}</lastmod>\n  </url>`;
-});
+const sitemap = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ...entries.map((entry) => `  <url>\n    <loc>${entry.loc}</loc>\n    <lastmod>${entry.date}</lastmod>\n  </url>`),
+  "</urlset>",
+  "",
+].join("\n");
 
-writeFileSync(SITEMAP, updatedSitemap);
-console.log(`stamp-last-updated: stamped ${stamped} sitemap lastmod dates`);
+writeFileSync(SITEMAP, sitemap);
+console.log(`stamp-last-updated: wrote ${entries.length} sitemap entries`);

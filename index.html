@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
-<script src="assets/clean-urls.js"></script>
+<meta charset="UTF-8">
 <script>
   (function () {
     try {
@@ -11,7 +11,6 @@
     } catch (e) {}
   })();
 </script>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#221246">
 <title>Goderich Chess Club - Free Weekly Meetings in Goderich, ON</title>
@@ -75,6 +74,34 @@
   ],
   "isAccessibleForFree": true,
   "email": "goderichchessclub@gmail.com",
+  "sameAs": [
+    "https://www.facebook.com/groups/goderichchessclub",
+    "https://www.instagram.com/goderichchessclub",
+    "https://www.chess.com/club/goderich-chess-club",
+    "https://worldchess.com/community/goderich-chess-club",
+    "https://lichess.org/team/goderich-chess-club"
+  ]
+}
+</script>
+
+<!-- Structured data: the club as an organisation, so search engines can tie
+     this site, its logo and the club's profiles together as one club. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://goderichchessclub.com/#organization",
+  "name": "Goderich Chess Club",
+  "url": "https://goderichchessclub.com/",
+  "logo": "https://goderichchessclub.com/assets/logos/GCC%20large%20logo%20rounded.png",
+  "email": "goderichchessclub@gmail.com",
+  "description": "A free, all-ages community chess club in Goderich, Ontario, meeting every Tuesday at Goderich Library and every Friday at Goderich Legion.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Goderich",
+    "addressRegion": "ON",
+    "addressCountry": "CA"
+  },
   "sameAs": [
     "https://www.facebook.com/groups/goderichchessclub",
     "https://www.instagram.com/goderichchessclub",
@@ -320,7 +347,7 @@
       </button>
     </div>
     <p>&copy; <span id="copyrightYear">2026</span> Goderich Chess Club Inc. All rights reserved.  Incorporated in Ontario, Canada.<br>
-    Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a> <br> <a href="privacy">Privacy Policy</a> </p>
+    Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a> <br> <a href="privacy">Privacy Policy</a> &bull; <a href="accessibility">Accessibility</a> </p>
     <p class="last-updated" hidden>Last updated: <span id="lastUpdatedText"></span></p>
   </div>
 </footer>
@@ -368,5 +395,6 @@
 <script src="assets/last-updated.js"></script>
 <script src="assets/banner.js"></script>
 <script src="assets/nav.js"></script>
+<script src="assets/clean-urls.js"></script>
 </body>
 </html>

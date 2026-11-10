@@ -4,8 +4,8 @@
  * photos are in the page itself: they load with the page, show up in search
  * results, and appear even when JavaScript is off.
  *
- * assets/gallery.js still runs the lightbox; it reads each photo's original
- * file from its card in the page.
+ * assets/gallery.js still runs the lightbox; it reads each photo's large copy
+ * from its card in the page, and adds the fade-in as photos scroll into view.
  *
  * Run from the repository root:
  *
@@ -37,7 +37,9 @@ function escapeHtml(value) {
 }
 
 function item(photo) {
-  const full = `assets/gallery/${photo.filename}`;
+  // The lightbox opens the 1600 px WebP rather than the multi-megabyte
+  // camera original; generate-gallery-thumbs.mjs writes it.
+  const full = `assets/gallery/thumbs/${photo.filename}-1600.webp`;
   const thumb = `assets/gallery/thumbs/${photo.filename}`;
   const alt = escapeHtml(photo.alt || photo.caption || "");
 
@@ -45,7 +47,7 @@ function item(photo) {
     ? `\n            <span class="gallery-item-caption">${escapeHtml(photo.caption)}</span>`
     : "";
 
-  return `          <button type="button" class="gallery-item gallery-item-visible" data-full="${escapeHtml(full)}">
+  return `          <button type="button" class="gallery-item" data-full="${escapeHtml(full)}">
             <img src="${escapeHtml(thumb)}-960.webp"
                  srcset="${escapeHtml(thumb)}-480.webp 480w, ${escapeHtml(thumb)}-960.webp 960w"
                  sizes="${SIZES}"

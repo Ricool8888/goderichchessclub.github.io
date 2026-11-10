@@ -1,13 +1,13 @@
 # Checks that keep typos and malformed markup out of the published site.
 #
-# The deploy workflow (static.yml) only runs on main, so these checks also run
-# on pull requests, before anything reaches the live site.
+# Two callers: a pull request runs them before anything is merged, and the
+# deploy workflow (static.yml) runs them as its first job, so a failure stops
+# the upload instead of publishing first and going red afterwards.
 name: Validate pages
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
@@ -45,6 +45,10 @@ jobs:
 
       - name: Check the photo gallery
         run: node scripts/render-gallery.mjs --check
+
+      # The posts are written into posts-and-news.html from assets/posts.json.
+      - name: Check the posts
+        run: node scripts/render-posts.mjs --check
 
       # Rules live in .htmlvalidate.json.
       - name: Validate HTML

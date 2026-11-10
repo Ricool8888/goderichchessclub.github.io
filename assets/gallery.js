@@ -178,5 +178,67 @@
     }
   }
 
+  /*
+   * Bring back the gallery's fade-in: each card fades and rises as it
+   * scrolls into view, and each photo fades in once it has loaded.
+   *
+   * Both are opt-in. The .gallery-reveal class is only added here, so a
+   * visitor whose script never runs - or a search engine reading the page -
+   * still sees every photo instead of a grid of empty squares.
+   */
+  function initReveal() {
+    var grids = Array.prototype.slice.call(document.querySelectorAll(".gallery-grid"));
+    if (!grids.length) return;
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".gallery-item"));
+    var prefersReducedMotion = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // No observer, or the visitor asked for less motion: leave everything
+    // exactly as it is in the HTML.
+    if (!("IntersectionObserver" in window) || prefersReducedMotion) {
+      cards.forEach(function (card) { card.classList.add("gallery-item-visible"); });
+      return;
+    }
+
+    grids.forEach(function (grid) { grid.classList.add("gallery-reveal"); });
+
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("gallery-item-visible");
+        revealObserver.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -60px 0px", threshold: 0.05 });
+
+    cards.forEach(function (card) { revealObserver.observe(card); });
+
+    // Fade each photo in when it finishes loading. A photo that is already
+    // decoded from the cache still gets one frame at opacity 0, so the fade
+    // does not depend on how fast the connection is.
+    cards.forEach(function (card) {
+      var img = card.querySelector("img");
+      if (!img) return;
+
+      img.classList.add("gallery-image-loading");
+
+      var shown = function () {
+        img.classList.remove("gallery-image-loading");
+        img.classList.add("gallery-image-loaded");
+      };
+
+      if (img.complete && img.naturalWidth) {
+        requestAnimationFrame(shown);
+      } else {
+        img.addEventListener("load", shown, { once: true });
+        img.addEventListener("error", shown, { once: true });
+      }
+    });
+  }
+
+  // The grid markup sits above this script, so the cards exist already and
+  // the fade can start before the first paint.
+  initReveal();
+
   document.addEventListener("DOMContentLoaded", init);
 })();

@@ -3,8 +3,12 @@
 
   // GitHub Pages serves every page at two addresses: /gallery and
   // /gallery.html. Only the clean one is canonical - it is what the menu, the
-  // sitemap and every canonical tag point at - so a visit to the .html copy
-  // is moved across before the page paints, leaving one address per page.
+  // sitemap and every canonical tag point at - so a visit to the .html copy is
+  // moved across, leaving one address per page.
+  //
+  // This runs with the other scripts at the end of the page rather than in
+  // <head>, so it never delays the first paint. Every link on the site already
+  // uses the clean address, so the redirect is only ever a safety net.
   //
   // Loaded by the content pages only. The error pages (400/403/404/500/503)
   // are excluded on purpose: they must stay on whatever address the visitor

@@ -117,5 +117,9 @@
     selectTab(tabFromHash());
   }
 
-  document.addEventListener("DOMContentLoaded", init);
+  // This script is the last thing on the page, so the tabs and both lists
+  // already exist. Running now (rather than waiting for DOMContentLoaded)
+  // hides the list that is not selected before the page paints, which is why
+  // both lists can safely ship visible for visitors without JavaScript.
+  init();
 })();

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="UTF-8">
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem("gcc-theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (e) {}
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#221246">
+<title>Accessibility - Goderich Chess Club</title>
+<meta name="description" content="How the Goderich Chess Club website is made accessible, what we have tested, and how to report a barrier.">
+<link rel="canonical" href="https://goderichchessclub.com/accessibility">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/logos/favicon-192.png">
+<link rel="apple-touch-icon" href="/assets/logos/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a href="#main-content" class="sr-only">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container">
+    <div class="navbar-flex">
+      <a href="./" class="brand-logo">
+        <img src="assets/logos/gcc-header-logo.webp" alt="" aria-hidden="true" width="32" height="48" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
+        <span class="gold-text">Goderich Chess Club</span>
+      </a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Open menu">&#9776;</button>
+      <nav class="nav-links" id="primaryNav" aria-label="Main Navigation">
+        <a href="./" class="nav-item">Home</a>
+        <a href="about" class="nav-item">About Us</a>
+        <a href="posts-and-news" class="nav-item">Posts / News</a>
+        <a href="events-calendar" class="nav-item">Events Calendar</a>
+        <a href="tournaments" class="nav-item">Tournaments</a>
+        <a href="sponsors" class="nav-item">Sponsors</a>
+        <a href="merch" class="nav-item">Merch</a>
+        <a href="gallery" class="nav-item">Gallery</a>
+        <a href="faq" class="nav-item">FAQ</a>
+        <a href="books-for-sale" class="nav-item">Books for sale</a>
+        <a href="mailto:goderichchessclub@gmail.com" class="btn-join">Contact Us</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Access<span class="gold-text">ibility</span></h1>
+      <p class="page-desc">How this website tries to work for everyone, and how to tell us when it does not.</p>
+    </div>
+
+    <div class="content-card" style="max-width: 800px; margin: 0 auto 40px; padding: 30px;">
+
+      <p>Last reviewed: <strong>November 10, 2026</strong></p>
+
+      <p>The Goderich Chess Club wants everyone to be able to read this site and find what they need, whether they use a keyboard, a screen reader, a phone, or a browser with large text.</p>
+
+      <h2>1. The standard we aim for</h2>
+      <p>We aim to meet the <a href="https://www.w3.org/TR/WCAG22/">Web Content Accessibility Guidelines (WCAG) 2.2, Level AA</a>. That is the standard Ontario&rsquo;s accessibility rules are built on, and it is the level we test against before a change goes live.</p>
+      <br>
+      <h2>2. What the site does</h2>
+      <ul>
+        <li><strong>Keyboard.</strong> Every page can be used without a mouse, including the calendar, the tournament tabs, the photo gallery and its larger viewer, and the theme switch. Focus is always visible, and the viewer sends focus back to the photo you opened.</li>
+        <li><strong>Contrast and colour.</strong> Text meets the 4.5:1 contrast minimum in both the dark and the light theme, and nothing is explained by colour alone: the calendar also uses shapes and text for meetings, tournaments and closures.</li>
+        <li><strong>Zoom and small screens.</strong> Pages reflow at 320&nbsp;px wide and remain usable at 200% zoom.</li>
+        <li><strong>Motion.</strong> The gallery fades and other animations stop when your device asks for reduced motion.</li>
+        <li><strong>Screen readers.</strong> Pages declare their language, photos carry descriptions, the current page is marked in the menu, month changes in the calendar are announced, and the countdown shows the closing date as text.</li>
+        <li><strong>Without JavaScript.</strong> The news, tournaments, gallery and calendar pages contain their content in the page itself, so it is readable even if scripts do not run.</li>
+      </ul>
+      <br>
+      <h2>3. Known limitations</h2>
+      <ul>
+        <li>Maps are drawn by Google and only load when you press <em>Show map</em>. The full street address is always printed as text above each map, so you never need the map.</li>
+        <li>Tournament registration and the mailing list use Google Forms, and past results link to chess-results.com. Those are other organisations&rsquo; pages, and we cannot change how they behave. If a form is a barrier for you, email us and we will register you or take your details directly.</li>
+        <li>Some photos have short descriptions because a visible caption already says what is happening. If you need a photo described in more detail, ask and we will help.</li>
+        <li>The live game board and the evaluation bar are third-party widgets. They are never the only way to get the information on the page.</li>
+      </ul>
+      <br>
+      <h2>4. Tell us about a barrier</h2>
+      <p>If something on this site is hard or impossible for you to use, email <a href="mailto:goderichchessclub@gmail.com">goderichchessclub@gmail.com</a> and describe the page and what happened. Please include the address of the page and, if you can, the browser or assistive technology you were using.</p>
+      <p>We will reply as soon as we reasonably can. If we cannot fix the problem quickly, we will send you the information in another format &mdash; by email, in large print, or over the phone &mdash; so you are not blocked in the meantime.</p>
+      <br>
+      <h2>5. Keeping this page current</h2>
+      <p>We review accessibility whenever the site changes and re-check every page with automated tools and a keyboard before a release. This page is updated when that review finds something worth reporting.</p>
+
+    </div>
+
+    <div class="social-container">
+      <a href="https://www.facebook.com/groups/goderichchessclub" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Visit Facebook">
+        <span class="social-icon" aria-hidden="true"></span>
+      </a>
+      <a href="https://www.instagram.com/goderichchessclub?igsh=c2VkY3VzNXFnMTky" target="_blank" rel="noopener noreferrer" class="social-btn instagram" aria-label="Visit Instagram">
+        <span class="social-icon" aria-hidden="true"></span>
+      </a>
+      <a href="https://www.chess.com/club/goderich-chess-club" target="_blank" rel="noopener noreferrer" class="social-btn chess" aria-label="Visit Chess.com">
+        <span class="social-icon" aria-hidden="true"></span>
+      </a>
+      <a href="https://worldchess.com/community/goderich-chess-club" target="_blank" rel="noopener noreferrer" class="social-btn worldchess" aria-label="Visit WorldChess">
+        <span class="social-icon" aria-hidden="true"></span>
+      </a>
+      <a href="https://lichess.org/team/goderich-chess-club" target="_blank" rel="noopener noreferrer" class="social-btn lichess" aria-label="Visit Lichess">
+        <span class="social-icon" aria-hidden="true"></span>
+      </a>
+      <button type="button" class="social-btn share" aria-label="Share this page" aria-haspopup="true" aria-expanded="false">
+        <span class="social-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="theme-control">
+      <span class="theme-label">Theme</span>
+      <button type="button" id="themeToggle" class="theme-toggle" aria-label="Theme: Dark mode" aria-pressed="false">
+        <span class="theme-option theme-option-light" aria-hidden="true">
+          <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </span>
+        <span class="theme-option theme-option-dark" aria-hidden="true">
+          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+        <span class="theme-thumb" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p>&copy; <span id="copyrightYear">2026</span> Goderich Chess Club Inc. All rights reserved.  Incorporated in Ontario, Canada.<br>
+    Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a> <br> <a href="privacy">Privacy Policy</a> &bull; <a href="accessibility">Accessibility</a> </p>
+    <p class="last-updated" hidden>Last updated: <span id="lastUpdatedText"></span></p>
+  </div>
+</footer>
+
+<script src="assets/theme.js"></script>
+<script src="assets/share.js"></script>
+<script src="assets/last-updated.js"></script>
+<script src="assets/nav.js"></script>
+<script src="assets/clean-urls.js"></script>
+</body>
+</html>

@@ -46,8 +46,20 @@
     if (deadline) {
       var countdownEl = document.createElement("span");
       countdownEl.className = "site-banner-countdown";
-      countdownEl.setAttribute("aria-live", "off");
+      // The clock changes every second. A screen reader should not read that
+      // out, so it is hidden from assistive technology and the exact closing
+      // moment is given as one static sentence instead.
+      countdownEl.setAttribute("aria-hidden", "true");
       bar.appendChild(countdownEl);
+
+      var deadlineText = document.createElement("span");
+      deadlineText.className = "sr-only";
+      deadlineText.textContent = deadline.toLocaleString("en-CA", {
+        timeZone: "America/Toronto",
+        dateStyle: "long",
+        timeStyle: "short"
+      }) + " Eastern time.";
+      bar.appendChild(deadlineText);
 
       var update = function () {
         var remaining = deadline.getTime() - Date.now();

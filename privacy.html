@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
-<script src="assets/clean-urls.js"></script>
+<meta charset="UTF-8">
 <script>
   (function () {
     try {
@@ -11,7 +11,6 @@
     } catch (e) {}
   })();
 </script>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#221246">
 <title>Privacy Policy - Goderich Chess Club</title>
@@ -59,7 +58,7 @@
 
     <div class="content-card" style="max-width: 800px; margin: 0 auto 40px; padding: 30px;">
 
-      <p>Last updated: <strong>November 9, 2026 - Version #2</strong></p>
+      <p>Last updated: <strong>November 10, 2026 - Version #3</strong></p>
 
       <p>The Goderich Chess Club ("we", "us") is a non-profit community chess club in Goderich, Ontario, Canada. This policy explains what information is collected through this website, how it is used, and how you can contact us about it.</p>
 
@@ -68,6 +67,7 @@
       <ul>
         <li><strong>Email correspondence.</strong> If you email us (to join the mailing list, ask a question, arrange a merchandise or book purchase, or request a photo removal), we receive your email address and whatever information you choose to include. We use it only to respond to you and, if you have asked to join the mailing list, to send club updates. You can unsubscribe from the mailing list at any time by emailing us.</li>
         <li><strong>Theme preference.</strong> Your light/dark theme choice is stored in your own browser (localStorage) so the site remembers it on your next visit. It never leaves your device and we have no access to it.</li>
+        <li><strong>Forms.</strong> Tournament registration and the mailing list sign-up are hosted by Google Forms (forms.gle), not by this website. When you submit one, Google receives the answers you type and the usual technical information about the request; the club receives only the answers you chose to send. Google's handling of that information is described in Google's own <a href="https://policies.google.com/privacy">privacy policy</a>.</li>
         <li><strong>Purchases and donations.</strong> Merchandise, book sales, and donations are arranged by email and settled in person or by other agreed methods. We keep only the information needed to complete the arrangement and do not use it for any other purpose.</li>
       </ul>
       <br>
@@ -75,9 +75,9 @@
       <p>This site is hosted on GitHub Pages. Like most web hosts, GitHub automatically logs certain technical information — including visitors' IP addresses — for security and operational purposes. These logs are controlled by GitHub, not by the club; we do not receive or review them. GitHub's handling of this data is described in GitHub's own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement.</a></p>
       <br>
       <h2>3. Photographs</h2>
-      <p>Our gallery and news pages may include photos taken at club meetings, tournaments, and events.</p>
+      <p>Our gallery and news pages may include photos and videos taken at club meetings, tournaments, and events for club records, this website, and our social media.</p>
       <ul>
-        <li>We aim to obtain permission from the people we photograph before publishing their image, and permission from a parent or guardian before publishing an identifiable image of a minor.</li>
+        <li>By attending or participating in a club meeting, tournament, or event, you consent to the use of your image, or your child's image, for these purposes. This is the same notice we give on tournament pages and at the door.</li>
         <li>We avoid publishing full names or other identifying details alongside photos.</li>
         <li>If a photo of you (or your child) appears on this site and you would like it removed or blurred, email us at the address below and we will take care of it promptly. You do not need to explain why.</li>
       </ul>
@@ -86,9 +86,11 @@
       <p>This site links to third-party services such as Facebook, Instagram, Chess.com, Lichess.org, Google Maps, and our sponsors' websites. When you follow a link, you leave our site and are governed by that service's own terms and privacy practices, which we do not control. We encourage you to review their policies.</p>
       <p>A few parts of the home page show content hosted by those services instead of by us:</p>
       <ul>
-        <li><strong>Puzzle of the Day and the live game board</strong> are provided by Lichess.org and load along with the page. Lichess may set cookies or record your IP address under its own privacy policy.</li>
+        <li><strong>Puzzle of the Day</strong> comes from Lichess.org: the puzzle itself is fetched from Lichess's public API, and the board it is played on is drawn by two open-source chess libraries (chessground and chess.js) that this site loads from the jsDelivr content network. Lichess and jsDelivr may record your IP address, and Lichess may set cookies, under their own policies.</li>
+        <li><strong>The live game board</strong> streams a game from Lichess.org and loads along with the page, under Lichess's own privacy policy.</li>
         <li><strong>Meeting maps</strong> come from Google Maps, but they do not load until you press the <em>Show map</em> button. The full street addresses are printed above each map, so you never have to open one.</li>
         <li><strong>The engine evaluation bar</strong> is switched off by default and only downloads its chess engine from cdnjs if you turn it on.</li>
+        <li><strong>Tournament registration and the mailing list</strong> are Google Forms, so following those links takes you to Google, which handles what you type there under its own privacy policy.</li>
       </ul>
       <p>If you would rather not be seen by those services, you can read the news, gallery, tournaments, and contact pages without visiting the home page, and everything else on the site is served from our own hosting.</p>
       <br>
@@ -148,7 +150,7 @@
       </button>
     </div>
     <p>&copy; <span id="copyrightYear">2026</span> Goderich Chess Club Inc. All rights reserved.  Incorporated in Ontario, Canada.<br>
-    Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a> <br> <a href="privacy">Privacy Policy</a> </p>
+    Affiliated Platforms: <a href="https://www.chess.ca/en/">CFC</a> &bull; <a href="https://www.fide.com/">FIDE</a> <br> <a href="privacy">Privacy Policy</a> &bull; <a href="accessibility">Accessibility</a> </p>
     <p class="last-updated" hidden>Last updated: <span id="lastUpdatedText"></span></p>
   </div>
 </footer>
@@ -157,5 +159,6 @@
 <script src="assets/share.js"></script>
 <script src="assets/last-updated.js"></script>
 <script src="assets/nav.js"></script>
+<script src="assets/clean-urls.js"></script>
 </body>
 </html>
