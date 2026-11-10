@@ -23,6 +23,7 @@ import { readdirSync, readFileSync } from "node:fs";
 const CHECKS = [
   ["shared header, footer and preview tags", ["scripts/sync-shared-blocks.mjs", "--check"]],
   ["data files", ["scripts/check-data.mjs"]],
+  ["footer dates and sitemap", ["scripts/stamp-last-updated.mjs", "--check"]],
   ["weekly meeting details vs the pages", ["scripts/check-meetings.mjs"]],
   ["book descriptions", ["scripts/generate-books-table.mjs", "--check"]],
   ["tournament cards", ["scripts/render-tournaments.mjs", "--check"]],

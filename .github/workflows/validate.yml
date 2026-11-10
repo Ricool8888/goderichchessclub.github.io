@@ -18,6 +18,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history: the footer dates come from the commit that last
+          # touched each page, and that check compares them with the file
+          # committed alongside the pages.
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4

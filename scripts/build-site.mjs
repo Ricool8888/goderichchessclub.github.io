@@ -52,14 +52,6 @@ function excluded(relPath) {
   return EXCLUDE_PATTERNS.some((pattern) => pattern.test(relPath));
 }
 
-function isGenerated(path) {
-  return existsSync(path);
-}
-
-// A file the workflow generates at deploy time; absent when someone runs this
-// script on a fresh clone. Copied when it is there.
-const OPTIONAL_FILES = ["assets/last-updated.json"];
-
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 
@@ -71,9 +63,6 @@ cpSync("assets", join(OUT, "assets"), {
 });
 for (const file of ROOT_FILES) cpSync(file, join(OUT, file));
 for (const page of pages) cpSync(page, join(OUT, page));
-for (const file of OPTIONAL_FILES) {
-  if (isGenerated(file)) cpSync(file, join(OUT, file));
-}
 
 // ---- checks -----------------------------------------------------------------
 
@@ -84,6 +73,7 @@ const missing = [
   "assets/nav.js",
   "assets/calendar.js",
   "assets/meetings.json",
+  "assets/last-updated.json",
   "assets/tournaments.json",
   "assets/gallery.json",
   "assets/closures.json",
