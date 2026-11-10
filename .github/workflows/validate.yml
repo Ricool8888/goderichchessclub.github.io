@@ -50,6 +50,11 @@ jobs:
       - name: Check the posts
         run: node scripts/render-posts.mjs --check
 
+      # The home page banner is written into index.html from
+      # assets/banner.json so it is in the page before it paints.
+      - name: Check the announcement banner
+        run: node scripts/render-banner.mjs --check
+
       # Rules live in .htmlvalidate.json.
       - name: Validate HTML
         run: npx --yes html-validate@9.7.1 '*.html'

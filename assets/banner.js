@@ -1,3 +1,11 @@
+// The announcement banner's live behaviour.
+//
+// The banner itself is already in the page: scripts/render-banner.mjs writes it
+// from assets/banner.json at build time, which is why it no longer shifts the
+// page when it appears and why the closing date is readable with scripts off.
+// This file only turns that closing date into a ticking countdown, and removes
+// the banner when its deadline passes. With scripts off the date simply stays
+// as text.
 (function () {
   "use strict";
 
@@ -16,88 +24,48 @@
     return pad(hours) + "h " + pad(minutes) + "m " + pad(seconds) + "s";
   }
 
-  // Renders exactly one banner. Banners are permanent (no dismiss control) -
-  // the only way a banner disappears is if its own countdown expires, or
-  // you set "enabled": false / remove it from banner.json.
-  function renderOne(data, mount) {
-    if (!data || !data.enabled) return;
-    if (!data.id || !data.message) return;
+  function hydrate(bar) {
+    var deadline = new Date(bar.getAttribute("data-banner-deadline"));
+    if (isNaN(deadline.getTime()) || deadline.getTime() <= Date.now()) {
+      bar.remove();
+      return;
+    }
 
-    var deadline = null;
-    if (data.countdown && data.countdown.enabled && data.countdown.deadlineUTC) {
-      deadline = new Date(data.countdown.deadlineUTC);
-      // Auto-expire: once the deadline has passed, don't show this banner
-      // at all. No manual cleanup needed after the tournament.
-      if (isNaN(deadline.getTime()) || deadline.getTime() <= Date.now()) {
+    var countdownEl = bar.querySelector(".site-banner-countdown");
+    if (!countdownEl) return;
+
+    // The clock changes every second, so a screen reader should not read that
+    // out. The exact closing moment is given once, as a sentence.
+    countdownEl.setAttribute("aria-hidden", "true");
+
+    var deadlineText = document.createElement("span");
+    deadlineText.className = "sr-only";
+    deadlineText.textContent = deadline.toLocaleString("en-CA", {
+      timeZone: "America/Toronto",
+      dateStyle: "long",
+      timeStyle: "short"
+    }) + " Eastern time.";
+    countdownEl.parentNode.insertBefore(deadlineText, countdownEl.nextSibling);
+
+    var timer = null;
+    var update = function () {
+      var remaining = deadline.getTime() - Date.now();
+      if (remaining <= 0) {
+        clearInterval(timer);
+        bar.remove();
         return;
       }
-    }
+      countdownEl.textContent = formatCountdown(remaining);
+    };
 
-    var bar = document.createElement("div");
-    bar.className = "site-banner-bar site-banner-" + (data.style === "urgent" ? "urgent" : "info");
-    bar.setAttribute("role", "region");
-    bar.setAttribute("aria-label", "Site announcement");
-
-    var text = document.createElement("span");
-    text.className = "site-banner-text";
-    text.textContent = data.message;
-    bar.appendChild(text);
-
-    if (deadline) {
-      var countdownEl = document.createElement("span");
-      countdownEl.className = "site-banner-countdown";
-      // The clock changes every second. A screen reader should not read that
-      // out, so it is hidden from assistive technology and the exact closing
-      // moment is given as one static sentence instead.
-      countdownEl.setAttribute("aria-hidden", "true");
-      bar.appendChild(countdownEl);
-
-      var deadlineText = document.createElement("span");
-      deadlineText.className = "sr-only";
-      deadlineText.textContent = deadline.toLocaleString("en-CA", {
-        timeZone: "America/Toronto",
-        dateStyle: "long",
-        timeStyle: "short"
-      }) + " Eastern time.";
-      bar.appendChild(deadlineText);
-
-      var update = function () {
-        var remaining = deadline.getTime() - Date.now();
-        if (remaining <= 0) {
-          clearInterval(localInterval);
-          bar.remove();
-          return;
-        }
-        countdownEl.textContent = formatCountdown(remaining);
-      };
-      update();
-      var localInterval = setInterval(update, 1000);
-    }
-
-    if (data.linkUrl && data.linkText) {
-      var link = document.createElement("a");
-      link.href = data.linkUrl;
-      link.className = "site-banner-link";
-      link.textContent = data.linkText + " \u2192";
-      bar.appendChild(link);
-    }
-
-    mount.appendChild(bar);
+    update();
+    timer = setInterval(update, 1000);
   }
 
   function init() {
     var mount = document.getElementById("siteBanner");
     if (!mount) return;
-
-    fetch("assets/banner.json")
-      .then(function (res) { if (!res.ok) throw new Error("no banner file"); return res.json(); })
-      .then(function (data) {
-        // Accept either a single banner object (older format) or an
-        // array of banners (current format) so nothing breaks either way.
-        var banners = Array.isArray(data) ? data : [data];
-        banners.forEach(function (banner) { renderOne(banner, mount); });
-      })
-      .catch(function () { /* no banner configured, do nothing */ });
+    Array.prototype.forEach.call(mount.querySelectorAll("[data-banner-deadline]"), hydrate);
   }
 
   document.addEventListener("DOMContentLoaded", init);

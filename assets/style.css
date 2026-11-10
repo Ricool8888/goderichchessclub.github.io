@@ -68,6 +68,13 @@
 
 html {
   scroll-behavior: smooth;
+  /*
+   * The header is sticky, so an in-page jump (#post-id, the skip link) would
+   * otherwise put its target underneath it. The header is 81px tall on a
+   * phone and 98px once the full menu is inline, so this keeps ~100px of
+   * clearance above whatever the browser scrolls to.
+   */
+  scroll-padding-top: 112px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -286,7 +293,8 @@ a { color: var(--chess-green); }
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 22px;
+  /* Shrinks on narrow phones so the menu button stays on the same line. */
+  font-size: clamp(17px, 5.2vw, 22px);
   font-weight: 700;
   color: var(--white);
   text-decoration: none;
@@ -348,6 +356,8 @@ a { color: var(--chess-green); }
  * rows on tablets and small laptops.
  */
 @media (max-width: 991px) {
+  /* One row: the brand and the menu button, never a wrapped second line. */
+  .navbar-flex { flex-wrap: nowrap; gap: 8px 10px; }
   .nav-toggle { display: inline-flex; }
   .nav-links {
     display: none;
@@ -358,11 +368,26 @@ a { color: var(--chess-green); }
     background-color: var(--navy-950);
     border-bottom: 1px solid var(--gold-20);
     flex-direction: column;
+    /* One column, always. Wrapping would turn the height cap below into
+       sideways columns instead of a scroll. */
+    flex-wrap: nowrap;
     align-items: flex-start;
     gap: 0;
     padding: 8px 24px 20px;
   }
-  .nav-links.open { display: flex; }
+  /*
+   * Eleven links are taller than a phone in landscape. Capping the menu to the
+   * space under the header and letting it scroll keeps "Books for sale" and
+   * "Contact Us" reachable on short screens, where the menu used to run off
+   * the bottom with no way to scroll it.
+   */
+  .nav-links.open {
+    display: flex;
+    max-height: calc(100vh - 100%);
+    max-height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
   .nav-links .nav-item { width: 100%; padding: 12px 0; border-bottom: 1px solid var(--slate-800); }
   .nav-links .nav-item.active { border-bottom: 1px solid var(--gold); }
   .nav-links .btn-join { margin-top: 12px; text-align: center; }
@@ -586,6 +611,35 @@ a { color: var(--chess-green); }
 .map-facade:hover { background: var(--gold-20); color: var(--white); }
 .map-facade-icon { font-size: 18px; }
 @media (prefers-reduced-motion: reduce) { .map-facade { transition: none; } }
+
+/*
+ * The Lichess TV panel before the board is loaded (see live-game.js). It is a
+ * link to lichess.org/tv, so it still works with scripts off, and it holds the
+ * board's 10:11 box so nothing moves when the embed replaces it.
+ */
+.tv-facade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  aspect-ratio: 10 / 11;
+  padding: 12px;
+  border: 1px dashed var(--gold-30);
+  border-radius: 8px;
+  background: var(--gold-10);
+  color: var(--slate-300);
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.tv-facade:hover { background: var(--gold-20); color: var(--white); }
+.tv-facade-icon { font-size: 44px; line-height: 1; color: var(--gold); }
+.tv-facade-title { font-size: 16px; font-weight: 700; color: var(--white); }
+.tv-facade-note { font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { .tv-facade { transition: none; } }
 
 .btn-rsvp {
   display: block;
@@ -1292,7 +1346,7 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .post-title a { color: inherit; text-decoration: none; }
 .post-title a:hover { color: var(--gold); }
 .post-excerpt { color: var(--slate-300); font-size: 15px; margin-bottom: 12px; line-height: 1.6; }
-.post-readmore { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; }
+.post-readmore { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; background: none; border: none; padding: 0; cursor: pointer; display: inline-flex; align-items: center; min-height: 32px; }
 .post-readmore:hover { color: var(--gold); }
 
 /*
@@ -1463,6 +1517,12 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 /* The evaluation bar only appears once the visitor asks for it. */
 .eval-bar.is-off { display: none; }
+
+/*
+ * Until the visitor loads the board there is nothing to pause or evaluate, so
+ * those buttons stay out of the way (live-game.js adds .is-loaded).
+ */
+.live-game:not(.is-loaded) .live-game-actions { display: none; }
 
 /* Paused: the embed is unloaded and a note sits where its board was. */
 .live-game.is-paused .puzzle-frame { visibility: hidden; }
@@ -1722,16 +1782,35 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 /* =========================================================
    SITE BANNER
    ========================================================= */
+/*
+ * A grid rather than a wrapping flex row: the message takes the first line and
+ * the countdown sits beside the link on the second, on every phone width. That
+ * keeps the banner exactly as tall before scripts run (when it shows the
+ * closing date) as after (when it shows the ticking clock), so it never pushes
+ * the page around.
+ */
 .site-banner-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 6px 16px;
   padding: 12px 24px;
   text-align: center;
   font-size: 14px;
   border-bottom: 1px solid var(--gold-30);
+}
+
+.site-banner-text { grid-column: 1 / -1; }
+
+@media (min-width: 760px) {
+  .site-banner-bar { grid-template-columns: auto auto auto; }
+  .site-banner-text { grid-column: auto; }
+}
+
+/* The countdown and the closing date must both fit one line on a small phone. */
+@media (max-width: 379px) {
+  .site-banner-bar { font-size: 13px; }
 }
 
 .site-banner-info {
@@ -1766,11 +1845,17 @@ html[data-theme="light"] .site-banner-countdown {
   color: #8E0B20;
 }
 
+
+
 .site-banner-link {
   color: var(--gold);
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 0;
 }
 .site-banner-link:hover { text-decoration: underline; }
 
@@ -1953,6 +2038,11 @@ html[data-theme="light"] .site-banner-countdown {
 .book-title-btn {
   background: none;
   border: none;
+  display: inline-flex;
+  align-items: center;
+  /* Titles are the tap target for the cover preview, so give them height
+     even though they look like plain text. */
+  min-height: 24px;
   padding: 0;
   font-size: inherit;
   font-weight: inherit;
@@ -2156,7 +2246,7 @@ html[data-theme="light"] .site-banner-countdown {
 .tournament-desc strong { color: var(--white); font-weight: 700; }
 
 .tournament-links { display: flex; gap: 14px; flex-wrap: wrap; }
-.tournament-links a { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; }
+.tournament-links a { font-size: 14px; font-weight: 700; color: var(--chess-green); text-decoration: none; display: inline-flex; align-items: center; min-height: 24px; padding: 2px 0; }
 .tournament-links a:hover { color: var(--gold); }
 
 /* =========================================================
@@ -2222,7 +2312,7 @@ html[data-theme="light"] .site-banner-countdown {
 
 .sponsor-name { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
 .sponsor-desc { font-size: 14px; color: var(--slate-300); line-height: 1.55; margin-bottom: 8px; }
-.sponsor-link { font-size: 13px; font-weight: 700; color: var(--chess-green); text-decoration: none; }
+.sponsor-link { font-size: 13px; font-weight: 700; color: var(--chess-green); text-decoration: none; display: inline-flex; align-items: center; min-height: 24px; padding: 2px 0; }
 .sponsor-link:hover { color: var(--gold); }
 
 .sponsor-cta {
