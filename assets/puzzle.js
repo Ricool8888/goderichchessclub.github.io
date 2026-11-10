@@ -47,11 +47,15 @@ function init(root) {
       solutionBtn.addEventListener("click", showSolution);
       retryBtn.addEventListener("click", start);
       root.classList.add("is-ready");
+      // puzzle-loader.js watches for this so it stops waiting and never
+      // replaces a working board with its "didn't load" message.
+      document.dispatchEvent(new Event("puzzle:ready"));
     })
     .catch(function () {
       setStatus(
         'Couldn’t load today’s puzzle. Try it on <a href="https://lichess.org/training" ' +
         'target="_blank" rel="noopener noreferrer">Lichess</a> instead.', "error", true);
+      document.dispatchEvent(new Event("puzzle:failed"));
     });
 
   function start() {

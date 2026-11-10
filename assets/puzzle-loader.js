@@ -1,62 +1,120 @@
-// Delays the Puzzle of the Day until it is close to the screen.
+// Delays the Puzzle of the Day until it is close to the screen, and makes sure
+// the widget can never sit on "Loading" for ever.
 //
 // The puzzle needs chessground and chess.js from jsDelivr plus three
 // chessground stylesheets, and a puzzle API call. It sits well below the fold
-// on the home page, so none of that is needed for someone who is reading the
-// top of the page: this loads it when the widget comes within 600px of the
-// viewport. puzzle.js itself is unchanged.
+// on the home page, so none of that is needed by someone reading the top of the
+// page: this starts it when the widget comes within 600px of the viewport.
+// puzzle.js itself is unchanged apart from announcing when it is ready.
+//
+// Three things used to leave the widget saying "Loading today's puzzle…" with
+// nothing to click:
+//
+//   1. Starting depended only on an IntersectionObserver callback. A plain
+//      scroll/resize check runs alongside it, so the load starts either way.
+//   2. The board module was imported only after all three stylesheets had
+//      fired their load event. The CSS comes from the same CDN as the board
+//      code, so that wait bought nothing that the import was not already
+//      waiting for, and a load event that never fired stopped the puzzle from
+//      loading at all. The styles are now requested alongside the import.
+//   3. Nothing ever gave up. If the CDN stalls, this now says so and points at
+//      Lichess instead of spinning indefinitely.
 (function () {
   "use strict";
 
   var root = document.getElementById("puzzleWidget");
   if (!root) return;
 
+  var status = root.querySelector(".puzzle-status");
   var VERSION = "9.2.1";
   var STYLES = [
     "https://cdn.jsdelivr.net/npm/chessground@" + VERSION + "/assets/chessground.base.css",
     "https://cdn.jsdelivr.net/npm/chessground@" + VERSION + "/assets/chessground.brown.css",
     "https://cdn.jsdelivr.net/npm/chessground@" + VERSION + "/assets/chessground.cburnett.css"
   ];
+  var NEAR_PX = 600;    // how close to the viewport counts as "about to be read"
+  var GIVE_UP_MS = 12000;
 
   var started = false;
+  var ready = false;
+  var giveUpTimer = null;
+  var observer = null;
 
-  function addStyle(href) {
-    return new Promise(function (resolve) {
+  function announce(text, tone) {
+    if (!status) return;
+    status.className = "puzzle-status" + (tone ? " is-" + tone : "");
+    status.textContent = text;
+  }
+
+  function addStyles() {
+    STYLES.forEach(function (href) {
       var link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = href;
-      // Resolve either way: a missing stylesheet should not leave the board
-      // hidden behind a "Loading" message.
-      link.onload = resolve;
-      link.onerror = resolve;
       document.head.appendChild(link);
     });
+  }
+
+  function giveUp() {
+    if (ready) return;
+    if (!status) return;
+    status.className = "puzzle-status is-error";
+    status.innerHTML =
+      'Today\u2019s puzzle didn\u2019t load. Check your connection and reload the page, ' +
+      'or solve it on <a href="https://lichess.org/training" target="_blank" ' +
+      'rel="noopener noreferrer">Lichess</a>.';
   }
 
   function start() {
     if (started) return;
     started = true;
 
-    Promise.all(STYLES.map(addStyle))
-      .then(function () { return import("./puzzle.js"); })
-      .catch(function () {
-        var status = root.querySelector(".puzzle-status");
-        if (!status) return;
-        status.textContent = "Today\u2019s puzzle could not be loaded.";
-        status.className = "puzzle-status is-bad";
-      });
+    if (observer) observer.disconnect();
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
+    window.removeEventListener("load", onScroll);
+
+    addStyles();
+    giveUpTimer = setTimeout(giveUp, GIVE_UP_MS);
+
+    import("./puzzle.js").catch(function () {
+      // puzzle.js reports its own fetch failures; reaching here means the
+      // module itself never loaded (blocked CDN, offline, bad MIME type).
+      clearTimeout(giveUpTimer);
+      giveUp();
+    });
   }
 
-  if (!("IntersectionObserver" in window)) {
-    start();
-    return;
+  // Fallback for the observer: is the widget at, or above, the bottom edge of
+  // the screen plus a screen's worth of margin? Also true when the page opens
+  // already scrolled down to it.
+  function onScroll() {
+    if (started) return;
+    var box = root.getBoundingClientRect();
+    if (box.top < window.innerHeight + NEAR_PX) start();
   }
 
-  var observer = new IntersectionObserver(function (entries) {
-    if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
-    observer.disconnect();
-    start();
-  }, { rootMargin: "600px" });
+  document.addEventListener("puzzle:ready", function () {
+    ready = true;
+    if (giveUpTimer) clearTimeout(giveUpTimer);
+    giveUpTimer = null;
+  });
 
-  observer.observe(root);
+  document.addEventListener("puzzle:failed", function () {
+    if (giveUpTimer) clearTimeout(giveUpTimer);
+    giveUpTimer = null;
+  });
+
+  if ("IntersectionObserver" in window) {
+    observer = new IntersectionObserver(function (entries) {
+      if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
+      start();
+    }, { rootMargin: NEAR_PX + "px" });
+    observer.observe(root);
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  window.addEventListener("load", onScroll);
+  onScroll();
 })();
