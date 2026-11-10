@@ -38,6 +38,14 @@ jobs:
       - name: Check the book descriptions
         run: node scripts/generate-books-table.mjs --check
 
+      # The tournament cards and the photo gallery are written into their
+      # pages from the JSON files; this fails if a page has fallen behind.
+      - name: Check the tournament cards
+        run: node scripts/render-tournaments.mjs --check
+
+      - name: Check the photo gallery
+        run: node scripts/render-gallery.mjs --check
+
       # Rules live in .htmlvalidate.json.
       - name: Validate HTML
         run: npx --yes html-validate@9.7.1 '*.html'

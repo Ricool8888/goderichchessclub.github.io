@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
 <script src="assets/clean-urls.js"></script>
 <script>
@@ -32,7 +32,7 @@
         <img src="assets/logos/gcc-header-logo.webp" alt="" aria-hidden="true" width="32" height="48" style="height:32px;width:auto;display:inline-block;vertical-align:middle;margin-right:8px;">
         <span class="gold-text">Goderich Chess Club</span>
       </a>
-      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle menu">&#9776;</button>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Open menu">&#9776;</button>
       <nav class="nav-links" id="primaryNav" aria-label="Main Navigation">
         <a href="./" class="nav-item">Home</a>
         <a href="about" class="nav-item">About Us</a>
@@ -66,12 +66,181 @@
       <a href="assets/downloads/goderich-chess-club-scoresheet.pdf" class="btn-secondary tab-toolbar-btn" download="Goderich Chess Club scoresheet.pdf" target="_blank" rel="noopener"><span aria-hidden="true">&#8595;</span> Download Printable Scoresheet (PDF)</a>
     </div>
 
-    <div class="tournament-grid" id="tournamentGrid" role="tabpanel" aria-labelledby="tabUpcoming">
-      <div class="empty-state">Loading tournaments…</div>
+    <div class="tournament-panel" id="tournamentGrid" role="tabpanel" aria-labelledby="tabUpcoming">
+      <!-- The cards below are written from assets/tournaments.json by
+           scripts/render-tournaments.mjs. Edit the JSON, not this block. -->
+      <!-- tournaments:start - generated from assets/tournaments.json by scripts/render-tournaments.mjs -->
+        <div class="tournament-grid" id="upcomingList" data-status="upcoming">
+          <h2 class="sr-only">Upcoming tournaments</h2>
+          <article class="tournament-card">
+            <div class="tournament-date-block">
+              <div class="month">Jan</div>
+              <div class="day">16</div>
+              <div class="year">2027</div>
+            </div>
+            <div>
+              <div class="tournament-body-top">
+                <h3 class="tournament-title">Goderich Winter Rapid</h3>
+                <span class="status-pill upcoming">Upcoming</span>
+              </div>
+              <div class="tournament-meta-row">
+                <span class="tournament-meta-item">📅 <strong>January 16, 2027</strong></span>
+                <span class="tournament-meta-item">♟ <strong>5 rounds · Swiss · 15+10 rapid</strong></span>
+                <span class="tournament-meta-item">📍 <strong>Lakeshore United Church - 56 North St, Goderich, ON N7A 2T5</strong></span>
+                <span class="tournament-meta-item">💵 <strong>$30 + CFC Membership</strong></span>
+              </div>
+              <p class="tournament-desc"><strong>Time Control</strong>: 15 + 10 - CFC Rated (quick time control).
+
+ <strong>Round Schedule</strong>:
+ Round 1: 10:00AM
+ Round 2: 11:00AM
+ Round 3: 1:00PM
+ Round 4: 2:00PM
+ Round 5: 3:00PM
+
+ <strong>Prizes</strong>: Prize policy applies to all sections.
+ After all tournament operating expenses have been deducted from total registration revenue, 50% of the remaining net revenue will be allocated to the prize fund. The prize fund will be distributed among the first, second, and third-place finishers in accordance with the published prize structure. The remaining net revenue will be retained by Goderich Chess Club to support its ongoing operations and future events.
+
+ <strong>Forfeit Time</strong>: 5 minutes
+
+ <strong>Sections</strong>: Open &amp; U1500
+
+ <strong>Registration</strong>: Please obtain a CFC membership before submitting the registration form.  Once you obtain a CFC ID, proceed and please send your $30 entry fee e-transfer to goderichchessclub@gmail.com. Once that's completed, please fill out the register form using the &lt;Register / Inquire&gt; link at the bottom of this message. Registration will close on January 15th, 2027 at 9:00 PM.
+
+ To obtain a CFC membership, please use the &lt;Join the CFC&gt; link at the bottom of this message. For membership fees please use the &lt;CFC Membership - Fees&gt; link at the bottom of this message.
+
+  <strong>Refund policy:</strong>
+ Tournament Entry Fees
+ • Withdrawing 48 hours or more before the tournament: full refund.
+ • Withdrawing less than 48 hours before the tournament: no refund.
+ • No-shows or withdrawing after round 1 has started: no refund.
+ • Tournament cancelled by the club: full refund, or a credit toward a future GCC tournament if you prefer.
+ • Tournament postponed: your entry carries over to the new date. If you can't attend the new date, you can ask for a full refund.
+
+ <strong>Lunch will be provided for free to everyone attending the event</strong>
+
+ <strong>Tournament Director, Organizer &amp; Arbiter</strong>: FIDE Arbiter Riley Khan
+
+ Pairings and live results will be available on chess-results.com. Please note that the registration list does not auto-update once you’ve submitted your registration form.
+ Rating sections and round times are subject to change without notice. What you see on this page is the most current date, rating sections, and round times.
+ Unrated players will receive a provisional rating regardless of if they play rated players or not.
+ This tournament will be an over the board (not online) tournament.
+
+ Parents are welcome to drop off their children and leave, though they are encouraged to stay and enjoy the chess tournament/event. There will a waiting area for parents and for lunch / analysis.
+
+ <strong>Volunteer hours</strong>
+ Students that would like to volunteer can email goderichchessclub@gmail.com to connect with the tournament director to obtain volunteer hours towards the 40 hours required to graduate with a high school diploma.
+
+ <strong>Photography Notice</strong>
+ Please note that photos and videos may be taken during this tournament for club records, website, and social media use. By attending or participating, you consent to the use of your image, or your child’s image, for these purposes. Feel free to email us at goderichchessclub@gmail.com if you have any questions or visit our privacy policy page in the footer of our website.
+
+  For any questions feel free to email us at goderichchessclub@gmail.com</p>
+              <div class="tournament-links">
+                <a href="https://www.chess.ca/en/players/membership-join/" target="_blank" rel="noopener noreferrer">Join the CFC →</a>
+                <a href="https://www.chess.ca/en/players/membership-fees/" target="_blank" rel="noopener noreferrer">CFC Membership - Fees →</a>
+                <a href="https://forms.gle/b3T5std5kdPZVY6L6" target="_blank" rel="noopener noreferrer">Register / Inquire →</a>
+                <a href="https://s3.chess-results.com/tnr1513704.aspx?lan=1&amp;SNode=S0" target="_blank" rel="noopener noreferrer">Registration list →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="tournament-grid" id="completedList" data-status="completed" hidden>
+          <h2 class="sr-only">Past results</h2>
+          <article class="tournament-card">
+            <div class="tournament-date-block">
+              <div class="month">Sep</div>
+              <div class="day">5</div>
+              <div class="year">2026</div>
+            </div>
+            <div>
+              <div class="tournament-body-top">
+                <h3 class="tournament-title">Goderich Beachside Rapid</h3>
+                <span class="status-pill completed">Completed</span>
+              </div>
+              <div class="tournament-meta-row">
+                <span class="tournament-meta-item">📅 <strong>September 5, 2026</strong></span>
+                <span class="tournament-meta-item">♟ <strong>5 rounds · Swiss · 15+10 rapid</strong></span>
+                <span class="tournament-meta-item">📍 <strong>Knights of Columbus – Main Hall, 390 Parsons Court, Goderich, ON</strong></span>
+                <span class="tournament-meta-item">💵 <strong>$20 + CFC Membership</strong></span>
+              </div>
+              <p class="tournament-desc"><strong>Time Control</strong>: 15 minutes + 10 seconds increment per move. CFC Rated (quick time control).
+
+ <strong>Round Schedule</strong>:
+ Round 1: 10:00 AM
+ Round 2: 11:00 AM
+ Round 3: 1:00 PM
+ Round 4: 2:00 PM
+ Round 5: 3:00 PM
+
+ <strong>Prizes</strong>:
+ 1st: $100
+ 2nd: $75
+ 3rd: $50
+
+ <strong>Forfeit Time</strong>: 5 minutes
+ <strong>Sections</strong>: Open and Unrated
+ <strong>Registration</strong>: Please obtain a CFC membership before submitting the registration form.  Once you obtain a CFC ID, proceed and please send your $20 entry fee e-transfer to goderichchessclub@gmail.com. Once that's completed, please fill out the register form using the &lt;Register / Inquire&gt; link at the bottom of this message. Registration will close on September 4th, 2026 at 9:00 PM.
+
+ To obtain a CFC membership, please use the &lt;Join the CFC&gt; link at the bottom of this message. For membership fees please use the &lt;CFC Membership - Fees&gt; link at the bottom of this message.
+
+ <strong>Tournament Director, Organizer &amp; Arbiter</strong>: FIDE Arbiter Riley Khan
+
+ Pairings and live results will be available on chess-results.com. Please note that the registration list does not auto-update once you’ve submitted your registration form.
+ Rating sections and round times are subject to change without notice. What you see on this page is the most current date, rating sections, and round times.
+ Unrated players will receive a provisional rating regardless of if they play rated players or not.
+ This tournament will be an over the board (not online) tournament.
+
+ Parents are welcome to drop off their children and leave, though they are encouraged to stay and enjoy the chess tournament/event. There will be a waiting area for parents and for lunch / analysis.
+
+ <strong>Volunteer hours</strong>
+ Students that would like to volunteer can email goderichchessclub@gmail.com to connect with the tournament director to obtain volunteer hours towards the 40 hours required to graduate with a high school diploma.
+
+ <strong>Photography Notice</strong>
+ Please note that photos and videos may be taken during this tournament for club records, website, and social media use. By attending or participating, you consent to the use of your image, or your child’s image, for these purposes. Feel free to email us at goderichchessclub@gmail.com if you have any questions or visit our privacy policy page in the footer of our website.
+
+ <strong>Our Sponsors</strong>
+ We would like to thank our sponsors:
+
+ – Noah Krantz from Rostra Marine Inc
+ – Levi Taylor from Shoreline Welding Inc
+ – Paul McInnis from Jokey North America Inc
+ – Knights of Columbus
+
+ For any questions feel free to email us at goderichchessclub@gmail.com</p>
+              <div class="tournament-links">
+                <a href="https://s3.chess-results.com/tnr1460936.aspx?lan=1&amp;SNode=S0" target="_blank" rel="noopener noreferrer">View Full Results →</a>
+              </div>
+            </div>
+          </article>
+          <article class="tournament-card">
+            <div class="tournament-date-block">
+              <div class="month">Jun</div>
+              <div class="day">13</div>
+              <div class="year">2026</div>
+            </div>
+            <div>
+              <div class="tournament-body-top">
+                <h3 class="tournament-title">Goderich Gambit</h3>
+                <span class="status-pill completed">Completed</span>
+              </div>
+              <div class="tournament-meta-row">
+                <span class="tournament-meta-item">📅 <strong>June 13, 2026</strong></span>
+                <span class="tournament-meta-item">♟ <strong>5 rounds · Swiss · CFC Rated</strong></span>
+                <span class="tournament-meta-item">📍 <strong>Goderich Library, 52 Montreal St, Goderich, ON</strong></span>
+                <span class="tournament-meta-item">💵 <strong>CFC Membership</strong></span>
+              </div>
+              <p class="tournament-desc">Our first official CFC rated tournament. One open section, with a strong turnout from across Huron County.</p>
+              <div class="tournament-links">
+                <a href="https://s3.chess-results.com/tnr1404449.aspx?lan=1" target="_blank" rel="noopener noreferrer">View Full Results →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      <!-- tournaments:end -->
     </div>
 
     <noscript>
-      <p class="empty-state">The tournament list is loaded with JavaScript. Turn it on to see upcoming tournaments and past results. Registration links and questions are also answered by email at <a href="mailto:goderichchessclub@gmail.com">goderichchessclub@gmail.com</a>.</p>
+      <p class="empty-state">Past results are in the Past Results tab, which needs JavaScript. Registration links and questions are also answered by email at <a href="mailto:goderichchessclub@gmail.com">goderichchessclub@gmail.com</a>.</p>
     </noscript>
 
     <div class="first-tournament" id="firstTournament" role="tabpanel" aria-labelledby="tabFirst" hidden>

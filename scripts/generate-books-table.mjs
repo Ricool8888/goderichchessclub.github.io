@@ -40,7 +40,12 @@ function paragraphs(text) {
 }
 
 const rowPattern =
-  /<tr><td>(.*?)<\/td><td>(.*?)<\/td><td class="desc-col">([\s\S]*?)<\/td><td class="price-col">(.*?)<\/td><\/tr>/g;
+  /<tr><td>(.*?)<\/td><td>(.*?)<\/td><td class="desc-col"[^>]*>([\s\S]*?)<\/td><td class="price-col"[^>]*>(.*?)<\/td><\/tr>/g;
+
+// The two labelled cells label themselves on a phone, where the column
+// headers are hidden and each row is shown as a card.
+const LABEL_DESC = ' data-label="Description"';
+const LABEL_PRICE = ' data-label="Price"';
 
 const used = new Set();
 const problems = [];
@@ -59,11 +64,11 @@ const updated = page.replace(
 
     const description = paragraphs(descriptions[key]);
 
-    if (description === oldDescription) {
+    if (description === oldDescription && row.includes(LABEL_DESC)) {
       return row;
     }
 
-    return `<tr><td>${title}</td><td>${author}</td><td class="desc-col">${description}</td><td class="price-col">${price}</td></tr>`;
+    return `<tr><td>${title}</td><td>${author}</td><td class="desc-col"${LABEL_DESC}>${description}</td><td class="price-col"${LABEL_PRICE}>${price}</td></tr>`;
   }
 );
 

@@ -148,8 +148,10 @@ events-calendar.html - Events Calendar
 
 tournaments.html - Tournaments
       Three tabs: Upcoming, Completed, and a first-timer guide (joining the
-      CFC, registering, rules, notation, penalties). The tab content is
-      rendered by assets/tournaments.js from assets/tournaments.json; the
+      CFC, registering, rules, notation, penalties). The cards in the first two
+      tabs are written into the page from assets/tournaments.json by
+      scripts/render-tournaments.mjs during deploy, so they are in the HTML and
+      do not need JavaScript; assets/tournaments.js only switches tabs. The
       guide text and the scoresheet download link are written in the HTML.
 
 sponsors.html - Sponsors
@@ -163,10 +165,12 @@ merch.html - Merch
       nothing to update on the site when stock changes.
 
 gallery.html - Gallery
-      Photos grouped into sections by assets/gallery.js from
-      assets/gallery.json. Each section gets its own heading and a row of
-      photos with a lightbox. Photos are loaded lazily, so a large gallery
-      does not slow the page down.
+      Photos grouped into sections, written into the page from
+      assets/gallery.json by scripts/render-gallery.mjs during deploy. Each
+      section gets its own heading and a row of photos. The grid shows the
+      small WebP copies and loads them lazily, so a large gallery does not slow
+      the page down; assets/gallery.js only adds the lightbox that opens the
+      full-size photo.
 
 faq.html - FAQ
       Nineteen collapsible question/answer pairs written directly in the HTML.
@@ -407,6 +411,11 @@ with the photos, so the published site never needs sharp.
 The check in section 6 fails if a photo is missing its thumbnails, so it is not
 possible to forget this step without noticing.
 
+Nothing has to be copied into gallery.html: the photo cards there are written
+from this file on every deploy (section 6, step 8), between the
+<!-- gallery:start ... --> markers. Editing those cards by hand only lasts
+until the next deploy.
+
 There is a short reminder of all this in assets/gallery/Gallery README.txt,
 next to the photos.
 
@@ -509,14 +518,22 @@ this in order:
              node scripts/generate-books-table.mjs
          Copies assets/books/descriptions.json into the description column of
          the table in books-for-sale.html (section 4.7).
-      7. Check the data files
+      7. Rebuild the tournament cards
+             node scripts/render-tournaments.mjs
+         Writes assets/tournaments.json into the two lists in tournaments.html,
+         between the <!-- tournaments:start ... --> markers.
+      8. Rebuild the photo gallery
+             node scripts/render-gallery.mjs
+         Writes the sections and photo cards of assets/gallery.json into
+         gallery.html, between the <!-- gallery:start ... --> markers.
+      9. Check the data files
              node scripts/check-data.mjs
          Reads every JSON file the site is built from and fails the deploy on a
          missing photo file, a missing thumbnail, an impossible date, a
 duplicated id or a closure that falls on a day the club does not meet.
-      8. Upload the whole repository as the site, and deploy it to GitHub Pages.
+      10. Upload the whole repository as the site, and deploy it to GitHub Pages.
 
-Steps 3-6 edit files in the deploy copy only - they do not commit anything, so
+Steps 3-8 edit files in the deploy copy only - they do not commit anything, so
 the repository keeps its hand-written state. That also means you never need to
 run them by hand, and you should not run them before committing: the dates
 would be wrong.
@@ -532,6 +549,17 @@ Two of them are generated at deploy time and wrapped in HTML comment markers:
 Editing inside those markers is pointless - the next deploy overwrites it.
 Editing the visible questions/answers, or the tournaments and events data, is
 exactly the right way to change what ends up there.
+
+The tournament lists and the photo gallery work the same way, with markers of
+their own:
+
+      tournaments.html
+            <!-- tournaments:start ... --> ... <!-- tournaments:end -->
+      gallery.html
+            <!-- gallery:start ... --> ... <!-- gallery:end -->
+
+They are filled from assets/tournaments.json and assets/gallery.json on every
+deploy (section 6, steps 7 and 8), so edit the JSON, not the cards.
 
 The third block - the "SportsActivityLocation" one in index.html's <head> -
 is hand-written, so its meeting days, times, addresses and social links have to
@@ -552,12 +580,18 @@ catches the mistakes that a browser quietly forgives:
              node scripts/generate-books-table.mjs --check
          Fails if books-for-sale.html and assets/books/descriptions.json have
          drifted apart.
-      4. Validate HTML
+      4. Check the tournament cards and the photo gallery
+             node scripts/render-tournaments.mjs --check
+             node scripts/render-gallery.mjs --check
+         Fails if tournaments.html or gallery.html has fallen behind the JSON
+         it is written from - which is what happens when someone edits the
+         generated block by hand instead of the data file.
+      5. Validate HTML
              npx --yes html-validate@9.7.1 '*.html'
          Reports malformed markup such as a list nested inside a <p>, a button
          with no type, or an aria attribute on an element that cannot take it.
          Rules live in .htmlvalidate.json.
-      5. Check internal links
+      6. Check internal links
              lychee --config .lychee.toml '*.html'
          Reports a link to a page or #anchor that does not exist. Settings live
          in .lychee.toml; external sites are deliberately not checked, because
@@ -806,6 +840,8 @@ CLOSE THE CLUB ON A DATE
 
 ADD A TOURNAMENT
       1. Add it to assets/tournaments.json with "status": "upcoming".
+         (Nothing to add to tournaments.html - the card is written from this
+         file on the next deploy.)
       2. Add a matching entry to assets/events.json so it appears on the
          calendar.
       3. Optionally add a banner with the registration deadline.

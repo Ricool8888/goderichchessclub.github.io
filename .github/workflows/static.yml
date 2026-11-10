@@ -47,6 +47,10 @@ jobs:
         run: node scripts/generate-faq-schema.mjs
       - name: Rebuild the book descriptions
         run: node scripts/generate-books-table.mjs
+      - name: Rebuild the tournament cards
+        run: node scripts/render-tournaments.mjs
+      - name: Rebuild the photo gallery
+        run: node scripts/render-gallery.mjs
       - name: Check the data files
         run: node scripts/check-data.mjs
       - name: Upload artifact

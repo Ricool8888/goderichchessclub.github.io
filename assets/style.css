@@ -98,7 +98,7 @@ html[data-theme="light"] {
   --navy-800: #EEF3FA;
   --slate-800: #D7E3F0;
   --slate-600: #AFC4DD;
-  --slate-500: #6B7C93;
+  --slate-500: #5A6A7E;
   --slate-400: #5B6B80;
   --slate-300: #33475A;
   --slate-200: #1F2A37;
@@ -236,6 +236,29 @@ html:not([data-theme="light"]) .meeting-card {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/* The skip link is the only .sr-only element that can take focus - reveal it
+   as a real button so a keyboard visitor can see what they have focused. */
+.sr-only:focus {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 3000;
+  width: auto;
+  height: auto;
+  padding: 12px 18px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  background: var(--navy-950);
+  color: var(--white);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
 a { color: var(--chess-green); }
@@ -818,6 +841,10 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 .muted-note { color: var(--slate-400); font-size: 14px; }
 
+/* Shown under the Lichess TV board in case the embed itself is blocked. */
+.live-game-fallback { margin: 10px 0 0; font-size: 12px; }
+.live-game-fallback a { color: var(--gold); }
+
 .last-updated {
   font-size: 12px;
   color: var(--slate-500);
@@ -933,11 +960,20 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   .calendar-view-btn { flex: 1; justify-content: center; height: 36px; }
 }
 
-.calendar-grid {
+/* The grid is a stack of week rows so each row and cell can carry the roles
+   the ARIA grid pattern needs; the rows do the seven-column layout. */
+.calendar-grid { display: block; }
+
+.calendar-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
 }
+
+.calendar-row + .calendar-row { margin-top: 6px; }
+
+.calendar-row > [role="gridcell"] { min-width: 0; }
+.calendar-row .calendar-day { width: 100%; }
 
 .calendar-weekday {
   text-align: center;
@@ -1795,6 +1831,10 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   overflow: hidden;
 }
 
+/* Each question is a real heading so screen-reader users can jump between
+   questions; the heading carries no styling of its own. */
+.faq-heading { margin: 0; font: inherit; }
+
 .faq-question {
   width: 100%;
   display: flex;
@@ -1917,8 +1957,92 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   margin-top: 16px;
 }
 
-@media (max-width: 640px) {
-  .price-table { min-width: 560px; }
+@media (max-width: 720px) {
+  /*
+   * A four-column table cannot fit a phone, so below 720px each row becomes
+   * a card: title, author, description, then the price. The column headers
+   * are hidden and every cell carries its own label instead; the labels come
+   * from data-label attributes so the row text itself is unchanged.
+   */
+  .table-wrap {
+    background: none;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .price-table,
+  .price-table tbody,
+  .price-table tr,
+  .price-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .price-table { min-width: 0; }
+
+  .price-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .price-table tbody tr {
+    background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%);
+    border: 1px solid var(--slate-800);
+    border-radius: 14px;
+    padding: 16px 18px 14px;
+    margin-bottom: 14px;
+  }
+
+  .price-table tbody tr:hover { background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-800) 100%); }
+
+  .price-table tbody td {
+    padding: 0;
+    border-bottom: none;
+    color: var(--slate-100);
+  }
+
+  /* The title read as the card heading. */
+  .price-table tbody td:first-child {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--white);
+  }
+
+  /* The author sits under the title, quietly. */
+  .price-table tbody td:nth-child(2) {
+    font-size: 13px;
+    color: var(--slate-400);
+    margin-top: 2px;
+  }
+
+  .price-table tbody td.desc-col {
+    min-width: 0;
+    margin-top: 10px;
+  }
+
+  .price-table tbody td.price-col {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--slate-800);
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .price-table tbody td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--slate-400);
+  }
 }
 
 /* =========================================================
