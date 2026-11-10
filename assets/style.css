@@ -982,7 +982,8 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 
 /* Each kind of day has its own marker shape as well as colour, matching the
    legend, so the calendar can be read without relying on colour: a circle for
-   Tuesday meetings, a square for Friday meetings, a diamond for special events. */
+   Tuesday meetings, a square for Friday meetings, a diamond for special events
+   and an X for closed days. */
 .calendar-day.has-event::after {
   content: "";
   width: 8px; height: 8px;
@@ -992,18 +993,31 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .calendar-day.day-tuesday-meeting::after { background: var(--chess-green); border-radius: 50%; }
 .calendar-day.day-friday-meeting::after { background: var(--friday-accent); }
 .calendar-day.day-special-event::after { background: var(--gold); transform: rotate(45deg); }
-/* Closures get a hollow ring, so "closed" reads differently from any meeting */
+/* Closures get an X, not a hollow ring: a ring is a circle outline, which still
+   reads as the Tuesday circle once colour is out of the picture. Two thin bars
+   crossed over the same centre make a silhouette no other day uses. */
+.calendar-day.day-closed::before,
 .calendar-day.day-closed::after {
+  content: "";
+  width: 11px; height: 0;
   background: transparent;
-  border: 2px solid var(--slate-400);
-  border-radius: 50%;
+  border: 0;
+  border-top: 2px solid var(--slate-400);
   box-sizing: border-box;
+  position: absolute;
+  top: 15px; right: 8.5px;
 }
+.calendar-day.day-closed::before { transform: rotate(45deg); }
+.calendar-day.day-closed::after { transform: rotate(-45deg); }
 
 /* Narrow cells have no room beside a two-digit number, so the marker sits
    below it instead, where it can never cover the digits. */
 @media (max-width: 640px) {
   .calendar-day.has-event::after { top: auto; right: auto; bottom: 9px; left: 7px; }
+  /* The X is wider and flatter than the dot markers, so it re-centres on the
+     same spot instead of inheriting the 8px box position */
+  .calendar-day.day-closed::before,
+  .calendar-day.day-closed::after { top: auto; right: auto; bottom: 12px; left: 5.5px; }
 }
 
 /* List view: upcoming days with events, one card per day */
@@ -1143,7 +1157,18 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 .legend-dot-tuesday { background: var(--chess-green); border-radius: 50%; }
 .legend-dot-friday { background: var(--friday-accent); }
 .legend-dot-special { background: var(--gold); transform: rotate(45deg); }
-.legend-dot-closed { background: transparent; border: 2px solid var(--slate-400); border-radius: 50%; box-sizing: border-box; }
+.legend-dot-closed { background: transparent; position: relative; }
+.legend-dot-closed::before,
+.legend-dot-closed::after {
+  content: "";
+  width: 11px; height: 0;
+  border-top: 2px solid var(--slate-400);
+  box-sizing: border-box;
+  position: absolute;
+  top: 4px; left: -0.5px;
+}
+.legend-dot-closed::before { transform: rotate(45deg); }
+.legend-dot-closed::after { transform: rotate(-45deg); }
 
 .add-to-calendar-row {
   display: flex;
@@ -2893,8 +2918,11 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   .legend-dot-special,
   .calendar-day.day-special-event::after { background: #FFFFFF !important; border: 2px solid #000000; }
   .legend-dot-closed,
-  .calendar-day.day-closed::after,
   .calendar-day.day-closed .day-number { background: transparent !important; border-color: #777777 !important; color: #777777 !important; }
+  .legend-dot-closed::before,
+  .legend-dot-closed::after,
+  .calendar-day.day-closed::before,
+  .calendar-day.day-closed::after { background: transparent !important; border-top-color: #777777 !important; }
 
   /* Show where links go */
   main a[href^="http"]::after {
