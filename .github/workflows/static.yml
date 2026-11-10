@@ -58,6 +58,8 @@ jobs:
         run: node scripts/render-gallery.mjs
       - name: Rebuild the posts
         run: node scripts/render-posts.mjs
+      - name: Rebuild the announcement banner
+        run: node scripts/render-banner.mjs
       - name: Check the data files
         run: node scripts/check-data.mjs
       - name: Upload artifact
