@@ -651,8 +651,9 @@ contradict itself.
 MEETING DAYS, TIMES AND ADDRESSES
       Change these together:
             - index.html - the hero sentence and the two meeting cards
-            - index.html - the structured-data block in the <head>
-              (dayOfWeek, opens, closes, streetAddress, postalCode)
+            - index.html - the structured-data block in the <head> (the
+              "location" list holds one entry per venue: name, streetAddress,
+              postalCode, dayOfWeek, opens, closes)
             - assets/calendar.js - RECURRING_EVENTS at the top (dayOfWeek,
               time, description; dayOfWeek is 0 = Sunday ... 5 = Friday)
             - faq.html - the "Where is the chess club located?" and "When does
