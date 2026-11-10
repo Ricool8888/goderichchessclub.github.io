@@ -16,10 +16,12 @@ small JavaScript files. There is no database, no login and no server-side
 code. A page either holds its text in the HTML file itself, or builds a list
 (events, posts, tournaments, photos) from a JSON file in assets/.
 
-GitHub Pages publishes the repository exactly as it is. Anything committed and
-pushed to the "main" branch is live about a minute later. There is no separate
-build you run by hand and no staging area, so treat every push to main as
-publishing.
+GitHub Pages publishes what the deploy produces, not the repository as a
+whole. scripts/build-site.mjs copies the pages, assets/ and the few root files
+into dist/, and dist/ is what gets uploaded, so scripts, partials and the
+camera originals stay private. Anything merged or pushed to the "main" branch
+is live about a minute later. There is no staging area, so treat every push to
+main as publishing.
 
 Because of that, "editing the site" is always one of three things:
 
@@ -212,9 +214,7 @@ books-for-sale.html - Books for sale
       exactly (see section 11).
 
 privacy.html - Privacy policy
-      Policy text with its own version line near the top:
-      "Last updated: November 10, 2026 - Version #5". That line is written by
-      hand and is separate from the generated footer date. Bump it whenever the
+      Policy text with its own version line near the top:      "Last updated: November 10, 2026 - Version #6". That line is written by hand and is separate from the generated footer date. Bump it whenever the
       policy text changes. The policy is protected wording (section 10), so
       any edit to it needs the exec's approval first.
 
@@ -937,16 +937,18 @@ PRIVACY POLICY VERSION
       privacy.html carries its own "Last updated ... Version #N" line. Update
       it by hand whenever the policy text changes. It is separate from the
       generated footer date and should not be deleted. The current policy is
-      Version #5.
+      Version #6.
 
-PRIVACY POLICY AND THE PUZZLE LIBRARIES - NEEDS AN EXEC DECISION
-      The policy says the puzzle board's two libraries are loaded "from the
-      jsDelivr content network" and that jsDelivr may record a visitor's IP
-      address. Since those libraries now ship from assets/vendor/, the site
-      never contacts jsDelivr. The sentence is out of date but it is protected
-      wording (section 10), so it has been left alone. Nothing in it is untrue
-      in a way that misleads - the site now does less than the policy says -
-      but it should be amended when the exec is next reviewing the policy.
+PRIVACY POLICY AND THE PUZZLE LIBRARIES
+      The policy used to say the puzzle board's two libraries were loaded "from
+      the jsDelivr content network" and that jsDelivr might record a visitor's
+      IP address. That stopped being true when chessground and chess.js moved
+      into assets/vendor/: the site does not contact jsDelivr at all. The exec
+      approved the corrected sentence, so Version #6 of the policy now says the
+      libraries are served from the club's own hosting, that they are not a
+      separate service, and that only Lichess is contacted. If the libraries
+      ever come from a content network again, that sentence has to change back,
+      with the exec's approval and a new version number.
 
 
 ==============================================================================
