@@ -262,7 +262,16 @@
       var isActive = b === match;
       b.classList.toggle("active", isActive);
       b.setAttribute("aria-selected", isActive ? "true" : "false");
+      // Roving tabindex: Tab reaches the tab row once, arrow keys move
+      // between the tabs, as the ARIA tabs pattern expects.
+      b.tabIndex = isActive ? 0 : -1;
     });
+
+    // Both "Upcoming" and "Past Results" render into the same panel, so its
+    // accessible name follows whichever tab is selected.
+    var panel = document.getElementById("tournamentGrid");
+    if (panel && match.id) panel.setAttribute("aria-labelledby", match.id);
+
     state.activeTab = match.getAttribute("data-tab");
     render();
   }
@@ -281,6 +290,31 @@
         selectTab(name);
       });
     });
+
+    // Arrow keys (and Home/End) move between tabs; Enter/Space is already
+    // handled by the buttons themselves.
+    var tabRow = document.querySelector(".tab-row");
+    if (tabRow) {
+      tabRow.addEventListener("keydown", function (e) {
+        var keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+        if (keys.indexOf(e.key) === -1) return;
+
+        var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
+        var index = tabs.indexOf(document.activeElement);
+        if (index === -1) return;
+
+        e.preventDefault();
+
+        var next = index;
+        if (e.key === "ArrowRight") next = (index + 1) % tabs.length;
+        else if (e.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        else if (e.key === "Home") next = 0;
+        else next = tabs.length - 1;
+
+        tabs[next].focus();
+        tabs[next].click();
+      });
+    }
 
     window.addEventListener("hashchange", function () { selectTab(tabFromHash()); });
 

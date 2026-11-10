@@ -51,6 +51,17 @@
     img.classList.add("gallery-image-loading");
 
     /*
+     * The grid shows a small WebP copy (see
+     * scripts/generate-gallery-thumbs.mjs); the browser picks the
+     * 480 px or 960 px version from srcset. If the small copy is
+     * ever missing, the error handler below falls back to the
+     * original photo so the gallery never shows a blank tile.
+     */
+    if (img.dataset.srcset) {
+      img.srcset = img.dataset.srcset;
+    }
+
+    /*
      * Setting src here actually starts the image request.
      */
     img.src = src;
@@ -60,11 +71,6 @@
      * Ask the browser to decode the image asynchronously.
      */
     img.decoding = "async";
-
-    /*
-     * Keep gallery thumbnails lower priority than more
-     * important page resources.
-     */
 
     /*
      * Once the image has completely loaded, fade it into view.
@@ -79,15 +85,20 @@
     );
 
     /*
-     * If the image fails, don't leave it permanently invisible.
+     * If the small copy fails, try the original once. If that fails
+     * too, don't leave the tile permanently invisible.
      */
-    img.addEventListener(
-      "error",
-      function () {
-        img.classList.remove("gallery-image-loading");
-      },
-      { once: true }
-    );
+    img.addEventListener("error", function () {
+      var full = img.dataset.fullSrc;
+
+      if (full && img.getAttribute("src") !== full) {
+        img.removeAttribute("srcset");
+        img.src = full;
+        return;
+      }
+
+      img.classList.remove("gallery-image-loading");
+    });
 
     /*
      * We no longer need to observe this image.
@@ -162,10 +173,59 @@
   }
 
   /*
+   * Every photo on the page, in the order it appears, so the
+   * lightbox can step forward and back between them.
+   */
+  var allPhotos = [];
+  var currentPhotoIndex = -1;
+
+  /*
    * The card that opened the lightbox, so focus can go
    * back there when it closes.
    */
   var returnFocusTo = null;
+
+  /*
+   * Show one photo in the lightbox. Called both when a card is
+   * clicked and when the visitor steps to the next / previous
+   * photo, so the caption, counter and alt text always match.
+   */
+  function showPhoto(index) {
+    if (!allPhotos.length) {
+      return;
+    }
+
+    /*
+     * Wrap around at both ends, so the buttons never dead-end.
+     */
+    currentPhotoIndex =
+      ((index % allPhotos.length) + allPhotos.length) % allPhotos.length;
+
+    var photo = allPhotos[currentPhotoIndex];
+
+    var img = document.getElementById("lightboxImage");
+    var caption = document.getElementById("lightboxCaption");
+    var counter = document.getElementById("lightboxCounter");
+
+    if (!img) {
+      return;
+    }
+
+    /*
+     * The lightbox always opens the full-size file: this is the
+     * one place the extra detail of the original is worth the
+     * download.
+     */
+    img.src = "assets/gallery/" + photo.filename;
+    img.alt = photo.alt || photo.caption || "";
+
+    caption.textContent = photo.caption || "";
+
+    if (counter) {
+      counter.textContent =
+        currentPhotoIndex + 1 + " / " + allPhotos.length;
+    }
+  }
 
   /*
    * Open the full-size photo lightbox.
@@ -173,27 +233,15 @@
   function openLightbox(photo, trigger) {
     returnFocusTo =
       trigger || document.activeElement;
+
     var overlay =
       document.getElementById("lightboxOverlay");
 
-    var img =
-      document.getElementById("lightboxImage");
+    if (!overlay) {
+      return;
+    }
 
-    var caption =
-      document.getElementById("lightboxCaption");
-
-    /*
-     * The full-size image is intentionally loaded immediately
-     * when the visitor clicks the gallery card.
-     */
-    img.src =
-      "assets/gallery/" + photo.filename;
-
-    img.alt =
-      photo.alt || photo.caption || "";
-
-    caption.textContent =
-      photo.caption || "";
+    showPhoto(allPhotos.indexOf(photo));
 
     overlay.classList.add("open");
 
@@ -203,8 +251,9 @@
     );
 
     /*
-     * Move focus into the overlay. The close button is
-     * its only control, so keyboard users stay there.
+     * Move focus into the overlay. The close button is the
+     * safest landing spot: it is always present, and the arrow
+     * keys are already handled for moving between photos.
      */
     var closeBtn =
       document.getElementById(
@@ -259,6 +308,12 @@
     var img =
       document.createElement("img");
 
+    var fullSrc =
+      "assets/gallery/" + photo.filename;
+
+    var thumbBase =
+      "assets/gallery/thumbs/" + photo.filename;
+
     /*
      * IMPORTANT:
      *
@@ -270,7 +325,21 @@
      * photo gets close to the viewport.
      */
     img.dataset.src =
-      "assets/gallery/" + photo.filename;
+      thumbBase + "-960.webp";
+
+    img.dataset.fullSrc = fullSrc;
+
+    img.dataset.srcset =
+      thumbBase + "-480.webp 480w, " +
+      thumbBase + "-960.webp 960w";
+
+    /*
+     * Match the grid: 2 columns on phones, 3 on tablets, 4 on
+     * desktop, so the browser downloads the smallest copy that
+     * still looks sharp on this screen.
+     */
+    img.sizes =
+      "(max-width: 639px) 47vw, (max-width: 991px) 31vw, 280px";
 
     img.alt =
       photo.alt || photo.caption || "";
@@ -433,6 +502,19 @@
 
     container.innerHTML = "";
 
+    /*
+     * Keep one flat list of every photo on the page: the
+     * lightbox steps through it with the arrow buttons and
+     * keys, across section boundaries.
+     */
+    allPhotos = [];
+
+    sections.forEach(function (section) {
+      (section.photos || []).forEach(function (photo) {
+        allPhotos.push(photo);
+      });
+    });
+
     if (!sections.length) {
       appendEmpty(
         container,
@@ -573,9 +655,42 @@
     }
 
     /*
-     * Escape closes the lightbox, and Tab stays inside it:
-     * the close button is the only control in the overlay.
+     * Escape closes the lightbox, the arrow keys step through the
+     * photos, and Tab cycles between the three controls instead of
+     * wandering off behind the overlay.
      */
+    var prevBtn =
+      document.getElementById(
+        "lightboxPrevBtn"
+      );
+
+    var nextBtn =
+      document.getElementById(
+        "lightboxNextBtn"
+      );
+
+    if (prevBtn) {
+      prevBtn.addEventListener(
+        "click",
+        function () {
+          showPhoto(
+            currentPhotoIndex - 1
+          );
+        }
+      );
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener(
+        "click",
+        function () {
+          showPhoto(
+            currentPhotoIndex + 1
+          );
+        }
+      );
+    }
+
     document.addEventListener(
       "keydown",
       function (e) {
@@ -585,12 +700,91 @@
 
         if (e.key === "Escape") {
           closeLightbox();
-        } else if (e.key === "Tab" && lightboxCloseBtn) {
+          return;
+        }
+
+        if (e.key === "ArrowLeft") {
           e.preventDefault();
-          lightboxCloseBtn.focus();
+          showPhoto(
+            currentPhotoIndex - 1
+          );
+          return;
+        }
+
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          showPhoto(
+            currentPhotoIndex + 1
+          );
+          return;
+        }
+
+        if (e.key === "Tab") {
+          var controls =
+            [prevBtn, nextBtn, lightboxCloseBtn].filter(
+              function (el) {
+                return !!el;
+              }
+            );
+
+          if (!controls.length) {
+            return;
+          }
+
+          var first =
+            controls[0];
+
+          var last =
+            controls[controls.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       }
     );
+
+    /*
+     * Swipe left / right on touch screens.
+     */
+    var touchStartX = null;
+
+    if (lightboxOverlay) {
+      lightboxOverlay.addEventListener(
+        "touchstart",
+        function (e) {
+          touchStartX = e.changedTouches[0].clientX;
+        },
+        { passive: true }
+      );
+
+      lightboxOverlay.addEventListener(
+        "touchend",
+        function (e) {
+          if (touchStartX === null) {
+            return;
+          }
+
+          var dx =
+            e.changedTouches[0].clientX - touchStartX;
+
+          touchStartX = null;
+
+          if (Math.abs(dx) < 40) {
+            return;
+          }
+
+          showPhoto(
+            currentPhotoIndex + (dx < 0 ? 1 : -1)
+          );
+        },
+        { passive: true }
+      );
+    }
 
     /*
      * Fetch gallery data and begin rendering.

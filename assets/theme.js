@@ -17,11 +17,22 @@
     } catch (e) { /* storage unavailable, ignore */ }
   }
 
+  // Matches --navy-950: the header colour, which is what the phone's browser
+  // bar paints, in both themes.
+  var THEME_COLORS = { dark: "#221246", light: "#ffffff" };
+
   function applyTheme(theme) {
     if (theme === "light") {
       document.documentElement.setAttribute("data-theme", "light");
     } else {
       document.documentElement.removeAttribute("data-theme");
+    }
+
+    // Keep the mobile browser chrome in step with the page, not just the
+    // stylesheet.
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute("content", THEME_COLORS[theme === "light" ? "light" : "dark"]);
     }
   }
 
@@ -41,6 +52,7 @@
     // head script before the page painted) in the button's state.
     var current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
     toggle.setAttribute("aria-pressed", current === "light" ? "true" : "false");
+    applyTheme(current);
   }
 
   document.addEventListener("DOMContentLoaded", init);

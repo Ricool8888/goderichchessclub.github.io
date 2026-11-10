@@ -100,7 +100,8 @@ FOLDERS OF IMAGES
       assets/books/images/  book cover images
       assets/tournaments/ logos used on the tournaments page
       assets/icons/       social media icons
-      assets/gallery/     gallery photos
+      assets/gallery/     gallery photos (originals, opened in the lightbox)
+      assets/gallery/thumbs/  generated small copies the grid shows
       assets/downloads/   the printable scoresheet PDF
 
 
@@ -383,11 +384,13 @@ A list of sections; each section has a title and its own list of photos:
         }
       ]
 
-To add a photo you must do BOTH steps:
+To add a photo you must do BOTH steps, plus a third one for the thumbnails:
 
       1. Put the image file in assets/gallery/ - keep it at 1-2 MB at most,
          JPG or PNG, and keep the filename exact (capitalisation matters).
       2. Add an entry for it in assets/gallery.json.
+      3. Run:  node scripts/generate-gallery-thumbs.mjs
+         (first time only: npm install --no-save sharp)
 
       - "id" values only need to be unique; numbering can keep counting up.
       - "caption" may be "" if you do not want one.
@@ -395,16 +398,35 @@ To add a photo you must do BOTH steps:
         search engines; a few words is enough.
       - To add a section, copy a whole { id, title, photos } block.
 
+Step 3 writes two small WebP copies of each photo into
+assets/gallery/thumbs/. The gallery grid shows those instead of the originals,
+which is what keeps the page light: a 3 MB camera photo becomes a ~20 KB tile,
+while the lightbox still opens the full-size file. The thumbnails are committed
+with the photos, so the published site never needs sharp.
+
+The check in section 6 fails if a photo is missing its thumbnails, so it is not
+possible to forget this step without noticing.
+
 There is a short reminder of all this in assets/gallery/Gallery README.txt,
 next to the photos.
 
 -------------------------------------------------------------------------------
-4.7 assets/books/descriptions.json
+4.7 assets/books/descriptions.json - the book descriptions
 -------------------------------------------------------------------------------
-A title -> description map for the books. The books page currently shows the
-descriptions written in its own table (books-for-sale.html), and nothing reads
-this file at runtime; it is kept as the source copy of that text. If you add a
-book, edit the table (section 11); treat this file as reference material.
+A title -> description map for the books, and the only place the blurbs are
+written. The description column of the table in books-for-sale.html is
+generated from this file by:
+
+      node scripts/generate-books-table.mjs
+
+The key must match the book's title cell in the table exactly - "Checkmate",
+not "Checkmate!" - and a \n in a description starts a new paragraph. The script
+stops with a clear message if a book has no description, or a description is
+left over with no book.
+
+The deploy workflow runs the script, and the validate workflow runs it with
+--check, so editing a description in only one place fails the check instead of
+silently drifting. Never edit the generated cells by hand.
 
 -------------------------------------------------------------------------------
 4.8 assets/last-updated.json - generated, do not edit
@@ -445,6 +467,8 @@ SHARED SCRIPTS (assets/)
       nav.js            Mobile menu: the hamburger opens it, Escape closes it
                         and returns focus to the button, a click outside closes
                         it. Included by every page.
+      clean-urls.js     Sends /page.html to /page, so each page has one address.
+                        Loaded by the content pages, never by the error pages.
       theme.js          Light/dark switch in the footer. The choice is saved in
                         the visitor's browser, not on the site.
       share.js          The share button: device share sheet where available,
@@ -481,9 +505,18 @@ this in order:
              node scripts/generate-faq-schema.mjs
          Rebuilds the FAQPage block in faq.html's <head> from the page's own
          question/answer markup.
-      6. Upload the whole repository as the site, and deploy it to GitHub Pages.
+      6. Rebuild the book descriptions
+             node scripts/generate-books-table.mjs
+         Copies assets/books/descriptions.json into the description column of
+         the table in books-for-sale.html (section 4.7).
+      7. Check the data files
+             node scripts/check-data.mjs
+         Reads every JSON file the site is built from and fails the deploy on a
+         missing photo file, a missing thumbnail, an impossible date, a
+duplicated id or a closure that falls on a day the club does not meet.
+      8. Upload the whole repository as the site, and deploy it to GitHub Pages.
 
-Steps 3-5 edit files in the deploy copy only - they do not commit anything, so
+Steps 3-6 edit files in the deploy copy only - they do not commit anything, so
 the repository keeps its hand-written state. That also means you never need to
 run them by hand, and you should not run them before committing: the dates
 would be wrong.
@@ -510,19 +543,30 @@ CHECKS THAT RUN ON PULL REQUESTS
 catches the mistakes that a browser quietly forgives:
 
       1. The shared header/footer check listed above.
-      2. Validate HTML
+      2. Check the data files
+             node scripts/check-data.mjs
+         Same script as the deploy: every gallery photo and thumbnail exists,
+         every date is a real date, no duplicate ids, and no closure lands on a
+         day the club does not meet.
+      3. Check the book descriptions
+             node scripts/generate-books-table.mjs --check
+         Fails if books-for-sale.html and assets/books/descriptions.json have
+         drifted apart.
+      4. Validate HTML
              npx --yes html-validate@9.7.1 '*.html'
          Reports malformed markup such as a list nested inside a <p>, a button
          with no type, or an aria attribute on an element that cannot take it.
          Rules live in .htmlvalidate.json.
-      3. Check internal links
+      5. Check internal links
              lychee --config .lychee.toml '*.html'
          Reports a link to a page or #anchor that does not exist. Settings live
          in .lychee.toml; external sites are deliberately not checked, because
          a sponsor's website being down is not the club's problem.
 
-Both tools are downloaded by the workflow, so the repository still has no
-package.json and nothing to install. To run them before pushing:
+The two tools are downloaded by the workflow, so the repository still has no
+package.json and nothing to install for a normal content edit. (The gallery
+thumbnail step is the one exception: it needs sharp, installed ad hoc and never
+committed.) To run them before pushing:
 
       npx --yes html-validate@9.7.1 '*.html'
       lychee --config .lychee.toml '*.html'
@@ -771,16 +815,22 @@ ADD A TOURNAMENT
 ADD A PHOTO TO THE GALLERY
       1. Put the file in assets/gallery/ (under 1-2 MB).
       2. Add its entry to assets/gallery.json, filename matching exactly.
-      3. Commit and push.
+      3. Run:  node scripts/generate-gallery-thumbs.mjs
+         (first time only: npm install --no-save sharp)
+      4. Commit the photo, the JSON entry and the new files in
+         assets/gallery/thumbs/. Push.
 
 ADD A BOOK
-      1. Add a <tr> row to the table in books-for-sale.html with title, author,
-         description and price.
-      2. Put its cover in assets/books/images/ named exactly "<Title>.jpg" -
+      1. Add a <tr> row to the table in books-for-sale.html with its title,
+         author and price. Leave the description cell empty - it is generated.
+      2. Add the description to assets/books/descriptions.json, keyed by the
+         title exactly as written in the table.
+      3. Run:  node scripts/generate-books-table.mjs
+      4. Put its cover in assets/books/images/ named exactly "<Title>.jpg" -
          for example "Checkmate.jpg" for the row titled Checkmate. Watch
          apostrophes and punctuation; they must match the title character for
          character.
-      3. Commit and push.
+      5. Commit and push.
 
 CHANGE THE MENU
       1. Edit partials/header.html.

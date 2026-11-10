@@ -35,6 +35,7 @@
     var menu = document.createElement("div");
     menu.className = "share-menu";
     menu.setAttribute("role", "menu");
+    menu.setAttribute("aria-label", "Share options");
     menu.hidden = true;
     menu.innerHTML =
       '<a role="menuitem" href="https://www.facebook.com/sharer/sharer.php?u=' + url + '" target="_blank" rel="noopener noreferrer">Facebook</a>' +
@@ -55,9 +56,24 @@
       wrap.appendChild(menu);
       var copyBtn = menu.querySelector(".share-copy");
 
+      // role="menu" promises arrow-key behaviour, so the items are walked
+      // with Up/Down (Home/End jump to the ends) and Tab closes the menu.
+      function menuItems() {
+        return Array.prototype.slice.call(menu.querySelectorAll('[role="menuitem"]'));
+      }
+
+      function focusItem(index) {
+        var items = menuItems();
+        if (!items.length) return;
+        var wrapped = ((index % items.length) + items.length) % items.length;
+        items[wrapped].focus();
+      }
+
       function setOpen(open) {
         menu.hidden = !open;
         btn.setAttribute("aria-expanded", open ? "true" : "false");
+        // Opening the menu moves focus to its first item, as a menu should.
+        if (open) focusItem(0);
       }
 
       btn.addEventListener("click", function () {
@@ -66,6 +82,35 @@
           return;
         }
         setOpen(menu.hidden);
+      });
+
+      btn.addEventListener("keydown", function (e) {
+        if (menu.hidden && e.key === "ArrowDown") {
+          e.preventDefault();
+          setOpen(true);
+        }
+      });
+
+      menu.addEventListener("keydown", function (e) {
+        var items = menuItems();
+        var index = items.indexOf(document.activeElement);
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          focusItem(index + 1);
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          focusItem(index - 1);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          focusItem(0);
+        } else if (e.key === "End") {
+          e.preventDefault();
+          focusItem(items.length - 1);
+        } else if (e.key === "Tab") {
+          // Leaving the menu closes it, so it is not left open behind focus.
+          setOpen(false);
+        }
       });
 
       copyBtn.addEventListener("click", function () {

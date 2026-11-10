@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="assets/clean-urls.js"></script>
 <script>
   (function () {
     try {
@@ -12,6 +13,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#221246">
 <title>Photo Gallery - Goderich Chess Club</title>
 <meta name="description" content="Photos from Goderich Chess Club meetings, tournaments, and events.">
 <link rel="canonical" href="https://goderichchessclub.com/gallery">
@@ -135,6 +137,10 @@
       <div class="empty-state">Loading photos&hellip;</div>
     </div>
 
+    <noscript>
+      <p class="empty-state">The photo gallery is loaded with JavaScript. Turn it on to see the photos, or find them on our <a href="https://www.facebook.com/groups/goderichchessclub">Facebook group</a>.</p>
+    </noscript>
+
     <div class="social-container">
       <a href="https://www.facebook.com/groups/goderichchessclub" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Visit Facebook">
         <span class="social-icon" aria-hidden="true"></span>
@@ -179,14 +185,17 @@
 </footer>
 
 <!-- Lightbox for viewing a photo enlarged -->
-<div class="lightbox-overlay" id="lightboxOverlay">
+<div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Photo viewer">
   <button type="button" class="lightbox-close" id="lightboxCloseBtn" aria-label="Close">&times;</button>
+  <button type="button" class="lightbox-nav lightbox-nav-prev" id="lightboxPrevBtn" aria-label="Previous photo">&#8249;</button>
   <div class="lightbox-content">
+    <p class="lightbox-counter" id="lightboxCounter"></p>
     <!-- Filled in by script when a photo is opened; the source below is a
          transparent pixel so the element is valid before anything loads. -->
     <img id="lightboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
-    <p class="lightbox-caption" id="lightboxCaption"></p>
+    <p class="lightbox-caption" id="lightboxCaption" aria-live="polite"></p>
   </div>
+  <button type="button" class="lightbox-nav lightbox-nav-next" id="lightboxNextBtn" aria-label="Next photo">&#8250;</button>
 </div>
 
 <script src="assets/theme.js"></script>

@@ -45,6 +45,10 @@ jobs:
         run: node scripts/generate-event-schema.mjs
       - name: Generate FAQ structured data
         run: node scripts/generate-faq-schema.mjs
+      - name: Rebuild the book descriptions
+        run: node scripts/generate-books-table.mjs
+      - name: Check the data files
+        run: node scripts/check-data.mjs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
