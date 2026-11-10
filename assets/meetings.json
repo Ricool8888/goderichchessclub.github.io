@@ -1,0 +1,52 @@
+{
+  "_comment": "The club's weekly meetings. This is the only place the day, time, venue and address of a regular club night are written: assets/calendar.js draws them, the Events Calendar page builds its .ics downloads from them, scripts/generate-meeting-schema.mjs writes the recurring Event structured data from them, and scripts/check-meetings.mjs checks that index.html and faq.html still say the same thing. See README section 9.",
+  "timezone": "America/Toronto",
+  "meetings": [
+    {
+      "id": "recurring-tuesday-library",
+      "title": "Weekly Club Meeting",
+      "dayOfWeek": 2,
+      "dayName": "Tuesday",
+      "calendarStartDate": null,
+      "firstDate": "2026-01-20",
+      "start": "18:00",
+      "end": "20:00",
+      "time": "6:00 PM - 8:00 PM",
+      "byDay": "TU",
+      "cssClass": "recurring",
+      "venueName": "Goderich Library",
+      "location": "Goderich Library, 52 Montreal St, Goderich, ON N7A 2G4",
+      "address": {
+        "streetAddress": "52 Montreal St",
+        "addressLocality": "Goderich",
+        "addressRegion": "ON",
+        "postalCode": "N7A 2G4",
+        "addressCountry": "CA"
+      },
+      "description": "Open play at Goderich Library. All skill levels welcome, free admission."
+    },
+    {
+      "id": "recurring-friday-legion",
+      "title": "Weekly Club Meeting",
+      "dayOfWeek": 5,
+      "dayName": "Friday",
+      "calendarStartDate": "2026-07-24",
+      "firstDate": "2026-07-24",
+      "start": "18:00",
+      "end": "21:00",
+      "time": "6:00 PM - 9:00 PM",
+      "byDay": "FR",
+      "cssClass": "recurring-alt",
+      "venueName": "Goderich Legion",
+      "location": "Goderich Legion, 56 Kingston St, Goderich, ON N7A 3K5",
+      "address": {
+        "streetAddress": "56 Kingston St",
+        "addressLocality": "Goderich",
+        "addressRegion": "ON",
+        "postalCode": "N7A 3K5",
+        "addressCountry": "CA"
+      },
+      "description": "Open play at Goderich Legion. All skill levels welcome, free admission."
+    }
+  ]
+}

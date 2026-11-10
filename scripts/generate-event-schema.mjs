@@ -4,9 +4,17 @@
  * assets/tournaments.json and assets/events.json, so structured data can never
  * drift from the tournaments the site actually shows.
  *
- * Run from the repository root:  node scripts/generate-event-schema.mjs
+ * Run from the repository root:  node scripts/generate-event-schema.mjs [--check]
+ *
+ * --check writes nothing and exits non-zero when the page's block no longer
+ * matches the tournament data. It is deliberately tolerant of one thing: an
+ * event that has already happened since the block was written is expected to
+ * still be in it (the deploy regenerates it), so only events that are still
+ * upcoming on the day of the check have to match exactly.
  */
 import { readFileSync, writeFileSync } from "node:fs";
+
+const CHECK = process.argv.includes("--check");
 
 const PAGE = "events-calendar.html";
 const START = "<!-- event-schema:start";
@@ -152,5 +160,32 @@ const block = [
   END,
 ].join("\n");
 
-writeFileSync(PAGE, startedAt + block + endedAt);
+const updated = startedAt + block + endedAt;
+
+if (updated === html) {
+  console.log(`generate-event-schema: ${PAGE} is up to date (${eventsOut.length} upcoming events)`);
+  process.exit(0);
+}
+
+if (CHECK) {
+  // The committed block may still list an event that has since passed; that is
+  // not drift. Compare only the events that are still upcoming today.
+  const committed = JSON.parse(html.slice(startIndex, endIndex).split("<script type=\"application/ld+json\">")[1].split("</script>")[0]);
+  const stillUpcoming = committed.filter((event) => String(event.startDate || "").slice(0, 10) >= today);
+
+  if (JSON.stringify(stillUpcoming) === JSON.stringify(eventsOut)) {
+    console.log(
+      `generate-event-schema: ${PAGE} is up to date apart from ${committed.length - stillUpcoming.length} past event(s)`
+    );
+    process.exit(0);
+  }
+
+  console.error(
+    `generate-event-schema: the Event block in ${PAGE} does not match assets/tournaments.json\n` +
+      "  Run `node scripts/generate-event-schema.mjs` and commit the result."
+  );
+  process.exit(1);
+}
+
+writeFileSync(PAGE, updated);
 console.log(`generate-event-schema: wrote ${eventsOut.length} upcoming event(s) to ${PAGE}`);

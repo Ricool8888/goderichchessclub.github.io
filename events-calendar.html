@@ -16,6 +16,23 @@
 <title>Events Calendar - Goderich Chess Club</title>
 <meta name="description" content="See when Goderich Chess Club meets next: Tuesdays 6-8 p.m. at Goderich Library and Fridays 6-9 p.m. at the Legion, plus tournaments and closures.">
 <link rel="canonical" href="https://goderichchessclub.com/events-calendar">
+<!-- social-preview:start - generated from this page's title, description and canonical link by scripts/sync-shared-blocks.mjs. Do not edit by hand. -->
+<meta property="og:site_name" content="Goderich Chess Club">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_CA">
+<meta property="og:title" content="Events Calendar - Goderich Chess Club">
+<meta property="og:description" content="See when Goderich Chess Club meets next: Tuesdays 6-8 p.m. at Goderich Library and Fridays 6-9 p.m. at the Legion, plus tournaments and closures.">
+<meta property="og:url" content="https://goderichchessclub.com/events-calendar">
+<meta property="og:image" content="https://goderichchessclub.com/assets/logos/Goderich%20Chess%20Club%20smaller%20logo.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="196">
+<meta property="og:image:height" content="292">
+<meta property="og:image:alt" content="Goderich Chess Club logo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Events Calendar - Goderich Chess Club">
+<meta name="twitter:description" content="See when Goderich Chess Club meets next: Tuesdays 6-8 p.m. at Goderich Library and Fridays 6-9 p.m. at the Legion, plus tournaments and closures.">
+<meta name="twitter:image" content="https://goderichchessclub.com/assets/logos/Goderich%20Chess%20Club%20smaller%20logo.png">
+<!-- social-preview:end -->
 
 <!-- event-schema:start — generated from assets/tournaments.json and assets/events.json by
   scripts/generate-event-schema.mjs; do not edit this block by hand -->
@@ -144,11 +161,11 @@
     </section>
 
     <div class="add-to-calendar-row">
-      <button type="button" class="btn-calendar" id="addTuesdayBtn">
+      <button type="button" class="btn-calendar" id="addTuesdayBtn" data-meeting="recurring-tuesday-library" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Add Tuesday Meeting to Calendar
       </button>
-      <button type="button" class="btn-calendar" id="addFridayBtn">
+      <button type="button" class="btn-calendar" id="addFridayBtn" data-meeting="recurring-friday-legion" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Add Friday Meeting to Calendar
       </button>
@@ -221,43 +238,52 @@
 <script src="assets/ics.js"></script>
 <script src="assets/calendar.js"></script>
 <script>
-  // Closure dates ship with the recurring meeting as EXDATEs, so an imported
-  // calendar skips the same nights the website marks as closed.
-  function downloadRecurringMeeting(options, filename) {
-    fetch("assets/closures.json")
-      .then(function (res) { if (!res.ok) throw new Error("no closures"); return res.json(); })
-      .then(function (data) {
-        options.exdates = ((data && data.closures) || []).map(function (c) { return c.date; });
-      })
-      .catch(function () { options.exdates = []; })
-      .then(function () { GCCCalendar.downloadICS(options, filename); });
-  }
+  // The two "add to calendar" buttons take their day, time, venue and address
+  // from assets/meetings.json, the same file that draws the weekly meetings in
+  // the calendar and writes their structured data. Nothing is typed twice.
+  (function () {
+    var buttons = document.querySelectorAll("[data-meeting]");
+    if (!buttons.length) return;
 
-  document.getElementById("addTuesdayBtn").addEventListener("click", function () {
-    downloadRecurringMeeting({
-      uid: "recurring-tuesday-library",
-      title: "Weekly Club Meeting",
-      description: "Open play at Goderich Library. All skill levels welcome, free admission.",
-      location: "Goderich Library, 52 Montreal St, Goderich, ON N7A 2G4",
-      startDate: "2026-01-20",
-      startTime: "18:00",
-      endTime: "20:00",
-      rrule: "FREQ=WEEKLY;BYDAY=TU"
-    }, "goderich-chess-club-tuesday-meeting.ics");
-  });
+    Promise.all([
+      fetch("assets/meetings.json").then(function (res) {
+        if (!res.ok) throw new Error("no meetings file");
+        return res.json();
+      }),
+      // Closure dates ship with the recurring meeting as EXDATEs, so an
+      // imported calendar skips the same nights the website marks as closed.
+      fetch("assets/closures.json")
+        .then(function (res) { if (!res.ok) throw new Error("no closures file"); return res.json(); })
+        .catch(function () { return { closures: [] }; })
+    ]).then(function (results) {
+      var meetings = (results[0] && results[0].meetings) || [];
+      var exdates = ((results[1] && results[1].closures) || []).map(function (c) { return c.date; });
 
-  document.getElementById("addFridayBtn").addEventListener("click", function () {
-    downloadRecurringMeeting({
-      uid: "recurring-friday-legion",
-      title: "Weekly Club Meeting",
-      description: "Open play at Goderich Legion. All skill levels welcome, free admission.",
-      location: "Goderich Legion, 56 Kingston St, Goderich, ON N7A 3K5",
-      startDate: "2026-07-24",
-      startTime: "18:00",
-      endTime: "21:00",
-      rrule: "FREQ=WEEKLY;BYDAY=FR"
-    }, "goderich-chess-club-friday-meeting.ics");
-  });
+      Array.prototype.forEach.call(buttons, function (btn) {
+        var id = btn.getAttribute("data-meeting");
+        var meeting = meetings.filter(function (m) { return m.id === id; })[0];
+        if (!meeting) return;
+
+        btn.addEventListener("click", function () {
+          GCCCalendar.downloadICS({
+            uid: meeting.id,
+            title: meeting.title,
+            description: meeting.description,
+            location: meeting.location,
+            startDate: meeting.firstDate,
+            startTime: meeting.start,
+            endTime: meeting.end,
+            rrule: "FREQ=WEEKLY;BYDAY=" + meeting.byDay,
+            exdates: exdates
+          }, "goderich-chess-club-" + meeting.dayName.toLowerCase() + "-meeting.ics");
+        });
+
+        btn.hidden = false;
+      });
+    }).catch(function (err) {
+      console.warn("add-to-calendar: meetings unavailable", err);
+    });
+  })();
 </script>
 <script src="assets/theme.js"></script>
 <script src="assets/share.js"></script>

@@ -4,27 +4,6 @@
   var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   var WEEKDAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-  var RECURRING_EVENTS = [
-    {
-      id: "recurring-tuesday-library",
-      dayOfWeek: 2,
-      startDate: null,
-      cssClass: "recurring",
-      time: "6:00 PM - 8:00 PM",
-      title: "Weekly Club Meeting",
-      description: "Open play at Goderich Library. All skill levels welcome, free admission."
-    },
-    {
-      id: "recurring-friday-legion",
-      dayOfWeek: 5,
-      startDate: "2026-07-24",
-      cssClass: "recurring-alt",
-      time: "6:00 PM - 9:00 PM",
-      title: "Weekly Club Meeting",
-      description: "Open play at Goderich Legion. All skill levels welcome, free admission."
-    }
-  ];
-
   var VIEW_KEY = "gcc-calendar-view";
 
   var state = {
@@ -32,6 +11,9 @@
     viewMonth: new Date().getMonth(),
     view: initialView(),
     publishedEvents: [],
+    // The weekly Tuesday and Friday meetings, from assets/meetings.json - the
+    // same file the .ics downloads and the structured data are built from.
+    meetings: [],
     // "YYYY-MM-DD" -> closure reason, from assets/closures.json
     closures: {},
     // Which day button in the month grid is in the tab order.
@@ -109,6 +91,22 @@
       .catch(function () { return {}; });
   }
 
+  /*
+   * assets/meetings.json is the single copy of the weekly meeting details:
+   * day, time, venue, address. calendarStartDate is the night the meeting
+   * began (null = as long as the calendar goes back); firstDate is the first
+   * occurrence a calendar app is told about.
+   */
+  function fetchMeetings() {
+    return fetch("assets/meetings.json")
+      .then(function (res) { if (!res.ok) throw new Error("no meetings file"); return res.json(); })
+      .then(function (data) { return (data && data.meetings) || []; })
+      .catch(function (err) {
+        console.warn("calendar.js: could not load assets/meetings.json", err);
+        return [];
+      });
+  }
+
   function eventsForDate(iso) {
     return state.publishedEvents.filter(function (e) { return e.date === iso; });
   }
@@ -121,9 +119,9 @@
     // A closure overrides the weekly meeting, so the calendar never
     // advertises a club night on a day the club is closed.
     if (state.closures[iso]) return [];
-    return RECURRING_EVENTS.filter(function (r) {
+    return state.meetings.filter(function (r) {
       if (r.dayOfWeek !== dayOfWeek) return false;
-      if (r.startDate && iso < r.startDate) return false;
+      if (r.calendarStartDate && iso < r.calendarStartDate) return false;
       return true;
     });
   }
@@ -491,7 +489,7 @@
       }
     });
 
-    Promise.all([fetchTournaments(), fetchPublishedEvents(), fetchClosures()]).then(function (results) {
+    Promise.all([fetchTournaments(), fetchPublishedEvents(), fetchClosures(), fetchMeetings()]).then(function (results) {
       var tournaments = tournamentsAsEvents(results[0]);
       var specials = results[1] || [];
 
@@ -504,6 +502,7 @@
         return ev && !seen[ev.date + "|" + ev.title];
       }));
       state.closures = results[2];
+      state.meetings = results[3] || [];
       render();
     });
   }
