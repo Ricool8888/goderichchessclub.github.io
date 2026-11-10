@@ -33,7 +33,9 @@
     view: initialView(),
     publishedEvents: [],
     // "YYYY-MM-DD" -> closure reason, from assets/closures.json
-    closures: {}
+    closures: {},
+    // Which day button in the month grid is in the tab order.
+    gridFocusIso: null
   };
 
   // A visitor's last choice wins; otherwise small screens start in list
@@ -111,30 +113,62 @@
   function renderGrid() {
     var grid = document.getElementById("calendarGrid");
     grid.innerHTML = "";
+    grid.setAttribute("aria-labelledby", "calendarMonthLabel");
+
+    function addRow() {
+      var row = document.createElement("div");
+      row.className = "calendar-row";
+      row.setAttribute("role", "row");
+      grid.appendChild(row);
+      return row;
+    }
+
+    function emptyCell() {
+      var cell = document.createElement("div");
+      cell.setAttribute("role", "gridcell");
+      return cell;
+    }
+
+    var headerRow = addRow();
     WEEKDAYS.forEach(function (w) {
       var el = document.createElement("div");
       el.className = "calendar-weekday";
+      el.setAttribute("role", "columnheader");
       el.textContent = w;
-      grid.appendChild(el);
+      headerRow.appendChild(el);
     });
 
     var firstDay = new Date(state.viewYear, state.viewMonth, 1).getDay();
     var daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
     var today = new Date();
     var todayISO = toISODate(today.getFullYear(), today.getMonth(), today.getDate());
+    var monthPrefix = state.viewYear + "-" + pad(state.viewMonth + 1) + "-";
+
+    // Only one day button is in the tab order; the arrow keys move from it,
+    // as the ARIA grid pattern expects. Start on today, or on the first of
+    // the month when today is in a different month.
+    if (!state.gridFocusIso || state.gridFocusIso.indexOf(monthPrefix) !== 0) {
+      state.gridFocusIso = todayISO.indexOf(monthPrefix) === 0
+        ? todayISO
+        : monthPrefix + "01";
+    }
+
+    var week = addRow();
 
     for (var i = 0; i < firstDay; i++) {
-      var empty = document.createElement("div");
-      empty.className = "calendar-day empty";
-      grid.appendChild(empty);
+      week.appendChild(emptyCell());
     }
 
     for (var d = 1; d <= daysInMonth; d++) {
+      if (week.children.length === 7) week = addRow();
+
       var iso = toISODate(state.viewYear, state.viewMonth, d);
       var dayOfWeek = new Date(state.viewYear, state.viewMonth, d).getDay();
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "calendar-day";
+      btn.dataset.iso = iso;
+      btn.tabIndex = iso === state.gridFocusIso ? 0 : -1;
       if (iso === todayISO) btn.classList.add("today");
 
       var dayEvents = eventsForDate(iso);
@@ -190,8 +224,23 @@
         return function () { openDayModal(isoDate, dow); };
       }(iso, dayOfWeek));
 
-      grid.appendChild(btn);
+      var cell = document.createElement("div");
+      cell.setAttribute("role", "gridcell");
+      cell.appendChild(btn);
+      week.appendChild(cell);
     }
+
+    // Complete the last week so every row has seven cells.
+    while (week.children.length < 7) week.appendChild(emptyCell());
+  }
+
+  // Move the single tab stop to the given day button.
+  function focusGridDay(btn) {
+    var buttons = document.querySelectorAll("#calendarGrid .calendar-day");
+    for (var i = 0; i < buttons.length; i++) buttons[i].tabIndex = -1;
+    btn.tabIndex = 0;
+    state.gridFocusIso = btn.dataset.iso;
+    btn.focus();
   }
 
   // List view: every day in the shown month that has something on, starting
@@ -355,6 +404,43 @@
     });
     document.getElementById("monthViewBtn").addEventListener("click", function () { setView("month"); });
     document.getElementById("listViewBtn").addEventListener("click", function () { setView("list"); });
+
+    // Arrow keys move between days, Home/End jump to the ends of the week.
+    // Tab moves out of the grid instead of stepping through thirty buttons.
+    document.getElementById("calendarGrid").addEventListener("keydown", function (e) {
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].indexOf(e.key) === -1) return;
+
+      var btn = e.target;
+      if (!btn || !btn.parentNode || btn.parentNode.getAttribute("role") !== "gridcell") return;
+
+      var cell = btn.parentNode;
+      var rowEl = cell.parentNode;
+      var rows = Array.prototype.slice.call(this.querySelectorAll(".calendar-row")).slice(1);
+      var rowIndex = rows.indexOf(rowEl);
+      var col = Array.prototype.indexOf.call(rowEl.children, cell);
+      if (rowIndex === -1) return;
+
+      e.preventDefault();
+
+      var target = null;
+
+      if (e.key === "Home" || e.key === "End") {
+        var cells = Array.prototype.slice.call(rowEl.children);
+        if (e.key === "End") cells.reverse();
+        for (var i = 0; i < cells.length; i++) {
+          var found = cells[i].querySelector(".calendar-day");
+          if (found) { target = found; break; }
+        }
+      } else {
+        var nextRow = rowIndex + (e.key === "ArrowUp" ? -1 : e.key === "ArrowDown" ? 1 : 0);
+        var nextCol = col + (e.key === "ArrowLeft" ? -1 : e.key === "ArrowRight" ? 1 : 0);
+        var rowNode = rows[nextRow];
+        var cellNode = rowNode && rowNode.children[nextCol];
+        target = cellNode ? cellNode.querySelector(".calendar-day") : null;
+      }
+
+      if (target) focusGridDay(target);
+    });
     document.getElementById("modalCloseBtn").addEventListener("click", closeDayModal);
     document.getElementById("dayModalOverlay").addEventListener("click", function (e) {
       if (e.target === this) closeDayModal();
