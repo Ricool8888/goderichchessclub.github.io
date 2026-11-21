@@ -33,15 +33,19 @@ const pages = readdirSync(".")
   .filter((name) => name.endsWith(".html"))
   .sort();
 
-function git(args) {
+function gitOutput(args) {
   try {
     return execFileSync("git", args, {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
+    });
   } catch (err) {
     return "";
   }
+}
+
+function git(args) {
+  return gitOutput(args).trim();
 }
 
 function lastCommitDate(file) {
@@ -50,8 +54,11 @@ function lastCommitDate(file) {
 
 // A page being edited right now is dated today, so the date that gets
 // committed with the page is the date of the change itself.
+// Untrimmed on purpose: the two-character status code and its space come
+// first, so the file name starts at index 3. Trimming the output first would
+// shift a modified entry (" M page.html") and hide the page.
 const dirty = new Set(
-  git(["status", "--porcelain", "--", ...pages])
+  gitOutput(["status", "--porcelain", "--", ...pages])
     .split("\n")
     .map((line) => line.slice(3).trim())
     .filter(Boolean)

@@ -70,7 +70,11 @@ const markup = live.map(function (banner) {
   const hasCountdown = !!(countdown && countdown.enabled && countdown.deadlineUTC);
 
   const parts = [
-    '      <section class="site-banner-bar site-banner-' + style + '" aria-label="Site announcement"' +
+    // A plain div, not a section: two stacked banners would be two landmarks
+    // named "Site announcement", which fails the HTML checks and confuses
+    // screen readers. The single labelled landmark is the wrapper section in
+    // index.html.
+    '      <div class="site-banner-bar site-banner-' + style + '"' +
       (hasCountdown ? ' data-banner-deadline="' + escapeHtml(countdown.deadlineUTC) + '"' : "") + ">",
     '        <span class="site-banner-text">' + escapeHtml(banner.message) + "</span>"
   ];
@@ -86,7 +90,7 @@ const markup = live.map(function (banner) {
     );
   }
 
-  parts.push("      </section>");
+  parts.push("      </div>");
   return parts.join("\n");
 });
 
