@@ -1,6 +1,12 @@
 [
   {
     "enabled": true,
+    "id": "banner-holiday-closure-dates",
+    "style": "info",
+    "message": "The Goderich Chess Club will be closed on November 27th, December 22nd, 25th, and 29th as well as January 1st.  We wish everyone happy holidays."
+  },
+  {
+    "enabled": true,
     "id": "banner-beachside-rapid-countdown",
     "style": "urgent",
     "message": "Goderich Beachside Rapid registration closes in:",
