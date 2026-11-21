@@ -338,6 +338,16 @@ Currently an array, and every entry in it is displayed:
 To show a new banner, add another object to the array with a new "id". To
 retire one immediately, set "enabled": false.
 
+Editing this file is not enough by itself. The strip is written into the home
+page, so after changing it run:
+
+      node scripts/render-banner.mjs
+
+and commit index.html with the JSON. The deploy cannot do it for you: the
+GitHub Pages site is built from this branch as it stands, so a banner that is
+only in the JSON is never seen by a visitor. The "announcement banner" check
+fails when the two disagree, which is the reminder to run the script.
+
 -------------------------------------------------------------------------------
 4.2 assets/events.json - events that are not tournaments
 -------------------------------------------------------------------------------
